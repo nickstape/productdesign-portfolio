@@ -62,7 +62,7 @@ export function Exploration({ n, title, intro, rows = [], aside, children }: Pro
       }`}
     >
       {main}
-      {aside && <div className="min-w-0 desktop:pt-[48px]">{aside}</div>}
+      {aside && <div className="min-w-0">{aside}</div>}
     </section>
   );
 }

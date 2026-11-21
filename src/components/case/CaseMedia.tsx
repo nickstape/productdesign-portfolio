@@ -17,6 +17,11 @@ type Props = MediaProps & {
   priority?: boolean;
   /** Default true: 1px line border. false: 8px radius only (e.g. the Before image). */
   outline?: boolean;
+  /**
+   * Hold the Figma frame (w × h) exactly and fill it like Figma does: "cover" (hero, problem
+   * image) or "contain" (figures, before/after). Without it the image keeps its own ratio.
+   */
+  fit?: "cover" | "contain";
 };
 
 const manifest: Record<string, Img> = images;
@@ -27,11 +32,28 @@ const VIDEO = /\.(mp4|webm|mov)$/i;
  * which shows a placeholder until the file is in /public. Until the key is added to images.ts,
  * a placeholder named after the key holds the slot at the Figma aspect ratio.
  */
-export function CaseMedia({ img, w = 16, h = 9, className = "", sizes, priority, outline = true }: Props) {
+export function CaseMedia({ img, w = 16, h = 9, className = "", sizes, priority, outline = true, fit }: Props) {
   const key = img.replace(/^images\./, "");
   const entry = manifest[key];
   if (!entry) {
     return <ImagePlaceholder name={`${key} · not in images.ts`} width={w} height={h} className={className} />;
+  }
+  if (fit) {
+    const framed = (
+      <div
+        style={{ aspectRatio: `${w} / ${h}` }}
+        className={`relative w-full overflow-hidden rounded-image ${outline ? "border border-line" : ""} ${className}`}
+      >
+        <ContentImage
+          img={entry}
+          sizes={sizes}
+          priority={priority}
+          frame={false}
+          className={`absolute inset-0 size-full ${fit === "cover" ? "object-cover" : "object-contain"}`}
+        />
+      </div>
+    );
+    return VIDEO.test(entry.src) ? <AutoplayVideo>{framed}</AutoplayVideo> : framed;
   }
   const media = outline ? (
     <ContentImage img={entry} sizes={sizes} priority={priority} className={className} />
