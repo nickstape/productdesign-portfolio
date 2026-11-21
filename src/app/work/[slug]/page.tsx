@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { CaseHeader, Hero, NextCase } from "@/components/case";
 import { CaseToc } from "@/components/case/CaseToc";
 import { JumpTo } from "@/components/case/JumpTo";
@@ -22,7 +23,25 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   return { title: frontmatter.title, description: frontmatter.intro };
 }
 
-export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
+/**
+ * The shell (the [data-case] wrapper that swaps the site nav for the TOC) is static. Everything
+ * that reads `params` renders inside <Suspense>, as Cache Components requires; the slugs from
+ * generateStaticParams are still prerendered in full at build time.
+ */
+export default function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
+  return (
+    <div
+      data-case
+      className="pb-4 desktop:ml-[calc(var(--case-left)-var(--content-left))] desktop:max-w-[1152px]"
+    >
+      <Suspense>
+        <CaseStudy params={params} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function CaseStudy({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   // Unknown slugs 404 (dynamicParams isn't available with cacheComponents).
   if (!listSlugs().includes(slug)) notFound();
@@ -31,10 +50,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
   const next = await getCase(fm.next);
 
   return (
-    <div
-      data-case
-      className="pb-4 desktop:ml-[calc(var(--case-left)-var(--content-left))] desktop:max-w-[1152px]"
-    >
+    <>
       <CaseToc items={toc} />
       <CaseHeader
         kicker={fm.kicker}
@@ -52,6 +68,6 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
         title={next.frontmatter.title}
         cta={`Read case study ${String(next.frontmatter.order).padStart(2, "0")}`}
       />
-    </div>
+    </>
   );
 }
