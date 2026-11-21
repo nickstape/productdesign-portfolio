@@ -35,7 +35,9 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mt-3 flex flex-col gap-2 tablet:flex-row tablet:items-baseline tablet:justify-between">
+      {/* Right padding keeps the text clear of the Chatbase bubble (55px, 16px from the
+          viewport edge): text ends ≥ 87px from the edge at every width. */}
+      <div className="mt-3 flex flex-col gap-2 pr-9 tablet:flex-row tablet:items-baseline tablet:justify-between tablet:pr-7 desktop:pr-6">
         <Label>say hello</Label>
         <ul className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-sans text-ui">
           <li>
