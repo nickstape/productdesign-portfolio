@@ -4,7 +4,7 @@ import Image from "next/image";
 import type { Img } from "@/content/images";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 
-const VIDEO = /\.(mp4|webm)$/i;
+const VIDEO = /\.(mp4|webm|mov)$/i;
 
 type Props = {
   img: Img;
@@ -17,7 +17,7 @@ type Props = {
 
 /**
  * Renders a manifest image with next/image (intrinsic width/height from the
- * manifest; CSS controls display size), or a <video> for .mp4/.webm entries. If the file isn't in /public yet,
+ * manifest; CSS controls display size), or a <video> for .mp4/.webm/.mov entries. If the file isn't in /public yet,
  * renders <ImagePlaceholder> at the same aspect ratio instead.
  */
 export function ContentImage({ img, className = "", sizes, priority, frame = true }: Props) {
@@ -35,7 +35,7 @@ export function ContentImage({ img, className = "", sizes, priority, frame = tru
     );
   }
 
-  // Video entries (.mp4/.webm) render as a muted, looping, inline <video>. It doesn't autoplay:
+  // Video entries (.mp4/.webm/.mov) render as a muted, looping, inline <video>. It doesn't autoplay:
   // the parent starts it when it's shown (e.g. a preview card opening).
   if (VIDEO.test(img.src)) {
     return (

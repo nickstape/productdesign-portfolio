@@ -36,4 +36,13 @@ export const images = {
   gallery08: { src: "/assets/about/gallery/08-postcards.JPG", alt: "Two postcards from Senegal: a horse and cart by the beach, and a painted yellow and blue bus on a street", width: 3072, height: 3840 },
   gallery09: { src: "/assets/about/gallery/09-10k.jpg", alt: "A runner bites her finisher’s medal in front of the Access Bank Lagos City Marathon backdrop", width: 3024, height: 4032 },
   gallery10: { src: "/assets/about/gallery/10-quest.jpg", alt: "A woman sits under a painting of two schoolgirls while someone photographs her", width: 3213, height: 5712 },
+
+  /* ---- Work: NDD case study ---- */
+  nddHero: { src: "/assets/work/ndd/hero-all-mandates.png", alt: "NDD All Mandates screen: a filterable table of direct debit mandates with status tags", width: 2304, height: 1152 },
+  nddProblem: { src: "/assets/work/ndd/problem-old-login.png", alt: "The original NDD login screen before the redesign", width: 2304, height: 1152 },
+  nddExp01Before: { src: "/assets/work/ndd/exp01-login-before.png", alt: "Old sign-in form, annotated: no visual hierarchy, flat structure, no clear instructions", width: 1090, height: 834 },
+  nddExp01After: { src: "/assets/work/ndd/exp01-login-after.mp4", alt: "Redesigned login with a \"Continue with Microsoft\" single sign-on button", width: 1090, height: 834 },
+  nddExp02Sidebar: { src: "/assets/work/ndd/exp02-sidebar-roles.png", alt: "Collapsible sidebar shown expanded and collapsed, with a role-specific menu", width: 942, height: 1128 },
+  nddExp03Filtering: { src: "/assets/work/ndd/exp03-log-filtering.mov", alt: "All Mandates table with dynamic filters applied", width: 1112, height: 636 },
+  nddExp04A11y: { src: "/assets/work/ndd/exp04-accessibility-sheet.png", alt: "Component sheet showing input and dropdown states with contrast checks", width: 1112, height: 834 },
 } satisfies Record<string, Img>;

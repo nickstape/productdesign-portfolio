@@ -1,1 +1,143 @@
-{/* NDD case study content. Placeholder until the screen is built. */}
+---
+title: "Designing the console behind Nigeria's national direct debit scheme"
+slug: "ndd"
+kicker: ".case study 01 · fintech · B2B platform"
+intro: "I redesigned the end-to-end experience of NIBSS Direct Debit (NDD), the platform Nigerian banks and businesses use to set up, approve and oversee recurring payments. That covered every step: joining and signing in, creating payment authorisations one at a time or in bulk, approving them at the bank, and overseeing the whole scheme. One design system holds it together across 7 role-based workspaces."
+role: "Lead product designer"
+platform: "Desktop web"
+outcome: "20+ integrations"
+hero: images.nddHero
+order: 1
+next: "tns"
+---
+
+{/* NDD case study. Copy from Figma "Case study - NDD" (3074:583), word for word.
+    Images: keys in src/content/images.ts ("Work: NDD case study"). nddFullIa isn't in the manifest yet. */}
+
+<Section id="tldr" label="tldr" nav="TLDR" title="NDD is where Nigeria’s recurring payments get permission.">
+
+NIBSS Direct Debit is the electronic mandate library behind Nigeria’s direct debit scheme. When an insurer, lender or utility collects a recurring payment from a customer’s bank account, the mandate that allows it is created, approved and monitored here. It’s a back-office product: the people who use it do so all day, under audit, with real money on the line.
+
+<AudienceCards>
+  <AudienceCard group="Billers and aggregators" title="Raise the mandates" roles="Biller Initiator · Bank as Aggregator">Insurers, lenders and utilities create mandates for their customers, one at a time or hundreds in a bulk upload.</AudienceCard>
+  <AudienceCard group="Banks" title="Check and approve them" roles="Initiator · Authoriser · Auditor · Admin · Bank as Aggregator">The payer’s bank captures, approves, rejects and audits each mandate, with duties split between people.</AudienceCard>
+  <AudienceCard group="NIBSS" title="Run the scheme" roles="NIBSS Admin">Scheme admins oversee every bank, biller, aggregator, institution and user, plus reporting and billing.</AudienceCard>
+</AudienceCards>
+
+<Stakes lead="The stakes:">Nigeria processed 849 million direct debit payments as of Q3 2024 [source]. <Todo>source for the 849M stat</Todo></Stakes>
+
+</Section>
+
+<Section id="problem" label="problem" nav="Problem">
+
+<HMW why="NDD handles billions in sensitive transactions, and the outdated interface created barriers from the first screen to the last. Conversations with 5+ colleagues across product, engineering and solution architecture confirmed three costs: lost trust, operational load, and technical debt from one-off screens.">how might we make every step of NDD, from signing in to approving a payment, feel as secure as it really is and easy for every role, without rebuilding the whole platform at once?</HMW>
+
+<QuoteBlock img="nddProblem" w={1152} h={576} label="The insight became the DEFINING design principle" quote="“Every time I see this login screen, I wonder if we should be using something else.”" />
+
+</Section>
+
+<Section id="research" label="research and insights" nav="Research" title="Research covered 10 user interviews, 5+ internal conversations, a competitive review, a technical audit and a heuristic evaluation.">
+
+<ProcessSteps>
+  <Step n={1} title="Find the problem">Login and funnel data, interviews</Step>
+  <Step n={2} title="Make the case" pill="C-suite approval">Pitch doc and a 6-hour prototype</Step>
+  <Step n={3} title="Build the system">Tokens and components first</Step>
+  <Step n={4} title="Ship the front door">2 experiments; 32% → 12%</Step>
+  <Step n={5} title="Scale it" highlight>Design every role's journey</Step>
+</ProcessSteps>
+
+</Section>
+
+<Section id="constraints" label="constraints" nav="Constraints">
+
+<Bullets>
+
+- Every action needs an audit trail and, for money-moving steps, a second approver.
+- Users range from NIBSS super-admins to bank branch staff with little training.
+- **Limited engineering time**, so work had to be released in stages, each one useful on its own.
+
+</Bullets>
+
+</Section>
+
+<Section id="ia" label="mapping the end-to-end flow" nav="IA">
+
+A payment authorisation passes through several hands before money moves, so I designed the journey as one connected flow rather than a set of separate screens. Here is how it works now, step by step.
+
+<Popup label="see full IA" title="full ia" img="nddFullIa" w={1152} h={720} />
+
+</Section>
+
+<Section id="design-explorations" label="design explorations" nav="Design Explorations" title="One system, carried through every job the product does.">
+
+I led the design process starting with drafting early wireframes and flows which I used to gather feedback from other designers as well as key stakeholders involved in the project
+
+<Exploration n={1} title="Single sign-on that fits how banks already work" problem={<Todo>problem</Todo>} solution={<Todo>solution</Todo>}>
+
+My first idea was to explain the onboarding process up front, with more content and clearer calls to action. It made no significant difference, so I dropped it.
+
+Added single sign-on (SSO) as a choice, not a requirement. Partners can sign in with their existing work account, or keep using email and password. I tested two ways of presenting that choice; the second cut login failures from 32% to 12%, and 70% of sign-ins now use SSO.
+
+<BeforeAfter
+  before="nddExp01Before"
+  after="nddExp01After"
+  w={545}
+  h={417}
+  annotations={[
+    { x: 9, y: 5, text: "no visual hierarchy" },
+    { x: 14, y: 86, text: "flat design structure and no clear instructions" },
+  ]}
+/>
+
+<StatRow>
+  <Stat value="32% → 12%">login failure rate</Stat>
+  <Stat value="70%">of users now sign in with SSO</Stat>
+  <Stat value="2×">onboarding conversion, now 28.8%</Stat>
+</StatRow>
+
+</Exploration>
+
+<Exploration n={2} title="Restructuring NDD's information architecture" problem="Before I could present any individual feature, I had to address a structural problem: the navigation." solution="Each role needs different tools, but they should not feel like seven different products. I designed one shared layout with a collapsible sidebar that has a variant for each role's menu, so everyone gets the same structure with only the options they need.">
+
+<Figure img="nddExp02Sidebar" w={471} h={564} maxWidth={471} caption="Side bar showing the collapsible component" />
+
+</Exploration>
+
+<Exploration n={3} title="Dynamic log filtering" problem="The existing mandate page showed a chronological list of log entries with no filtering specific for containers." solution="The admin workspace brings the whole scheme into one place. It reuses the same tables, filters and states as every other workspace, so admins can move from a list of institutions to a single user to a report without learning a new layout.">
+
+<Figure img="nddExp03Filtering" w={556} h={318} maxWidth={556} caption="Filtering system for easy search" />
+
+</Exploration>
+
+<Exploration n={4} title="Accessibility built into the components" problem="NDD is used all day by operations staff across hundreds of institutions, on office monitors of every quality . Small, faint or colour-only signals cause mistakes, and mistakes here move money ." solution={<Todo>solution</Todo>}>
+
+Then I audited my own screens against WCAG 2.2 AA. I measured contrast on the hi-fi exports <Todo>sentence ends here in Figma; finish or confirm</Todo>
+
+<Figure img="nddExp04A11y" w={556} h={417} maxWidth={556} caption={<>Labels are explicit and contrast meets WCAG AA, <Todo>caption ends with a comma in Figma; finish or confirm</Todo></>} />
+
+</Exploration>
+
+</Section>
+
+<Section id="outcome" label="outcome" nav="Outcome">
+
+<Outcome>
+  <OutcomeStat value="~26.55M">transactions valued at N1.4 trillion across 48 participating institutions</OutcomeStat>
+  <OutcomeStat value="64%">Adoption rate among existing customers <Todo>confirm the 64% adoption stat</Todo></OutcomeStat>
+  <OutcomeStat value="[Shipped]" accent={false}>Used by partners including Paystack, Flutterwave, etc. <Todo>confirm [Shipped]</Todo></OutcomeStat>
+</Outcome>
+
+</Section>
+
+<Section id="reflection" label="what I'd do differently" nav="Reflection" title="The lesson I took from NDD: in regulated systems, the permission model is the product, and the screens follow from it.">
+
+<Bullets>
+
+- **Measure from day one.** Agree activation time and approval turnaround as success metrics with the PM before build.
+- **Finish the accessibility work.** Roll the audit fixes out to every screen, add visible focus states and test with a screen reader.
+- **Design the unhappy paths.** Bulk upload needs a row-level error report; expired or cancelled mandates need their own states.
+- Iterate fail state with Claude Design & Figma MCP.
+
+</Bullets>
+
+</Section>
