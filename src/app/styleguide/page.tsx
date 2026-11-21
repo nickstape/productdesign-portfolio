@@ -34,6 +34,8 @@ const typeScale = [
   { token: "text-headline", spec: "28 / 24 · lh 1.15", cls: "font-display text-headline", sample: "Back-office tooling for mandates" },
   { token: "text-intro", spec: "20 / 18 · lh 1.4", cls: "font-sans text-intro", sample: "Senior product designer for payments. I design the moments where money moves and people need to trust it." },
   { token: "text-body", spec: "18 / 16 · lh 1.4", cls: "font-sans text-body", sample: "Back-office tooling for users, mandates and failed collections, used daily by operations teams across 23+ integrated banks." },
+  { token: "text-ui", spec: "16 fixed · sidebar, header name, footer links", cls: "font-sans text-ui", sample: "Work  About  AskMary" },
+  { token: "text-nav", spec: "14 mono fixed · top bar links", cls: "font-mono text-nav text-muted", sample: "Work  About  CV ↗" },
   { token: "text-label", spec: "13 mono", cls: "font-mono text-label text-muted", sample: ".selected work" },
   { token: "text-meta", spec: "12 mono", cls: "font-mono text-meta text-muted", sample: "02 · Bank / fintech · Lead product designer · 2023" },
 ] as const;
@@ -42,7 +44,7 @@ const grid = [1, 2, 3, 4, 6, 8, 12, 16] as const; // × 8px
 
 export default function StyleguidePage() {
   return (
-    <main className="flex flex-col gap-12 px-2 py-8 lg:pr-8 lg:pl-[var(--content-left)]">
+    <div className="flex flex-col gap-12 py-8">
       <header className="flex flex-col gap-2">
         <SectionLabel>styleguide</SectionLabel>
         <h1 className="font-display text-h1">Design tokens</h1>
@@ -162,7 +164,7 @@ export default function StyleguidePage() {
           <ImagePlaceholder name="example-tag.png" width={120} height={120} />
         </div>
       </Section>
-    </main>
+    </div>
   );
 }
 

@@ -6,9 +6,9 @@ export const metadata: Metadata = { title: "TNS case study" };
 
 export default function Page() {
   return (
-    <main className="px-2 py-6 lg:pl-[var(--content-left)]">
+    <div className="py-6">
       <SectionLabel as="h1">work / tns</SectionLabel>
       <Content />
-    </main>
+    </div>
   );
 }

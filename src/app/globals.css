@@ -27,6 +27,17 @@
   --text-label--line-height: 1.4;
   --text-meta: 12px;
   --text-meta--line-height: 1.4;
+
+  /* Fixed UI sizes (site chrome: sidebar, header, footer) */
+  --text-ui: 16px;  /* Instrument Sans nav + footer links */
+  --text-ui--line-height: 1.4;
+  --text-nav: 14px; /* JetBrains Mono top-bar links */
+  --text-nav--line-height: 1.4;
+
+  /* Layout breakpoints for site chrome.
+     < tablet: mobile top bar · tablet–desktop: tablet top bar · ≥ desktop: sidebar */
+  --breakpoint-tablet: 52.125rem;  /* 834px */
+  --breakpoint-desktop: 74.625rem; /* 1194px */
 }
 
 /* Values that point at runtime variables (next/font, responsive sizes). */

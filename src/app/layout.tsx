@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PageShell } from "@/components/PageShell";
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={fontVariables}>
-      <body className="min-h-dvh bg-bg text-body text-text">{children}</body>
+      <body className="min-h-dvh bg-bg text-body text-text">
+        <PageShell>{children}</PageShell>
+      </body>
     </html>
   );
 }

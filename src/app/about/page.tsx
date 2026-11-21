@@ -5,8 +5,8 @@ export const metadata: Metadata = { title: "About" };
 
 export default function Page() {
   return (
-    <main className="px-2 py-6 lg:pl-[var(--content-left)]">
+    <div className="py-6">
       <SectionLabel as="h1">about</SectionLabel>
-    </main>
+    </div>
   );
 }
