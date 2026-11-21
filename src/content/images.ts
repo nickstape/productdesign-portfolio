@@ -3,7 +3,14 @@
  * One entry per row of each screen's "Images for this screen" table,
  * copied exactly (key, src, alt, width, height).
  */
-export type Img = { src: string; alt: string; width: number; height: number };
+export type Img = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  /** Videos only: still shown before playback and with reduced motion. */
+  poster?: string;
+};
 
 export const images = {
   /** Round avatar mark. Decorative: it always sits inside a link labelled "Mary Fisher — home". */

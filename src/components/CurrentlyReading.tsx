@@ -16,13 +16,14 @@ const NORMAL = "leading-[normal]"; // Figma "auto" line height
 
 /**
  * ≥ 1194px: a strip (button) that opens a floating card above it on hover or keyboard focus.
- * Below that: the mobile row; tapping it (or the green ↓) expands the same card inline.
+ * Below that: the mobile row; tapping it expands the row in place with the why-line (no card).
  * Data in src/content/reading.ts.
  */
 export function CurrentlyReading() {
   const { title, author, page, totalPages, why, previously, cover } = reading;
   const [open, setOpen] = useState(false);
   const cardId = useId();
+  const detailsId = useId();
   const progress = `${Math.min(100, Math.max(0, (page / totalPages) * 100))}%`;
 
   const show = () => setOpen(true);
@@ -77,30 +78,52 @@ export function CurrentlyReading() {
         </span>
       </button>
 
-      {/* Mobile row */}
+      {/* Mobile row — Figma "Mobile / Currently reading" (Default / Open). Expands in place:
+          72px closed, grows to fit the why-line; content below moves down with it. */}
       <button
         type="button"
         aria-expanded={open}
-        aria-controls={cardId}
+        aria-controls={detailsId}
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onEsc}
         className="flex w-full items-start gap-[14px] py-1.5 text-left desktop:hidden"
       >
         <span aria-hidden="true" className="relative block h-[40px] w-[28px] shrink-0">
           <span
-            className={`absolute top-[5px] left-[-2px] block h-[38px] w-[26px] rotate-8 overflow-hidden rounded-[2px] shadow-[0_4px_8px_rgb(0_0_0/0.5)] ${CREAM}`}
+            className={`absolute top-[5px] left-[-2px] block h-[38px] w-[26px] overflow-hidden rounded-[2px] shadow-[0_4px_8px_rgb(0_0_0/0.5)] ${CREAM} ${MOTION} ${
+              open ? "rotate-0 motion-safe:-translate-y-[2px]" : "rotate-8"
+            }`}
           >
             <span className={`absolute inset-y-0 left-0 w-[3px] ${SPINE}`} />
           </span>
         </span>
-        <span className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="flex min-w-0 flex-1 flex-col">
           <span className="font-sans text-[17px] leading-[25px] text-text">
             Reading <span className="text-accent underline">{title}</span> by {author}
           </span>
-          <span className="flex items-center gap-1">
+          <span className="mt-1 flex items-center gap-1">
             {bar("w-[110px]")}
             <span className="font-mono text-[11px] leading-[15px] text-muted">
               p. {page} / {totalPages}
+            </span>
+          </span>
+          {/* 0fr → 1fr animates the height without measuring. */}
+          <span
+            id={detailsId}
+            aria-hidden={!open}
+            className={`grid transition-[grid-template-rows,opacity] duration-[280ms] ease-out motion-reduce:transition-none ${
+              open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+            }`}
+          >
+            <span className="min-h-0 overflow-hidden">
+              <span className="flex flex-col gap-1 pt-1">
+                <span className="font-sans text-[15px] leading-[1.4] text-[#b8b8b5]">{why}</span>
+                {previously.length > 0 && (
+                  <span className="font-mono text-[11px] leading-[15px] text-muted">
+                    Previously: {previously.join(" · ")}
+                  </span>
+                )}
+              </span>
             </span>
           </span>
         </span>
@@ -114,13 +137,13 @@ export function CurrentlyReading() {
         </span>
       </button>
 
-      {/* Card: floats above the strip on desktop; inline below the row on mobile. */}
+      {/* Card: desktop only, floating above the strip. Below 1194 the row expands instead. */}
       <div
         id={cardId}
-        className={`mt-1 flex w-full items-center gap-[20px] rounded-[14px] border border-[#333] bg-surface py-[20px] pr-[24px] pl-[20px] text-left shadow-[0_24px_48px_rgb(0_0_0/0.6)] desktop:pointer-events-none desktop:absolute desktop:bottom-[calc(100%+20px)] desktop:left-[-36px] desktop:mt-0 desktop:h-[202px] desktop:w-[346px] ${MOTION} ${
+        className={`hidden items-center gap-[20px] rounded-[14px] border border-[#333] bg-surface py-[20px] pr-[24px] pl-[20px] text-left shadow-[0_24px_48px_rgb(0_0_0/0.6)] desktop:pointer-events-none desktop:absolute desktop:bottom-[calc(100%+20px)] desktop:left-[-36px] desktop:flex desktop:h-[202px] desktop:w-[346px] ${MOTION} ${
           open
             ? "visible translate-y-0 opacity-100"
-            : "invisible opacity-0 max-desktop:hidden motion-safe:translate-y-[14px]"
+            : "invisible opacity-0 motion-safe:translate-y-[14px]"
         }`}
       >
         <div className="relative h-[160px] w-[110px] shrink-0 overflow-hidden rounded-[2px]">

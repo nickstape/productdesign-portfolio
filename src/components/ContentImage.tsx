@@ -11,6 +11,8 @@ type Props = {
   className?: string;
   sizes?: string;
   priority?: boolean;
+  /** Default true: full width, 8px radius, 1px line border. false: no frame, the caller sizes it. */
+  frame?: boolean;
 };
 
 /**
@@ -18,8 +20,9 @@ type Props = {
  * manifest; CSS controls display size), or a <video> for .mp4/.webm entries. If the file isn't in /public yet,
  * renders <ImagePlaceholder> at the same aspect ratio instead.
  */
-export function ContentImage({ img, className = "", sizes, priority }: Props) {
+export function ContentImage({ img, className = "", sizes, priority, frame = true }: Props) {
   const file = path.join(process.cwd(), "public", img.src);
+  const frameClass = frame ? "h-auto w-full rounded-image border border-line" : "";
 
   if (!existsSync(file)) {
     return (
@@ -40,13 +43,14 @@ export function ContentImage({ img, className = "", sizes, priority }: Props) {
         src={img.src}
         width={img.width}
         height={img.height}
+        poster={img.poster}
         muted
         loop
         playsInline
         preload="metadata"
         aria-label={img.alt || undefined}
         aria-hidden={img.alt ? undefined : true}
-        className={`h-auto w-full rounded-image border border-line ${className}`}
+        className={`${frameClass} ${className}`}
       />
     );
   }
@@ -59,7 +63,7 @@ export function ContentImage({ img, className = "", sizes, priority }: Props) {
       height={img.height}
       sizes={sizes}
       priority={priority}
-      className={`h-auto w-full rounded-image border border-line ${className}`}
+      className={`${frameClass} ${className}`}
     />
   );
 }
