@@ -12,7 +12,7 @@ export function OpenChat() {
     <button
       type="button"
       onClick={() => window.chatbase?.open?.()}
-      className="self-start rounded-image border border-line bg-surface px-2 py-1 font-sans text-ui text-text transition-colors hover:border-accent hover:text-accent"
+      className="relative touch-target self-start rounded-image border border-line bg-surface px-2 py-1 font-sans text-ui text-text transition-colors hover:border-accent hover:text-accent"
     >
       Open AskMary
     </button>

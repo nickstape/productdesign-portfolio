@@ -32,7 +32,7 @@ function List({ items, linkClassName, pathname }: Props & { pathname: string | n
     <>
       {items.map((item) => {
         const current = isCurrent(item, pathname);
-        const cls = `${linkClassName} transition-colors ${
+        const cls = `${linkClassName} relative touch-target transition-colors duration-150 ${
           current ? "text-accent" : "text-muted hover:text-text"
         }`;
         return (

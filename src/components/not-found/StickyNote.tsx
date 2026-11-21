@@ -39,7 +39,7 @@ export function StickyNote({ links, className = "", style }: Props) {
             >
               <Link
                 href={link.href}
-                className="flex h-6 items-center font-sans text-[14px] whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f0f0f] tablet:inline-flex tablet:h-auto tablet:text-[17px] tablet:leading-[24px]"
+                className="relative touch-target flex h-6 items-center font-sans tablet:[--hit:34px] text-[14px] whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f0f0f] tablet:inline-flex tablet:h-auto tablet:text-[17px] tablet:leading-[24px]"
               >
                 <span className="underline decoration-1 [text-underline-position:from-font] hover:decoration-2">
                   {link.label}

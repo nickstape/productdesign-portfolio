@@ -21,7 +21,7 @@ export function MobileHeader() {
       <Link
         href="/"
         aria-label="Mary Fisher — home"
-        className="flex items-center gap-1 font-sans text-ui font-medium text-text"
+        className="relative touch-target flex items-center gap-1 font-sans text-ui font-medium text-text"
       >
         <Avatar />
         <span className="tablet:hidden">Mary Fisher</span>

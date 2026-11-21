@@ -26,7 +26,7 @@ export default function Home() {
       <div className="hidden flex-1 flex-col justify-center pt-6 pb-8 tablet:-mr-(--page-right) tablet:-ml-(--page-left) tablet:flex desktop:justify-start desktop:pt-(--home-column-top) desktop:pb-0">
       {/* Full-width stage: the column centres on the viewport and the tag field spans it. */}
       <div className="relative">
-        <div className="mx-auto flex max-w-[520px] flex-col items-center text-center">
+        <div data-enter className="mx-auto flex max-w-[520px] flex-col items-center text-center">
           <SectionLabel>hello — i’m a designer & i’m based in London</SectionLabel>
 
           <h1 className="mt-1 font-sans text-[22px] leading-[30px] font-normal text-text">

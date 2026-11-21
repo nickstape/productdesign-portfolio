@@ -1,7 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { TAG_FRAMES, type HomeTag } from "@/content/home-tags";
 
 /**
@@ -33,6 +42,63 @@ function placement({ position: p }: HomeTag): CSSProperties {
   return vars as CSSProperties;
 }
 
+/** Parallax: tags drift up to this many px against the pointer; alternate tags sit "deeper". */
+const DRIFT = [3, 2] as const;
+/** Desktop, mouse, motion allowed. */
+const PARALLAX_QUERY =
+  "(min-width: 74.625rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
+
+/**
+ * Sets --drift-x / --drift-y (−1…1, the pointer's position from the viewport centre) on the
+ * field, once per frame at most. Each tag turns them into a 2–3px translate, eased by CSS.
+ */
+function useParallax(ref: RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const mq = window.matchMedia(PARALLAX_QUERY);
+    let frame = 0;
+    let x = 0;
+    let y = 0;
+    const write = () => {
+      frame = 0;
+      el.style.setProperty("--drift-x", x.toFixed(3));
+      el.style.setProperty("--drift-y", y.toFixed(3));
+    };
+    const queue = () => {
+      if (!frame) frame = requestAnimationFrame(write);
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      x = (e.clientX / window.innerWidth) * 2 - 1;
+      y = (e.clientY / window.innerHeight) * 2 - 1;
+      queue();
+    };
+    const recentre = () => {
+      x = 0;
+      y = 0;
+      queue();
+    };
+    const sync = () => {
+      if (mq.matches) {
+        window.addEventListener("pointermove", onMove, { passive: true });
+      } else {
+        window.removeEventListener("pointermove", onMove);
+        recentre();
+      }
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    document.documentElement.addEventListener("pointerleave", recentre);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("pointermove", onMove);
+      mq.removeEventListener("change", sync);
+      document.documentElement.removeEventListener("pointerleave", recentre);
+    };
+  }, [ref]);
+}
+
 type Props = {
   tags: HomeTag[];
   /** One rendered <ContentImage> per tag, same order. Built on the server (ContentImage reads the file system). */
@@ -42,18 +108,33 @@ type Props = {
 /**
  * Home page project tags, ≥ 834px (below that the home page is <MobileHome>, without tags):
  * positioned around the centre column with a hover/focus preview card, one open at a time.
+ * Esc closes the open card however it was opened (WCAG 1.4.13). On desktop with a mouse the
+ * tags drift 2–3px with the pointer.
  * The field is absolute over the full-width stage, its top at the top of the centre column.
  */
 export function ProjectTags({ tags, previews }: Props) {
   const [open, setOpen] = useState<number | null>(null);
+  const field = useRef<HTMLUListElement>(null);
+  useParallax(field);
+
+  // A card opened by hover has no focused control to take the key, so listen on the document.
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(null);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
-    <ul aria-label="Projects" className="pointer-events-none absolute inset-x-0 top-0">
+    <ul ref={field} aria-label="Projects" className="pointer-events-none absolute inset-x-0 top-0">
 
       {tags.map((tag, i) => (
         <Tag
           key={tag.label}
           tag={tag}
+          depth={DRIFT[i % DRIFT.length]}
           preview={previews[i]}
           open={open === i}
           onOpen={() => setOpen(i)}
@@ -66,13 +147,15 @@ export function ProjectTags({ tags, previews }: Props) {
 
 type TagProps = {
   tag: HomeTag;
+  /** Parallax drift in px at the viewport edge. */
+  depth: number;
   preview: ReactNode;
   open: boolean;
   onOpen: () => void;
   onClose: () => void;
 };
 
-function Tag({ tag, preview, open, onOpen, onClose }: TagProps) {
+function Tag({ tag, depth, preview, open, onOpen, onClose }: TagProps) {
   const captionId = useId();
 
   const controlProps = {
@@ -82,7 +165,7 @@ function Tag({ tag, preview, open, onOpen, onClose }: TagProps) {
       if (e.key === "Escape") onClose();
     },
     "aria-describedby": captionId,
-    className: "block",
+    className: "relative block touch-target",
   };
 
   const chip = (
@@ -111,10 +194,10 @@ function Tag({ tag, preview, open, onOpen, onClose }: TagProps) {
     <li
       onMouseEnter={onOpen}
       onMouseLeave={onClose}
-      className={`pointer-events-auto absolute left-(--l-tablet) top-(--t-tablet) desktop:left-(--l-desktop) desktop:top-(--t-desktop) wide:left-(--l-wide) wide:top-(--t-wide) xwide:left-(--l-xwide) xwide:top-(--t-xwide) ${
+      className={`pointer-events-auto absolute [translate:calc(var(--drift-x,0)*var(--depth))_calc(var(--drift-y,0)*var(--depth))] transition-[translate] duration-[600ms] ease-out left-(--l-tablet) top-(--t-tablet) desktop:left-(--l-desktop) desktop:top-(--t-desktop) wide:left-(--l-wide) wide:top-(--t-wide) xwide:left-(--l-xwide) xwide:top-(--t-xwide) ${
         open ? "z-20" : "z-10"
       }`}
-      style={placement(tag)}
+      style={{ ...placement(tag), "--depth": `${-depth}px` } as CSSProperties}
     >
       {tag.href ? (
         <Link href={tag.href} {...controlProps}>
@@ -128,7 +211,7 @@ function Tag({ tag, preview, open, onOpen, onClose }: TagProps) {
             aria-disabled="true"
             onClick={(e) => e.preventDefault()}
             {...controlProps}
-            className="block cursor-default"
+            className="relative block cursor-default touch-target"
           >
             {chip}
           </button>

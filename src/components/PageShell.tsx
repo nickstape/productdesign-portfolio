@@ -18,8 +18,12 @@ export function PageShell({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
-      <SiteLogo />
-      <Sidebar />
+      {/* Banner landmark ≥ 1194px. Both children are position: fixed, so this box is empty and
+          takes no space. Below 1194 <MobileHeader> is the banner. */}
+      <header className="hidden desktop:block">
+        <SiteLogo />
+        <Sidebar />
+      </header>
       <MobileHeader />
       <main id="main" tabIndex={-1} className={`flex-1 focus:outline-none ${pageGutter}`}>
         {children}

@@ -28,7 +28,7 @@ const columns = {
 export default function Page() {
   return (
     // < 834: main's 16px gutter + 4px here = Figma's 20px side padding.
-    <div className="px-0.5 pt-4 tablet:px-0 tablet:pt-9 desktop:pt-18">
+    <div data-enter className="px-0.5 pt-4 tablet:px-0 tablet:pt-9 desktop:pt-18">
       <h1 className="sr-only">About</h1>
 
       <div
