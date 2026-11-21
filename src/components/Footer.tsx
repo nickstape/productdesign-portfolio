@@ -48,29 +48,39 @@ export function Footer() {
 
       {/* Right padding keeps the text clear of the Chatbase bubble (55px, 16px from the
           viewport edge): text ends ≥ 87px from the edge at every width. */}
-      <div className="mt-3 flex flex-col gap-2 pr-9 tablet:flex-row tablet:items-baseline tablet:justify-between tablet:pr-7 desktop:pr-6">
-        <Label>say hello</Label>
-        <ul className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-sans text-ui">
-          <li>
-            <a
-              href={contact.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text transition-colors hover:text-accent"
-            >
-              LinkedIn
-            </a>
-          </li>
-          <li>
-            <a href={`mailto:${contact.email}`} className="text-text transition-colors hover:text-accent">
-              Email
-            </a>
-          </li>
-          <li className="text-muted">
-            All rights reserved<span className="tablet:hidden">,</span> ©2026
-          </li>
-        </ul>
-      </div>
+      <FooterRow className="mt-3 flex flex-col gap-2 pr-9 tablet:flex-row tablet:items-baseline tablet:justify-between tablet:pr-7 desktop:pr-6" />
     </footer>
+  );
+}
+
+/**
+ * The footer's bottom row: ".say hello" and the contact links. The caller sets the layout.
+ * `compact`: below 834px only LinkedIn and Email (the 404 page).
+ */
+export function FooterRow({ className = "", compact = false }: { className?: string; compact?: boolean }) {
+  return (
+    <div className={className}>
+      <Label>say hello</Label>
+      <ul className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-sans text-ui">
+        <li>
+          <a
+            href={contact.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text transition-colors hover:text-accent"
+          >
+            LinkedIn
+          </a>
+        </li>
+        <li>
+          <a href={`mailto:${contact.email}`} className="text-text transition-colors hover:text-accent">
+            Email
+          </a>
+        </li>
+        <li className={`text-muted ${compact ? "hidden tablet:list-item" : ""}`}>
+          All rights reserved<span className="tablet:hidden">,</span> ©2026
+        </li>
+      </ul>
+    </div>
   );
 }
