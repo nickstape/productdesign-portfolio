@@ -102,6 +102,13 @@
   }
 }
 
+/* Home (< 834px): Figma "Mobile — Home" puts the footer 56px under the reading row. */
+@media (width < 52.125rem) {
+  #main:has([data-home]) ~ footer {
+    margin-top: 56px;
+  }
+}
+
 @layer base {
   html {
     background: var(--color-bg);
