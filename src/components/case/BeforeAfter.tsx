@@ -19,7 +19,10 @@ type Props = {
   annotations?: Annotation[];
 };
 
-/** Two images side by side ≥ 834 with Before / After captions; stacked (Before first) below. */
+/**
+ * Two images side by side ≥ 834 with Before / After captions; stacked (Before first) below.
+ * The Before image has no stroke outline; After keeps the 1px line border.
+ */
 export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] }: Props) {
   const panes = [
     { key: "before", img: before, caption: "Before" },
@@ -31,7 +34,7 @@ export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] 
       {panes.map((p) => (
         <figure key={p.key} className="flex flex-col gap-[10px]">
           <div className="relative">
-            <CaseMedia img={p.img} w={w} h={h} sizes={SIZES_HALF} />
+            <CaseMedia img={p.img} w={w} h={h} sizes={SIZES_HALF} outline={p.key !== "before"} />
             {annotations
               .filter((a) => (a.on ?? "before") === p.key)
               .map((a) => (
