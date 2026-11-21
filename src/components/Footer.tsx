@@ -14,6 +14,15 @@ const WORDMARK_RATIO = 4.575;
 const WORDMARK_LEADING = 1.55;
 const WORDMARK_CLIP = 0.63;
 
+/**
+ * Optional height cap: a page can set --wordmark-max-height on the footer (the home page does,
+ * so it fits one viewport). The font then shrinks to keep the visible band within it.
+ * Unset, the fallback is never reached and the word spans the column.
+ */
+const WORDMARK_FONT_SIZE = `min(calc(100cqw / ${WORDMARK_RATIO}), calc(var(--wordmark-max-height, 100000px) / ${
+  WORDMARK_LEADING * WORDMARK_CLIP
+}))`;
+
 export function Footer() {
   return (
     <footer aria-label="Mary Fisher" className={`mt-12 pb-4 ${gutter}`}>
@@ -23,7 +32,7 @@ export function Footer() {
           aria-hidden="true"
           className="overflow-hidden font-wordmark font-normal whitespace-nowrap text-text select-none"
           style={{
-            fontSize: `calc(100cqw / ${WORDMARK_RATIO})`,
+            fontSize: WORDMARK_FONT_SIZE,
             lineHeight: WORDMARK_LEADING,
             height: `${WORDMARK_LEADING * WORDMARK_CLIP}em`,
             // opsz pinned to the display cut: auto optical sizing widens the letters
