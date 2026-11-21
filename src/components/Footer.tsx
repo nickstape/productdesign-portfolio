@@ -26,8 +26,10 @@ const WORDMARK_FONT_SIZE = `min(calc(100cqw / ${WORDMARK_RATIO}), calc(var(--wor
 export function Footer() {
   return (
     <footer aria-label="Mary Fisher" className={`mt-12 pb-4 ${gutter}`}>
-      {/* Container query: 100cqw = content width, so no JS measuring or resize jump. */}
-      <div className="@container">
+      {/* Container query: 100cqw = content width, so no JS measuring or resize jump.
+          < 834px the container bleeds through the gutter, so the word spans the full
+          viewport (390 in Figma "Mobile / Footer"). */}
+      <div className="@container -mx-2 tablet:mx-0">
         <div
           aria-hidden="true"
           className="overflow-hidden font-wordmark font-normal whitespace-nowrap text-text select-none"
@@ -64,7 +66,9 @@ export function Footer() {
               Email
             </a>
           </li>
-          <li className="text-muted">All rights reserved ©2026</li>
+          <li className="text-muted">
+            All rights reserved<span className="tablet:hidden">,</span> ©2026
+          </li>
         </ul>
       </div>
     </footer>

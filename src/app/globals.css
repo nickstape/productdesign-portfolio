@@ -15,12 +15,14 @@
   --color-muted: #a3a3a3;   /* secondary text, >= 4.5:1 on bg */
   --color-line: #262626;    /* 1px dividers and card borders */
   --color-accent: #42f57e;  /* signal, not a fill */
+  --color-annotate: #ff6b6b; /* case studies only: annotation labels on before/after images */
 
   /* 8px spacing grid: p-1 = 8px, p-2 = 16px, p-3 = 24px … (p-0.5 = 4px) */
   --spacing: 0.5rem;
 
-  /* Images: 8px radius */
+  /* Images: 8px radius. Case study panels and cards: 16px (Figma). */
   --radius-image: 8px;
+  --radius-card: 16px;
 
   /* Fixed mono sizes */
   --text-label: 13px;
@@ -33,6 +35,15 @@
   --text-ui--line-height: 1.4;
   --text-nav: 14px; /* JetBrains Mono top-bar links */
   --text-nav--line-height: 1.4;
+
+  /* Case study table of contents (Instrument Sans): sections 15, explorations 14 */
+  --text-toc: 15px;
+  --text-toc--line-height: 1.6;
+  --text-toc-sub: 14px;
+  --text-toc-sub--line-height: 1.6;
+  /* Case study small text: stat and outcome captions, CTA (Instrument Sans 15) */
+  --text-small: 15px;
+  --text-small--line-height: 1.5;
 
   /* Layout breakpoints for site chrome.
      < tablet: mobile top bar · tablet–desktop: tablet top bar · ≥ desktop: sidebar */
@@ -56,6 +67,29 @@
   --text-h1--line-height: 1.15;
   --text-headline: var(--fs-headline);
   --text-headline--line-height: 1.15;
+
+  /* Case study scale (mobile / desktop, switches at 1024px) */
+  /* Case study scale, from Figma "Case study - NDD" (3074:583) and mobile (3297:647) */
+  --text-case-title: var(--fs-case-title);
+  --text-case-title--line-height: 1.15;
+  --text-case-intro: var(--fs-case-intro);
+  --text-case-intro--line-height: 1.55;
+  --text-case-lead: var(--fs-case-lead); /* .tldr headline */
+  --text-case-lead--line-height: 1.1;
+  --text-case-headline: var(--fs-case-headline); /* section headlines, HMW */
+  --text-case-headline--line-height: 1.2;
+  --text-case-body: var(--fs-case-body);
+  --text-case-body--line-height: 1.65;
+  --text-card-title: var(--fs-card-title); /* audience cards */
+  --text-card-title--line-height: 1.3;
+  --text-next-title: var(--fs-next-title);
+  --text-next-title--line-height: 1.25;
+  --text-quote: var(--fs-quote);
+  --text-quote--line-height: 1.25;
+  --text-stat: var(--fs-stat);
+  --text-stat--line-height: 1.15;
+  --text-outcome: var(--fs-outcome);
+  --text-outcome--line-height: 1.2;
 }
 
 :root {
@@ -64,9 +98,23 @@
   --fs-intro: 18px;
   --fs-h1: 30px;
   --fs-headline: 24px;
+  --fs-case-title: 28px;
+  --fs-case-intro: 16px;
+  --fs-case-lead: 26px;
+  --fs-case-headline: 24px;
+  --fs-case-body: 16px;
+  --fs-card-title: 15px;
+  --fs-next-title: 21px;
+  --fs-quote: 21px;
+  --fs-stat: 22px;
+  --fs-outcome: 32px;
 
   /* Layout: content column starts at x=145 on a 1440 frame (right of sidebar) */
   --content-left: 145px;
+  /* Case study pages: content starts at x=216 (1152 wide) so the table of contents fits at x=38 */
+  --case-left: 216px;
+  /* Sticky bars above case study sections (< 1194: 60px header + 52px jump-to strip) */
+  --case-scroll-offset: 128px;
 
   color-scheme: dark;
 }
@@ -78,6 +126,16 @@
     --fs-intro: 20px;
     --fs-h1: clamp(32px, 2.78vw, 40px); /* 32 → 40 at 1440 */
     --fs-headline: 28px;
+    --fs-case-title: 32px;
+    --fs-case-intro: 19px;
+    --fs-case-lead: 47px;
+    --fs-case-headline: 30px;
+    --fs-case-body: 17px;
+    --fs-card-title: 22px;
+    --fs-next-title: 26px;
+    --fs-quote: 31px;
+    --fs-stat: 29px;
+    --fs-outcome: 48px;
   }
 }
 
@@ -99,6 +157,25 @@
     margin-top: 32px;
     /* page − hero minimum (32 top + 356 column) − footer chrome (32 + 24 + 23 + 32) */
     --wordmark-max-height: calc(max(100svh, 820px) - 499px);
+  }
+}
+
+/* Home (< 834px): Figma "Mobile — Home" puts the footer 56px under the reading row. */
+@media (width < 52.125rem) {
+  #main:has([data-home]) ~ footer {
+    margin-top: 56px;
+  }
+}
+
+/* Case study pages ([data-case] is the page root in src/app/work/[slug]/page.tsx).
+   ≥ 1194px the table of contents replaces the site sidebar and avatar mark. */
+@media (min-width: 74.625rem) {
+  :root {
+    --case-scroll-offset: 40px;
+  }
+
+  body:has([data-case]) nav[data-site-nav] {
+    display: none;
   }
 }
 

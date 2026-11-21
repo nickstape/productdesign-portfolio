@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withMDX = createMDX({});
+// Plugins are named as strings: Turbopack can't pass JS functions to its Rust loader.
+// Frontmatter is exported from each MDX file as `frontmatter` (see src/lib/case-studies.ts).
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-frontmatter", ["remark-mdx-frontmatter", { name: "frontmatter" }]],
+  },
+});
 
 export default withMDX(nextConfig);

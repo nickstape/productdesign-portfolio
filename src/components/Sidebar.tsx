@@ -6,6 +6,7 @@ export function Sidebar() {
   return (
     <nav
       aria-label="Primary"
+      data-site-nav
       className="fixed top-1/2 left-[38px] z-20 hidden -translate-y-1/2 desktop:block"
     >
       <ul className="flex flex-col gap-3">

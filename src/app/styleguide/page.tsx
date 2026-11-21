@@ -20,6 +20,7 @@ const colours = [
   { name: "muted", hex: "#a3a3a3", use: "Secondary text (≥ 4.5:1 on bg)", swatch: "bg-muted" },
   { name: "line", hex: "#262626", use: "1px dividers, card borders", swatch: "bg-line" },
   { name: "accent", hex: "#42f57e", use: "Active nav, links, key numbers, small squares", swatch: "bg-accent" },
+  { name: "annotate", hex: "#ff6b6b", use: "Case studies only: before/after annotation labels", swatch: "bg-annotate" },
 ] as const;
 
 const fonts = [
@@ -32,10 +33,23 @@ const fonts = [
 const typeScale = [
   { token: "text-h1", spec: "32–40 / 30 · lh 1.15", cls: "font-display text-h1", sample: "Designing the console behind Nigeria’s direct debit scheme" },
   { token: "text-headline", spec: "28 / 24 · lh 1.15", cls: "font-display text-headline", sample: "Back-office tooling for mandates" },
+  { token: "text-case-title", spec: "32 / 28 · lh 1.15 · case study H1", cls: "font-display text-case-title", sample: "Designing the console behind Nigeria’s national direct debit scheme" },
+  { token: "text-case-lead", spec: "47 / 26 · lh 1.1 · .tldr headline", cls: "font-display text-case-lead", sample: "NDD is where Nigeria’s recurring payments get permission." },
+  { token: "text-case-headline", spec: "30 / 24 · lh 1.2 · section headlines, HMW", cls: "font-display text-case-headline", sample: "One system, carried through every job the product does." },
+  { token: "text-case-intro", spec: "19 / 16 · lh 1.55 · case study intro", cls: "font-sans text-case-intro text-muted", sample: "I redesigned the end-to-end experience of NIBSS Direct Debit (NDD)." },
+  { token: "text-case-body", spec: "17 / 16 · lh 1.65 · case study body", cls: "font-sans text-case-body", sample: "A payment authorisation passes through several hands before money moves." },
+  { token: "text-card-title", spec: "22 / 15 · lh 1.3 · audience cards", cls: "font-sans text-card-title font-semibold", sample: "Raise the mandates" },
+  { token: "text-next-title", spec: "26 / 21 · lh 1.25 · next case study", cls: "font-display text-next-title", sample: "Giving operators control of Direct Debit" },
+  { token: "text-quote", spec: "31 / 21 · lh 1.25 · quotes", cls: "font-display text-quote", sample: "“Every time I see this login screen, I wonder if we should be using something else.”" },
+  { token: "text-stat", spec: "29 / 22 · lh 1.15 · stat cards", cls: "font-sans font-semibold text-stat text-accent", sample: "32% → 12%" },
+  { token: "text-outcome", spec: "48 / 32 · lh 1.2 · outcome numbers", cls: "font-display text-outcome text-accent", sample: "~26.55M" },
   { token: "text-intro", spec: "20 / 18 · lh 1.4", cls: "font-sans text-intro", sample: "Senior product designer for payments. I design the moments where money moves and people need to trust it." },
   { token: "text-body", spec: "18 / 16 · lh 1.4", cls: "font-sans text-body", sample: "Back-office tooling for users, mandates and failed collections, used daily by operations teams across 23+ integrated banks." },
   { token: "text-ui", spec: "16 fixed · sidebar, header name, footer links", cls: "font-sans text-ui", sample: "Work  About  AskMary" },
   { token: "text-nav", spec: "14 mono fixed · top bar links", cls: "font-mono text-nav text-muted", sample: "Work  About  CV ↗" },
+  { token: "text-toc", spec: "15 fixed · case study contents", cls: "font-sans text-toc text-muted", sample: "Design Explorations" },
+  { token: "text-toc-sub", spec: "14 fixed · contents sub-items", cls: "font-sans text-toc-sub text-muted", sample: "exploration 1" },
+  { token: "text-small", spec: "15 fixed · case study captions, CTA", cls: "font-sans text-small text-muted", sample: "of users now sign in with SSO" },
   { token: "text-label", spec: "13 mono", cls: "font-mono text-label text-muted", sample: ".selected work" },
   { token: "text-meta", spec: "12 mono", cls: "font-mono text-meta text-muted", sample: "02 · Bank / fintech · Lead product designer · 2023" },
 ] as const;

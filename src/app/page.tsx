@@ -1,13 +1,14 @@
 import Image from "next/image";
 import { ContentImage } from "@/components/ContentImage";
 import { CurrentlyReading } from "@/components/CurrentlyReading";
+import { MobileHome } from "@/components/MobileHome";
 import { ProjectTags } from "@/components/ProjectTags";
 import { SectionLabel } from "@/components/SectionLabel";
 import { homeTags } from "@/content/home-tags";
 import { images } from "@/content/images";
 
 /**
- * Home — Figma "Home — 1194" (3407:1654).
+ * Home — Figma "Home — 1194" (3407:1654); below 834px, <MobileHome> (3294:633) instead.
  * ≥ 1194px the page is exactly one viewport tall (min 820px) and doesn't scroll; the
  * [data-home] rules in globals.css size the shell, main and footer wordmark for that.
  */
@@ -15,10 +16,11 @@ export default function Home() {
   const portrait = images.portrait;
 
   return (
-    <div
-      data-home
-      className="flex flex-1 flex-col justify-end pt-6 desktop:-mr-5 desktop:-ml-[var(--content-left)] desktop:pt-4"
-    >
+    <div data-home className="flex flex-1 flex-col">
+      {/* < 834px: a separate text layout (Figma "Mobile — Home"). */}
+      <MobileHome />
+
+      <div className="hidden flex-1 flex-col justify-end pt-6 tablet:flex desktop:-mr-5 desktop:-ml-[var(--content-left)] desktop:pt-4">
       {/* Full-width stage: the column centres on the viewport and the tag field spans it. */}
       <div className="relative">
         <div className="mx-auto flex max-w-[520px] flex-col items-center text-center">
@@ -55,6 +57,7 @@ export default function Home() {
           </div>
 
         </div>
+      </div>
       </div>
     </div>
   );
