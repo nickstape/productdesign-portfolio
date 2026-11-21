@@ -6,7 +6,15 @@ import { SideQuestsGallery } from "@/components/SideQuestsGallery";
 import { experience } from "@/content/experience";
 import { gallery } from "@/content/gallery";
 
-export const metadata: Metadata = { title: "About" };
+import { pageMetadata } from "@/lib/seo";
+
+/** Description: the bio's first sentence, verbatim. */
+export const metadata: Metadata = pageMetadata({
+  title: "About",
+  description:
+    "I’m a product designer specialising in clear, scalable digital experiences for complex systems, with a strong focus on payment platforms and inclusive design.",
+  path: "/about",
+});
 
 /**
  * About — Figma "About v2" (1440, 3375:819), "About — 1194" (3407:1752), "About — 834"

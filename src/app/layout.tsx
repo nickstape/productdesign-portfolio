@@ -2,16 +2,30 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { INTRO_LOADER } from "@/components/home-intro";
 import { PageShell } from "@/components/PageShell";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  IS_PREVIEW,
+  SITE_URL,
+  sharedOpenGraph,
+  sharedTwitter,
+} from "@/lib/seo";
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
+/** Site-wide defaults. Pages add their own canonical and Open Graph / Twitter text through
+ *  pageMetadata() in src/lib/seo.ts; the 404 inherits these as they are. */
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Mary Fisher — Senior Product Designer",
+    default: DEFAULT_TITLE,
     template: "%s — Mary Fisher",
   },
-  description:
-    "Senior product designer for payments. I design the moments where money moves and people need to trust it.",
+  description: DEFAULT_DESCRIPTION,
+  openGraph: { ...sharedOpenGraph, title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION },
+  twitter: { ...sharedTwitter, title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION },
+  // Preview deployments stay out of search results.
+  ...(IS_PREVIEW && { robots: { index: false, follow: false } }),
 };
 
 /** Chatbase embed snippet, verbatim. The id and domain identify the agent; don't edit. */

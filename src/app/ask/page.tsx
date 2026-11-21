@@ -3,7 +3,14 @@ import { Label } from "@/components/Label";
 import { contact } from "@/content/site";
 import { OpenChat } from "./OpenChat";
 
-export const metadata: Metadata = { title: "AskMary" };
+import { pageMetadata } from "@/lib/seo";
+
+/** Description: the page's own intro line, verbatim. */
+export const metadata: Metadata = pageMetadata({
+  title: "AskMary",
+  description: "Ask my AI agent about my work, process or experience.",
+  path: "/ask",
+});
 
 /** AskMary lives in the site-wide Chatbase bubble; this page points to it. */
 export default function Page() {
