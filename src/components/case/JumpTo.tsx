@@ -17,8 +17,10 @@ export function JumpTo({ items }: { items: TocItem[] }) {
     const list = listRef.current;
     const chip = list?.querySelector<HTMLElement>(`[data-id="${active}"]`);
     if (!list || !chip) return;
-    const left = chip.offsetLeft - 16;
-    const right = chip.offsetLeft + chip.offsetWidth + 16 - list.clientWidth;
+    // Keep the chip clear of the edge by the page gutter (16 mobile, 48 tablet).
+    const pad = parseFloat(getComputedStyle(list).paddingLeft) || 16;
+    const left = chip.offsetLeft - pad;
+    const right = chip.offsetLeft + chip.offsetWidth + pad - list.clientWidth;
     if (list.scrollLeft > left) list.scrollTo({ left });
     else if (list.scrollLeft < right) list.scrollTo({ left: right });
   }, [active]);
@@ -30,10 +32,10 @@ export function JumpTo({ items }: { items: TocItem[] }) {
   };
 
   return (
-    <nav aria-label="Jump to section" className="sticky top-[60px] z-20 -mx-2 mt-3 bg-bg tablet:-mx-4 desktop:hidden">
+    <nav aria-label="Jump to section" className="sticky top-[60px] z-20 -mr-(--page-right) -ml-(--page-left) mt-3 bg-bg desktop:hidden">
       <ul
         ref={listRef}
-        className="flex gap-1 overflow-x-auto px-2 py-[10px] [scrollbar-width:none] tablet:px-4 [&::-webkit-scrollbar]:hidden"
+        className="flex gap-1 overflow-x-auto py-[10px] pr-(--page-right) pl-(--page-left) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item) => {
           const current = active === item.id;

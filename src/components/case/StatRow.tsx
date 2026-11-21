@@ -1,8 +1,15 @@
 import type { ReactNode } from "react";
 
-/** Figma "Feature notes" (3091:1739): 3 stat cards ≥ 834, stacked below (3303:770). */
+/**
+ * Figma "Feature notes" (3091:1739): stacked below 834 (3303:770); 834–1193 2-up, each card
+ * as tall as its own content; ≥ 1194 3 equal cards in a row.
+ */
 export function StatRow({ children }: { children: ReactNode }) {
-  return <ul className="grid grid-cols-1 gap-1 tablet:grid-cols-3 tablet:gap-3 desktop:gap-6">{children}</ul>;
+  return (
+    <ul className="grid grid-cols-1 gap-1 tablet:grid-cols-2 tablet:items-start tablet:gap-3 desktop:grid-cols-3 desktop:items-stretch desktop:gap-6">
+      {children}
+    </ul>
+  );
 }
 
 export function Stat({ value, children }: { value: ReactNode; children: ReactNode }) {

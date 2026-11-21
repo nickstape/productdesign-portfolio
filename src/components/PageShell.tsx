@@ -3,7 +3,7 @@ import { Footer } from "./Footer";
 import { MobileHeader } from "./MobileHeader";
 import { Sidebar } from "./Sidebar";
 import { SiteLogo } from "./SiteLogo";
-import { gutter } from "./gutter";
+import { pageGutter } from "./gutter";
 
 /**
  * Site chrome for every page (applied once in the root layout).
@@ -21,7 +21,7 @@ export function PageShell({ children }: { children: ReactNode }) {
       <SiteLogo />
       <Sidebar />
       <MobileHeader />
-      <main id="main" tabIndex={-1} className={`flex-1 focus:outline-none ${gutter}`}>
+      <main id="main" tabIndex={-1} className={`flex-1 focus:outline-none ${pageGutter}`}>
         {children}
       </main>
       <Footer />

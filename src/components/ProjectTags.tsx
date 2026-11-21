@@ -1,8 +1,37 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
-import { TAG_FIELD_HEIGHT, type HomeTag } from "@/content/home-tags";
+import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
+import { TAG_FRAMES, type HomeTag } from "@/content/home-tags";
+
+/**
+ * `a` at viewport width w0, `b` at w1, linear in between. `base` is the length that tracks the
+ * viewport: 100% for left (the field spans the viewport), 100vw for top.
+ */
+function lerp(a: number, b: number, w0: number, w1: number, base: string): string {
+  if (a === b) return `${a}px`;
+  const slope = ((b - a) / (w1 - w0)).toFixed(5);
+  return `calc(${a}px + ${slope} * (${base} - ${w0}px))`;
+}
+
+/**
+ * --l-* / --t-* per range (tablet 834–1193, desktop 1194–1439, wide 1440–1919, xwide ≥ 1920),
+ * picked by the breakpoint classes on the <li>. Each range runs from one Figma frame to the next,
+ * so a tag never jumps at a breakpoint.
+ */
+function placement({ position: p }: HomeTag): CSSProperties {
+  const ranges = ["tablet", "desktop", "wide"] as const;
+  const vars: Record<string, string> = {};
+  ranges.forEach((r, i) => {
+    const [w0, w1] = [TAG_FRAMES[i], TAG_FRAMES[i + 1]];
+    vars[`--l-${r}`] = lerp(p[i][0], p[i + 1][0], w0, w1, "100%");
+    vars[`--t-${r}`] = lerp(p[i][1], p[i + 1][1], w0, w1, "100vw");
+  });
+  const [x, y] = p[3];
+  vars["--l-xwide"] = `${((x / TAG_FRAMES[3]) * 100).toFixed(3)}%`;
+  vars["--t-xwide"] = `${y}px`;
+  return vars as CSSProperties;
+}
 
 type Props = {
   tags: HomeTag[];
@@ -11,18 +40,16 @@ type Props = {
 };
 
 /**
- * Home page project tags. ≥ 1194px: positioned around the centre column with a hover/focus
- * preview card, one open at a time. Below that: a plain row of tags in the column, no previews.
+ * Home page project tags, ≥ 834px (below that the home page is <MobileHome>, without tags):
+ * positioned around the centre column with a hover/focus preview card, one open at a time.
+ * The field is absolute over the full-width stage, its top at the top of the centre column.
  */
 export function ProjectTags({ tags, previews }: Props) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <ul
-      aria-label="Projects"
-      className="mt-3 flex flex-wrap justify-center gap-2 desktop:pointer-events-none desktop:absolute desktop:inset-x-0 desktop:top-0 desktop:mt-0 desktop:block"
-      style={{ ["--tag-field-h" as string]: `${TAG_FIELD_HEIGHT}px` }}
-    >
+    <ul aria-label="Projects" className="pointer-events-none absolute inset-x-0 top-0">
+
       {tags.map((tag, i) => (
         <Tag
           key={tag.label}
@@ -84,12 +111,10 @@ function Tag({ tag, preview, open, onOpen, onClose }: TagProps) {
     <li
       onMouseEnter={onOpen}
       onMouseLeave={onClose}
-      // Static below desktop, so the offsets only take effect once it's absolutely positioned.
-      className={`desktop:pointer-events-auto desktop:absolute ${open ? "z-20" : "z-10"}`}
-      style={{
-        left: `${tag.position.x}%`,
-        top: `calc(var(--tag-field-h) * ${tag.position.y / 100})`,
-      }}
+      className={`pointer-events-auto absolute left-(--l-tablet) top-(--t-tablet) desktop:left-(--l-desktop) desktop:top-(--t-desktop) wide:left-(--l-wide) wide:top-(--t-wide) xwide:left-(--l-xwide) xwide:top-(--t-xwide) ${
+        open ? "z-20" : "z-10"
+      }`}
+      style={placement(tag)}
     >
       {tag.href ? (
         <Link href={tag.href} {...controlProps}>
@@ -146,7 +171,7 @@ function Preview({ preview, caption, captionId, arrow, align, open }: PreviewPro
     <div
       ref={ref}
       aria-hidden="true"
-      className={`absolute top-full z-30 hidden w-[280px] pt-5 desktop:block ${
+      className={`absolute top-full z-30 w-[280px] pt-5 ${
         align === "end" ? "right-0" : "left-0"
       } ${open ? "pointer-events-auto" : "pointer-events-none"}`}
     >

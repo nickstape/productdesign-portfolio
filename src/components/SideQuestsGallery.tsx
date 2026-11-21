@@ -159,7 +159,8 @@ export function SideQuestsGallery({ captions, slides, heights, ratios }: Props) 
 
   return (
     <div>
-      {/* Bleeds out of main: full width below 834; to the viewport's right edge above. */}
+      {/* Bleeds out of main: full width below 834; to the viewport's right edge above
+          (including the empty band beside the centred layout ≥ 1440, as in "About — 1920"). */}
       <div
         ref={scroller}
         role="region"
@@ -172,11 +173,11 @@ export function SideQuestsGallery({ captions, slides, heights, ratios }: Props) 
         onPointerCancel={endDrag}
         onDragStart={(e) => e.preventDefault()}
         style={fades}
-        className={`relative -mx-2.5 snap-x snap-mandatory scroll-px-2.5 overflow-x-auto overscroll-x-contain [scrollbar-width:none] focus-visible:outline-offset-[-2px] tablet:-mr-4 tablet:ml-0 tablet:snap-none tablet:scroll-px-0 tablet:[mask-image:linear-gradient(to_right,transparent,black_var(--fade-l),black_calc(100%-var(--fade-r)),transparent)] desktop:-mr-5 [&::-webkit-scrollbar]:hidden ${
+        className={`relative -mx-2.5 snap-x snap-mandatory scroll-px-2.5 overflow-x-auto overscroll-x-contain [scrollbar-width:none] focus-visible:outline-offset-[-2px] tablet:-mr-(--page-right) tablet:ml-0 tablet:snap-none tablet:scroll-px-0 tablet:[mask-image:linear-gradient(to_right,transparent,black_var(--fade-l),black_calc(100%-var(--fade-r)),transparent)] [&::-webkit-scrollbar]:hidden ${
           dragging ? "cursor-grabbing select-none" : "tablet:cursor-grab"
         }`}
       >
-        <ul className="flex w-max items-end gap-1.5 px-2.5 tablet:gap-[18px] tablet:pr-4 tablet:pl-0 desktop:pr-5">
+        <ul className="flex w-max items-end gap-1.5 px-2.5 tablet:gap-[18px] tablet:pr-(--page-right) tablet:pl-0">
           {slides.map((slide, i) => (
             <li
               key={captions[i]}

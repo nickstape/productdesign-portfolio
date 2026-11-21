@@ -89,7 +89,7 @@ const STAGGER_MS = 60;
 export default function NotFound() {
   return (
     <div
-      className="relative -mx-2 h-[max(calc(100svh-60px),680px)] overflow-x-clip tablet:-mx-4 tablet:h-[1134px] desktop:-mr-5 desktop:-ml-[var(--content-left)] desktop:h-[max(100svh,820px)]"
+      className="relative -mr-(--page-right) -ml-(--page-left) h-[max(calc(100svh-60px),680px)] overflow-x-clip tablet:h-[1134px] desktop:h-[max(100svh,820px)]"
       style={
         {
           /* Headline size: also places the tablet sticky note under it. */

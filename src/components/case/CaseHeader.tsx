@@ -23,10 +23,11 @@ export function CaseHeader({ kicker, title, intro, role, platform, outcome, outc
   ];
 
   return (
-    <header className="flex flex-col pt-[22px] desktop:pt-20">
+    <header className="flex flex-col pt-[22px] tablet:pt-9 desktop:pt-20">
+      {/* Mobile only: the 834 frame (3408:1169) has no back link; the top bar covers it. */}
       <Link
         href="/"
-        className="mb-[14px] self-start font-mono text-meta text-muted transition-colors hover:text-text desktop:hidden"
+        className="mb-[14px] self-start font-mono text-meta text-muted transition-colors hover:text-text tablet:hidden"
       >
         <span aria-hidden="true">← </span>Home
       </Link>

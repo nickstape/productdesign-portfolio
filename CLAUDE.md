@@ -10,7 +10,7 @@ Pages are built one Figma screen at a time. Match the design closely: spacing, t
 - All tokens live in `src/app/globals.css` under `@theme`. There is no `tailwind.config` file. Tailwind's stock palette is removed, so only token colours exist.
 - Colours (dark only): `bg`, `surface`, `text`, `muted`, `line`, `accent`. Accent is a signal (active nav, links, key numbers, small squares), never a fill.
 - Fonts: `font-sans` (Instrument Sans, body/UI), `font-display` (Space Grotesk, case study headlines), `font-mono` (JetBrains Mono, labels/meta/years/captions), `font-wordmark` (Fraunces, only the "Mary Fisher" wordmark).
-- Type: `text-body`, `text-intro`, `text-h1`, `text-headline` switch desktop/mobile size at 1024px automatically; `text-label` (13 mono), `text-meta` (12 mono).
+- Type: `text-body`, `text-intro`, `text-h1`, `text-headline` (and the case study `text-case-*` sizes) are fluid: `clamp()` from the mobile size at 390px to the desktop size at 834px, then held (`text-h1` grows on to 40 at 1440); `text-label` (13 mono), `text-meta` (12 mono).
 - Spacing: `--spacing` is 8px, so `p-1` = 8px, `p-2` = 16px, and so on. Stay on the 8px grid.
 - Content column starts at x=145 on 1440 (`var(--content-left)`).
 - `/styleguide` renders every token. Check it after any token change.

@@ -8,24 +8,27 @@ const items: NavItem[] = [
 ];
 import { Avatar } from "./Avatar";
 import { NavLinks } from "./NavLinks";
-import { gutter } from "./gutter";
 
 /**
- * Sticky top bar below 1194px.
- * < 834: Work / About / CV ↗ · 834–1193: Work / About / AskMary.
+ * Sticky 60px top bar below 1194px.
+ * < 834: avatar + name, Work / About / CV ↗ in mono, 1px line under it.
+ * 834–1193: Figma "Home — 834" header (3408:965): the sidebar moved to the top. Avatar only,
+ *   Work / About / AskMary in the sidebar's sans 16, 28px apart, 38px from each edge, no line.
  */
 export function MobileHeader() {
   return (
-    <header
-      className={`sticky top-0 z-30 flex h-[60px] items-center justify-between border-b border-line bg-bg desktop:hidden ${gutter}`}
-    >
-      <Link href="/" className="flex items-center gap-1 font-sans text-ui font-medium text-text">
+    <header className="sticky top-0 z-30 flex h-[60px] items-center justify-between border-b border-line bg-bg px-2 tablet:border-transparent tablet:px-[38px] desktop:hidden">
+      <Link
+        href="/"
+        aria-label="Mary Fisher — home"
+        className="flex items-center gap-1 font-sans text-ui font-medium text-text"
+      >
         <Avatar />
-        Mary Fisher
+        <span className="tablet:hidden">Mary Fisher</span>
       </Link>
       <nav aria-label="Primary">
-        <ul className="flex items-center gap-2 tablet:gap-3">
-          <NavLinks items={items} linkClassName="font-mono text-nav" />
+        <ul className="flex items-center gap-2 tablet:gap-[28px]">
+          <NavLinks items={items} linkClassName="font-mono text-nav tablet:font-sans tablet:text-ui" />
         </ul>
       </nav>
     </header>

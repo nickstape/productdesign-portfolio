@@ -1,8 +1,15 @@
 import type { ReactNode } from "react";
 
-/** Figma "Organisations" (3074:794): 3 equal cards ≥ 834, 36px below the text; rows split by lines below (3303:699). */
+/**
+ * Figma "Organisations" (3074:794): 3 cards ≥ 834, 36px below the text; rows split by lines
+ * below (3303:699). 834–1193 each card is as tall as its own content (3408:1188); ≥ 1194 equal.
+ */
 export function AudienceCards({ children }: { children: ReactNode }) {
-  return <ul className="flex flex-col tablet:mt-[20px] tablet:grid tablet:grid-cols-3 tablet:gap-[12px]">{children}</ul>;
+  return (
+    <ul className="flex flex-col tablet:mt-[20px] tablet:grid tablet:grid-cols-3 tablet:items-start tablet:gap-[12px] desktop:items-stretch">
+      {children}
+    </ul>
+  );
 }
 
 type CardProps = {
