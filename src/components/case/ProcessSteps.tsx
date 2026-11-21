@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
 
-/** Figma "Approach steps" (3074:832): a row of cards ≥ 834; a numbered list below (3303:723). */
+/**
+ * Figma "Approach steps" (3074:832): a row of cards ≥ 834; a numbered list below (3303:723).
+ * 834–1193 each card is as tall as its own content (3408:1239); ≥ 1194 equal.
+ */
 export function ProcessSteps({ children }: { children: ReactNode }) {
   return (
-    <ol className="flex flex-col tablet:grid tablet:auto-cols-fr tablet:grid-flow-col tablet:gap-[10px] tablet:pt-[18px] tablet:pb-1">
+    <ol className="flex flex-col tablet:grid tablet:auto-cols-fr tablet:grid-flow-col tablet:items-start tablet:gap-[10px] tablet:pt-[18px] tablet:pb-1 desktop:items-stretch">
       {children}
     </ol>
   );
@@ -33,7 +36,7 @@ export function Step({ n, title, pill, highlight = false, children }: StepProps)
         <p className="font-sans text-ui font-semibold text-text tablet:text-case-body tablet:leading-[1.3]">{title}</p>
         <div className="font-sans text-nav leading-[1.45] text-muted">{children}</div>
         {pill && (
-          <span className="mt-0.5 self-start rounded-full bg-text px-1 py-[3px] font-sans text-meta font-semibold text-bg">
+          <span className="mt-0.5 self-start rounded-full bg-text px-1 py-[3px] font-sans text-meta font-semibold whitespace-nowrap text-bg">
             {pill}
           </span>
         )}

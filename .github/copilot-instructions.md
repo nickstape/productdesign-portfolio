@@ -26,7 +26,8 @@ Tailwind's stock palette is removed. Use only these, e.g. `bg-surface`, `text-mu
 - `font-mono`: JetBrains Mono, for section labels, metadata, years and captions
 - `font-wordmark`: Fraunces, only for the giant "Mary Fisher" wordmark
 
-## Type scale (desktop / mobile; switches at 1024px automatically)
+## Type scale (desktop / mobile; fluid)
+- Sizes are fluid: each grows linearly via `clamp()` from its mobile size at 390px to its desktop size at 834px, then holds (`text-h1` keeps growing to 40 at 1440). No jumps at breakpoints. Values live in `--fs-*` in `globals.css`.
 - `text-body` 18/16 and `text-intro` 20/18, line-height 1.4
 - `text-h1` 32–40/30 and `text-headline` 28/24, line-height 1.15
 - `text-label` 13 mono, `text-meta` 12 mono

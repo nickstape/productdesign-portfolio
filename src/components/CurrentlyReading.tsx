@@ -15,7 +15,7 @@ const MOTION = "transition-[opacity,translate,rotate,visibility] duration-[280ms
 const NORMAL = "leading-[normal]"; // Figma "auto" line height
 
 /**
- * ≥ 1194px: a strip (button) that opens a floating card above it on hover or keyboard focus.
+ * ≥ 834px: a strip (button) that opens a floating card above it on hover or keyboard focus.
  * Below that: the mobile row; tapping it expands the row in place with the why-line (no card).
  * Data in src/content/reading.ts.
  */
@@ -39,8 +39,8 @@ export function CurrentlyReading() {
   );
 
   return (
-    <div className={`relative w-full desktop:w-auto ${open ? "z-40" : ""}`}>
-      {/* Desktop strip */}
+    <div className={`relative w-full tablet:w-auto ${open ? "z-40" : ""}`}>
+      {/* Strip (≥ 834) */}
       <button
         type="button"
         aria-expanded={open}
@@ -51,7 +51,7 @@ export function CurrentlyReading() {
         onBlur={hide}
         onClick={show}
         onKeyDown={onEsc}
-        className="hidden items-center gap-[14px] text-left desktop:flex"
+        className="hidden items-center gap-[14px] text-left tablet:flex"
       >
         <span aria-hidden="true" className="relative block h-[46px] w-[36px] shrink-0">
           <span
@@ -86,7 +86,7 @@ export function CurrentlyReading() {
         aria-controls={detailsId}
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onEsc}
-        className="flex w-full items-start gap-[14px] py-1.5 text-left desktop:hidden"
+        className="flex w-full items-start gap-[14px] py-1.5 text-left tablet:hidden"
       >
         <span aria-hidden="true" className="relative block h-[40px] w-[28px] shrink-0">
           <span
@@ -137,10 +137,10 @@ export function CurrentlyReading() {
         </span>
       </button>
 
-      {/* Card: desktop only, floating above the strip. Below 1194 the row expands instead. */}
+      {/* Card: ≥ 834 only, floating above the strip. Below 834 the row expands instead. */}
       <div
         id={cardId}
-        className={`hidden items-center gap-[20px] rounded-[14px] border border-[#333] bg-surface py-[20px] pr-[24px] pl-[20px] text-left shadow-[0_24px_48px_rgb(0_0_0/0.6)] desktop:pointer-events-none desktop:absolute desktop:bottom-[calc(100%+20px)] desktop:left-[-36px] desktop:flex desktop:h-[202px] desktop:w-[346px] ${MOTION} ${
+        className={`hidden items-center gap-[20px] rounded-[14px] border border-[#333] bg-surface py-[20px] pr-[24px] pl-[20px] text-left shadow-[0_24px_48px_rgb(0_0_0/0.6)] tablet:pointer-events-none tablet:absolute tablet:bottom-[calc(100%+20px)] tablet:left-[-36px] tablet:flex tablet:h-[202px] tablet:w-[346px] ${MOTION} ${
           open
             ? "visible translate-y-0 opacity-100"
             : "invisible opacity-0 motion-safe:translate-y-[14px]"
@@ -157,7 +157,7 @@ export function CurrentlyReading() {
           />
           <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-[6px] ${SPINE}`} />
         </div>
-        <div className="flex min-w-0 flex-col gap-[10px] desktop:w-[170px] desktop:shrink-0">
+        <div className="flex min-w-0 flex-col gap-[10px] tablet:w-[170px] tablet:shrink-0">
           <p
             className="font-wordmark text-[24px] leading-[26px] text-text italic"
             style={{ fontVariationSettings: '"SOFT" 0, "WONK" 1' }}

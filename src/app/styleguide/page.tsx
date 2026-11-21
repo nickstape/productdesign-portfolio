@@ -64,7 +64,7 @@ export default function StyleguidePage() {
         <h1 className="font-display text-h1">Design tokens</h1>
         <p className="max-w-[640px] text-intro text-muted">
           Every colour, font and type size in the system. Sizes marked “rendered” are read from
-          the browser, so resize the window to see the mobile values below 1024px.
+          the browser, so resize the window to watch the fluid sizes grow from 390px to 834px.
         </p>
       </header>
 

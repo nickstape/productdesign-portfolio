@@ -51,7 +51,20 @@ const components: MDXComponents = {
   Todo,
   p: (props) => <p className="font-sans text-case-body text-text/80" {...props} />,
   strong: (props) => <strong className="font-semibold" {...props} />,
-  a: (props) => <a className="text-accent underline underline-offset-4 hover:no-underline" {...props} />,
+  a: ({ href = "", children, ...props }) => {
+    const external = /^https?:\/\//.test(href);
+    return (
+      <a
+        href={href}
+        className="text-accent underline underline-offset-4 hover:no-underline"
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...props}
+      >
+        {children}
+        {external && <span className="sr-only"> (opens in a new tab)</span>}
+      </a>
+    );
+  },
 };
 
 export function useMDXComponents(): MDXComponents {

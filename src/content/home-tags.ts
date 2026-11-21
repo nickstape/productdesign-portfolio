@@ -1,13 +1,17 @@
 import { images, type Img } from "./images";
 
 /**
- * Floating project tags around the home page column (desktop, ≥ 1194px).
+ * Floating project tags around the home page column (≥ 834px).
  *
- * position: top-left corner of the tag, in % of the tag field. The field spans the full
- * viewport width and is TAG_FIELD_HEIGHT tall, starting at the top of the centre column.
- * Values come from the 1194 × 834 Figma frame: x = left ÷ 1194, y = (top − 151) ÷ 347.
+ * position: the tag's top-left corner in each Figma Home frame, in px: x from the left edge of
+ * the viewport, y from the top of the centre column (the ".hello" label). Frames: 834 (3408:964,
+ * column at y 270), 1194 (3407:1654, y 151), 1440 (3363:751, y 151), 1920 (3407:824, y 211).
+ * Between frames the tag moves in a straight line; above 1920, x keeps its share of the width
+ * so the tags spread with the extra room, and y holds.
  */
-export const TAG_FIELD_HEIGHT = 347;
+export const TAG_FRAMES = [834, 1194, 1440, 1920] as const;
+
+type Point = [x: number, y: number];
 
 export type HomeTag = {
   label: string;
@@ -16,7 +20,8 @@ export type HomeTag = {
   image: Img;
   /** One line under the preview image */
   caption: string;
-  position: { x: number; y: number };
+  /** One point per TAG_FRAMES entry, same order. */
+  position: [Point, Point, Point, Point];
   /** Which edge of the tag the preview card lines up with. Right-hand tags use "end" so the card stays on screen. */
   previewAlign: "start" | "end";
 };
@@ -30,7 +35,7 @@ export const homeTags: HomeTag[] = [
     href: "/work/tns",
     image: images.tagPayments,
     caption: "Transfer Notification Service",
-    position: { x: 12.98, y: 38.9 },
+    position: [[56, 118], [155, 135], [200, 42], [302, 105]],
     previewAlign: "start",
   },
   {
@@ -38,14 +43,14 @@ export const homeTags: HomeTag[] = [
     href: "/work/ndd",
     image: images.tagB2B,
     caption: "NIBSS Direct Debit · 50+ components",
-    position: { x: 22.11, y: 55.9 },
+    position: [[150, 198], [368, 104], [316, 226], [579, 147]],
     previewAlign: "start",
   },
   {
     label: "Branding",
     image: images.tagBranding,
     caption: "H20pe case study coming soon",
-    position: { x: 76.55, y: 27.4 },
+    position: [[640, -20], [950, 57], [1143, -14], [1521, 13]],
     previewAlign: "end",
   },
   {
@@ -53,14 +58,14 @@ export const homeTags: HomeTag[] = [
     href: "/work/ndd",
     image: images.tagDesignSystems,
     caption: "NIBSS Direct Debit · WCAG AA audited",
-    position: { x: 63.82, y: 48.1 },
+    position: [[540, 130], [757, 114], [930, 167], [1281, 163]],
     previewAlign: "end",
   },
   {
     label: "0 → 1 products",
     image: images.tag0to1,
     caption: COMING_SOON,
-    position: { x: 72.03, y: 71.8 },
+    position: [[590, 204], [932, 272], [1143, 234], [1456, 315]],
     previewAlign: "end",
   },
 ];

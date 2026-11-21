@@ -15,7 +15,7 @@ type Props = {
    * (accent label, text colour), e.g. [["problem", …], [null, …]] or [["considered", …], ["chose", …]].
    */
   rows?: Row[];
-  /** Right-hand column at ≥ 1194 (Figma explorations 03 and 04), usually a <Figure>. */
+  /** Right-hand column at ≥ 834 (Figma explorations 03 and 04, 834 and up), usually a <Figure>. */
   aside?: ReactNode;
   children?: ReactNode;
 };
@@ -58,11 +58,11 @@ export function Exploration({ n, title, intro, rows = [], aside, children }: Pro
       id={explorationId(n)}
       tabIndex={-1}
       className={`mt-6 scroll-mt-[var(--case-scroll-offset)] focus:outline-none ${
-        aside ? "flex flex-col gap-3 desktop:grid desktop:grid-cols-2 desktop:items-start desktop:gap-5" : ""
+        aside ? "flex flex-col gap-3 tablet:grid tablet:grid-cols-2 tablet:items-start tablet:gap-5" : ""
       }`}
     >
       {main}
-      {aside && <div className="min-w-0 desktop:pt-[48px]">{aside}</div>}
+      {aside && <div className="min-w-0">{aside}</div>}
     </section>
   );
 }

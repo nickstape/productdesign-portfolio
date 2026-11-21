@@ -45,10 +45,26 @@
   --text-small: 15px;
   --text-small--line-height: 1.5;
 
-  /* Layout breakpoints for site chrome.
-     < tablet: mobile top bar · tablet–desktop: tablet top bar · ≥ desktop: sidebar */
+  /* Layout breakpoints: 390 (base) · 834 · 1194 · 1440 · 1920.
+     < tablet: mobile top bar · tablet–desktop: tablet top bar · ≥ desktop: sidebar.
+     ≥ wide: the 1440 layout is centred (see --frame-offset). */
   --breakpoint-tablet: 52.125rem;  /* 834px */
   --breakpoint-desktop: 74.625rem; /* 1194px */
+  --breakpoint-wide: 90rem;        /* 1440px */
+  --breakpoint-xwide: 120rem;      /* 1920px */
+
+  /* 404 entrance: polaroids and sticky note drop in from 16px above (use with motion-safe:). */
+  --animate-drop-in: drop-in 400ms ease-out both;
+  @keyframes drop-in {
+    from {
+      opacity: 0;
+      translate: 0 -16px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
 }
 
 /* Values that point at runtime variables (next/font, responsive sizes). */
@@ -58,7 +74,7 @@
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   --font-wordmark: var(--font-fraunces), Georgia, serif;
 
-  /* Responsive type scale: one class per role, size switches at 1024px. */
+  /* Responsive type scale: one class per role, fluid between breakpoints (see :root). */
   --text-body: var(--fs-body);
   --text-body--line-height: 1.4;
   --text-intro: var(--fs-intro);
@@ -68,8 +84,7 @@
   --text-headline: var(--fs-headline);
   --text-headline--line-height: 1.15;
 
-  /* Case study scale (mobile / desktop, switches at 1024px) */
-  /* Case study scale, from Figma "Case study - NDD" (3074:583) and mobile (3297:647) */
+  /* Case study scale, from Figma "Case study - NDD" (3074:583), 834 (3408:1167) and mobile (3297:647) */
   --text-case-title: var(--fs-case-title);
   --text-case-title--line-height: 1.15;
   --text-case-intro: var(--fs-case-intro);
@@ -93,24 +108,34 @@
 }
 
 :root {
-  /* Mobile type sizes */
-  --fs-body: 16px;
-  --fs-intro: 18px;
-  --fs-h1: 30px;
-  --fs-headline: 24px;
-  --fs-case-title: 28px;
-  --fs-case-intro: 16px;
-  --fs-case-lead: 26px;
-  --fs-case-headline: 24px;
-  --fs-case-body: 16px;
-  --fs-card-title: 15px;
-  --fs-next-title: 21px;
-  --fs-quote: 21px;
-  --fs-stat: 22px;
-  --fs-outcome: 32px;
+  /* Fluid type: the 390 (mobile) size at 390px, growing linearly to the 834 size at 834px, then
+     held — the 834, 1194 and 1440 frames share one scale. Nothing jumps at a breakpoint.
+     Pattern: clamp(min, calc(min + (max − min) × (100vw − 390px) / 444), max).
+     --fs-h1 keeps growing after that: 32 from 834, then 2.78vw up to 40 at 1440. */
+  --fs-body: clamp(16px, calc(16px + 2 * (100vw - 390px) / 444), 18px);
+  --fs-intro: clamp(18px, calc(18px + 2 * (100vw - 390px) / 444), 20px);
+  --fs-h1: clamp(30px, max(min(calc(30px + 2 * (100vw - 390px) / 444), 32px), 2.78vw), 40px);
+  --fs-headline: clamp(24px, calc(24px + 4 * (100vw - 390px) / 444), 28px);
+  --fs-case-title: clamp(28px, calc(28px + 4 * (100vw - 390px) / 444), 32px);
+  --fs-case-intro: clamp(16px, calc(16px + 3 * (100vw - 390px) / 444), 19px);
+  --fs-case-lead: clamp(26px, calc(26px + 21 * (100vw - 390px) / 444), 47px);
+  --fs-case-headline: clamp(24px, calc(24px + 6 * (100vw - 390px) / 444), 30px);
+  --fs-case-body: clamp(16px, calc(16px + 1 * (100vw - 390px) / 444), 17px);
+  --fs-card-title: clamp(15px, calc(15px + 7 * (100vw - 390px) / 444), 22px);
+  --fs-next-title: clamp(21px, calc(21px + 5 * (100vw - 390px) / 444), 26px);
+  --fs-quote: clamp(21px, calc(21px + 10 * (100vw - 390px) / 444), 31px);
+  --fs-stat: clamp(22px, calc(22px + 7 * (100vw - 390px) / 444), 29px);
+  --fs-outcome: clamp(32px, calc(32px + 16 * (100vw - 390px) / 444), 48px);
 
   /* Layout: content column starts at x=145 on a 1440 frame (right of sidebar) */
   --content-left: 145px;
+  /* ≥ 1440: the 1440 layout is centred; this is the empty band on each side of it.
+     (100vw counts a classic scrollbar, so on those systems it's a few px wider; never overflows.) */
+  --frame-offset: 0px;
+  /* Page content padding (main). Full-bleed elements pull out by exactly these.
+     Mobile 16 · tablet 48 (one 738px column at 834) · desktop: x=145, 40px right, + frame offset. */
+  --page-left: 16px;
+  --page-right: 16px;
   /* Case study pages: content starts at x=216 (1152 wide) so the table of contents fits at x=38 */
   --case-left: 216px;
   /* Sticky bars above case study sections (< 1194: 60px header + 52px jump-to strip) */
@@ -119,33 +144,58 @@
   color-scheme: dark;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 52.125rem) {
   :root {
-    /* Desktop type sizes */
-    --fs-body: 18px;
-    --fs-intro: 20px;
-    --fs-h1: clamp(32px, 2.78vw, 40px); /* 32 → 40 at 1440 */
-    --fs-headline: 28px;
-    --fs-case-title: 32px;
-    --fs-case-intro: 19px;
-    --fs-case-lead: 47px;
-    --fs-case-headline: 30px;
-    --fs-case-body: 17px;
-    --fs-card-title: 22px;
-    --fs-next-title: 26px;
-    --fs-quote: 31px;
-    --fs-stat: 29px;
-    --fs-outcome: 48px;
+    --page-left: 48px;
+    --page-right: 48px;
+  }
+}
+
+@media (min-width: 74.625rem) {
+  :root {
+    --page-left: calc(var(--content-left) + var(--frame-offset));
+    --page-right: calc(40px + var(--frame-offset));
+  }
+}
+
+@media (min-width: 90rem) {
+  :root {
+    --frame-offset: calc((100vw - 1440px) / 2);
+  }
+}
+
+/* Home (834–1193px): Figma "Home — 834" (3408:964) is one 834 × 1194 poster. The shell fills
+   the viewport, the hero takes what's left above the footer and centres the column in it. */
+@media (min-width: 52.125rem) and (width < 74.625rem) {
+  div:has(> #main [data-home]) {
+    min-height: max(100svh, 900px);
+  }
+
+  #main:has([data-home]) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #main:has([data-home]) ~ footer {
+    margin-top: 0;
   }
 }
 
 /* Home (≥ 1194px): exactly one viewport tall, min 820px, no scroll.
    [data-home] is the page root in src/app/page.tsx. The shell gets the page height, main
-   becomes a flex column so the hero takes what's left, and the footer sits 32px under the
-   hero with its wordmark capped to the remaining height (only binds on short, wide screens). */
+   becomes a flex column so the hero takes what's left. The centre column's top follows the
+   page height as in Figma (y 151 at 820 and 834 tall, 211 at 1080: --home-column-top).
+   The footer sits 32px under the hero, its wordmark's empty top leading pulled up into that
+   space (--wordmark-pull), and the wordmark is capped to the remaining height (only binds on
+   short, wide screens). */
 @media (min-width: 74.625rem) {
+  :root {
+    --home-page-h: max(100svh, 820px);
+    --home-column-top: calc(151px + 0.23077 * (var(--home-page-h) - 820px));
+  }
+
   div:has(> #main [data-home]) {
-    min-height: max(100svh, 820px);
+    min-height: var(--home-page-h);
   }
 
   #main:has([data-home]) {
@@ -155,8 +205,9 @@
 
   #main:has([data-home]) ~ footer {
     margin-top: 32px;
-    /* page − hero minimum (32 top + 356 column) − footer chrome (32 + 24 + 23 + 32) */
-    --wordmark-max-height: calc(max(100svh, 820px) - 499px);
+    --wordmark-pull: 0.38;
+    /* page − column top − column (354) − gap (32) − footer chrome under the band (24 + 23 + 32) */
+    --wordmark-max-height: calc(var(--home-page-h) - var(--home-column-top) - 465px);
   }
 }
 
@@ -167,15 +218,12 @@
   }
 }
 
-/* Case study pages ([data-case] is the page root in src/app/work/[slug]/page.tsx).
-   ≥ 1194px the table of contents replaces the site sidebar and avatar mark. */
+/* Case study pages: sticky chrome above sections is gone ≥ 1194px (no top bar).
+   Hiding the site sidebar on case pages lives in <CasePageStyles>, not here: it must switch
+   off when Next keeps the case page mounted but hidden after navigating away. */
 @media (min-width: 74.625rem) {
   :root {
     --case-scroll-offset: 40px;
-  }
-
-  body:has([data-case]) nav[data-site-nav] {
-    display: none;
   }
 }
 

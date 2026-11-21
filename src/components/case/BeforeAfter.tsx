@@ -21,6 +21,7 @@ type Props = {
 
 /**
  * Two images side by side ≥ 834 with Before / After captions; stacked (Before first) below.
+ * Figma "Frame 3" (3184:2328): two 545 × 417 frames, 51px apart (row 1141 wide), images contained.
  * The Before image has no stroke outline; After keeps the 1px line border.
  */
 export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] }: Props) {
@@ -30,11 +31,11 @@ export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] 
   ] as const;
 
   return (
-    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:gap-[51px]">
+    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:max-w-[1141px] desktop:gap-[51px]">
       {panes.map((p) => (
         <figure key={p.key} className="flex flex-col gap-[10px]">
           <div className="relative">
-            <CaseMedia img={p.img} w={w} h={h} sizes={SIZES_HALF} outline={p.key !== "before"} />
+            <CaseMedia img={p.img} w={w} h={h} sizes={SIZES_HALF} outline={p.key !== "before"} fit="contain" />
             {annotations
               .filter((a) => (a.on ?? "before") === p.key)
               .map((a) => (

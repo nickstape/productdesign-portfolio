@@ -1,8 +1,15 @@
 import type { ReactNode } from "react";
 
-/** Figma "Outcome stats" (3074:641): large numbers, no cards, caption under each. */
+/**
+ * Figma "Outcome stats" (3074:641): large numbers, no cards, caption under each.
+ * Stacked below 834, 2-up 834–1193 (3408:1375), 3-up ≥ 1194.
+ */
 export function Outcome({ children }: { children: ReactNode }) {
-  return <ul className="grid grid-cols-1 gap-3 tablet:mt-[14px] tablet:grid-cols-3 tablet:gap-4">{children}</ul>;
+  return (
+    <ul className="grid grid-cols-1 gap-3 tablet:mt-[14px] tablet:grid-cols-2 tablet:gap-4 desktop:grid-cols-3">
+      {children}
+    </ul>
+  );
 }
 
 type Props = {
