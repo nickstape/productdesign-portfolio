@@ -27,7 +27,7 @@ export function CaseHeader({ kicker, title, intro, role, platform, outcome, outc
       {/* Mobile only: the 834 frame (3408:1169) has no back link; the top bar covers it. */}
       <Link
         href="/"
-        className="mb-[14px] self-start font-mono text-meta text-muted transition-colors hover:text-text tablet:hidden"
+        className="relative touch-target mb-[14px] self-start font-mono text-meta text-muted transition-colors hover:text-text tablet:hidden"
       >
         <span aria-hidden="true">← </span>Home
       </Link>

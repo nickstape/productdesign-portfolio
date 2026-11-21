@@ -1,5 +1,6 @@
 import { contact } from "@/content/site";
 import { Label } from "./Label";
+import { ReadingPreferences } from "./ReadingPreferences";
 import { gutter } from "./gutter";
 
 /**
@@ -48,7 +49,8 @@ export function Footer() {
             fontVariationSettings: '"SOFT" 0, "WONK" 1, "opsz" 144',
           }}
         >
-          Mary Fisher
+          {/* Rises once from the clip edge on page load (inline-block so it can translate). */}
+          <span className="inline-block motion-safe:animate-wordmark-rise">Mary Fisher</span>
         </div>
       </div>
 
@@ -62,7 +64,8 @@ export function Footer() {
 }
 
 /**
- * The footer's bottom row: ".say hello" and the contact links. The caller sets the layout.
+ * The footer's bottom row: ".say hello", the contact links and Reading preferences. The caller
+ * sets the layout.
  * `compact`: below 834px only LinkedIn and Email (the 404 page).
  */
 export function FooterRow({ className = "", compact = false }: { className?: string; compact?: boolean }) {
@@ -75,15 +78,18 @@ export function FooterRow({ className = "", compact = false }: { className?: str
             href={contact.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-text transition-colors hover:text-accent"
+            className="relative touch-target text-text transition-colors hover:text-accent"
           >
             LinkedIn
           </a>
         </li>
         <li>
-          <a href={`mailto:${contact.email}`} className="text-text transition-colors hover:text-accent">
+          <a href={`mailto:${contact.email}`} className="relative touch-target text-text transition-colors hover:text-accent">
             Email
           </a>
+        </li>
+        <li className={compact ? "hidden tablet:list-item" : ""}>
+          <ReadingPreferences />
         </li>
         <li className={`text-muted ${compact ? "hidden tablet:list-item" : ""}`}>
           All rights reserved<span className="tablet:hidden">,</span> ©2026

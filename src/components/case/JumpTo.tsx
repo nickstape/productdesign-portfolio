@@ -45,7 +45,7 @@ export function JumpTo({ items }: { items: TocItem[] }) {
                 href={`#${item.id}`}
                 onClick={(e) => onClick(e, item.id)}
                 aria-current={current ? "location" : undefined}
-                className={`block rounded-full bg-surface px-[12px] py-1 font-mono text-meta whitespace-nowrap transition-colors ${
+                className={`relative block touch-target rounded-full bg-surface px-[12px] py-1 font-mono text-meta whitespace-nowrap transition-colors duration-150 ease-out ${
                   current ? "text-accent" : "text-muted hover:text-text"
                 }`}
               >

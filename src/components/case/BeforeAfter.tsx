@@ -1,4 +1,5 @@
 import { CaseMedia, SIZES_HALF } from "./CaseMedia";
+import { FadeIn } from "./FadeIn";
 
 type Annotation = {
   /** Position over the image, in % of its width / height. */
@@ -34,8 +35,9 @@ export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] 
     <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:max-w-[1141px] desktop:gap-[51px]">
       {panes.map((p) => (
         <figure key={p.key} className="flex flex-col gap-[10px]">
-          <div className="relative">
-            <CaseMedia img={p.img} w={w} h={h} sizes={SIZES_HALF} outline={p.key !== "before"} fit="contain" />
+          {/* Image and its annotations fade in together. */}
+          <FadeIn className="relative">
+            <CaseMedia img={p.img} w={w} h={h} sizes={SIZES_HALF} outline={p.key !== "before"} fit="contain" fade={false} />
             {annotations
               .filter((a) => (a.on ?? "before") === p.key)
               .map((a) => (
@@ -47,7 +49,7 @@ export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] 
                   {a.text}
                 </span>
               ))}
-          </div>
+          </FadeIn>
           <figcaption className="font-mono text-meta text-muted tablet:font-sans tablet:text-nav">{p.caption}</figcaption>
         </figure>
       ))}

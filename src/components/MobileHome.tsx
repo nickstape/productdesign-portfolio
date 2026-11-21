@@ -11,7 +11,7 @@ import { WorkRow } from "./WorkRow";
  */
 export function MobileHome() {
   return (
-    <div className="px-0.5 pt-4 tablet:hidden">
+    <div data-enter className="px-0.5 pt-4 tablet:hidden">
       {/* Hero */}
       <SectionLabel>hello, i’m a designer based in London</SectionLabel>
       <h1 className="mt-2 font-sans text-[32px] leading-[1.15] font-normal text-text">

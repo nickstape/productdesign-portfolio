@@ -29,7 +29,9 @@ export function Step({ n, title, pill, highlight = false, children }: StepProps)
         highlight ? "tablet:border-2 tablet:border-accent/10 tablet:bg-accent/5" : "tablet:border tablet:border-line"
       }`}
     >
-      <span className={`shrink-0 font-mono text-label ${highlight ? "text-accent tablet:text-accent/40" : "text-muted"}`}>
+      {/* Faint accent on the highlight card: 60% is the least that clears 4.5:1 on its accent/5
+          fill with margin (40% was 3.0:1). */}
+      <span className={`shrink-0 font-mono text-label ${highlight ? "text-accent tablet:text-accent/60" : "text-muted"}`}>
         {String(n).padStart(2, "0")}
       </span>
       <div className="flex flex-col gap-[2px] tablet:gap-[6px]">

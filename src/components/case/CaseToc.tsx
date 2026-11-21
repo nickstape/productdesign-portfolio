@@ -27,7 +27,9 @@ export function CaseToc({ items }: { items: TocItem[] }) {
         href={`#${item.id}`}
         onClick={(e) => onClick(e, item.id)}
         aria-current={current ? "location" : undefined}
-        className={`block font-sans transition-colors ${sub ? "pl-2 text-toc-sub" : "text-toc"} ${
+        // Colour eases over 150ms. Touch (iPad landscape): the 44px hit area would overlap the
+        // next item, so it is capped at the 32px row pitch.
+        className={`relative block touch-target [--hit:32px] font-sans transition-colors duration-150 ease-out ${sub ? "pl-2 text-toc-sub" : "text-toc"} ${
           current ? "font-semibold text-accent" : "text-muted hover:text-text"
         }`}
       >

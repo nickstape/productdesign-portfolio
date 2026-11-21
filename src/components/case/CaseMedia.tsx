@@ -2,6 +2,7 @@ import { images, type Img } from "@/content/images";
 import { ContentImage } from "../ContentImage";
 import { ImagePlaceholder } from "../ImagePlaceholder";
 import { AutoplayVideo } from "./AutoplayVideo";
+import { FadeIn } from "./FadeIn";
 
 export type MediaProps = {
   /** Key in src/content/images.ts, e.g. "nddHero" (or "images.nddHero"). */
@@ -22,6 +23,11 @@ type Props = MediaProps & {
    * image) or "contain" (figures, before/after). Without it the image keeps its own ratio.
    */
   fit?: "cover" | "contain";
+  /**
+   * Default true: fade in on first scroll into view. Off for the hero (above the fold, the LCP
+   * image) and where the caller fades a larger block itself (<BeforeAfter>).
+   */
+  fade?: boolean;
 };
 
 const manifest: Record<string, Img> = images;
@@ -32,7 +38,12 @@ const VIDEO = /\.(mp4|webm|mov)$/i;
  * which shows a placeholder until the file is in /public. Until the key is added to images.ts,
  * a placeholder named after the key holds the slot at the Figma aspect ratio.
  */
-export function CaseMedia({ img, w = 16, h = 9, className = "", sizes, priority, outline = true, fit }: Props) {
+export function CaseMedia({ fade = true, ...props }: Props) {
+  const media = <Media {...props} />;
+  return fade ? <FadeIn>{media}</FadeIn> : media;
+}
+
+function Media({ img, w = 16, h = 9, className = "", sizes, priority, outline = true, fit }: Omit<Props, "fade">) {
   const key = img.replace(/^images\./, "");
   const entry = manifest[key];
   if (!entry) {

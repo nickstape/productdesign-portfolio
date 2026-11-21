@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState, type KeyboardEvent } from "react";
+import { useEffect, useId, useState, type KeyboardEvent } from "react";
 import { reading } from "@/content/reading";
 
 /*
@@ -31,6 +31,16 @@ export function CurrentlyReading() {
   const onEsc = (e: KeyboardEvent) => {
     if (e.key === "Escape") hide();
   };
+
+  // The card can open on hover with nothing focused; Esc still closes it (WCAG 1.4.13).
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const bar = (width: string) => (
     <span aria-hidden="true" className={`relative block h-[2px] shrink-0 ${width} ${TRACK}`}>

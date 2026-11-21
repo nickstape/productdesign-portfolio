@@ -31,7 +31,7 @@ export function UnlockForm() {
         <button
           type="submit"
           disabled={pending}
-          className="shrink-0 rounded-image border border-line bg-bg px-2 py-1 font-sans text-ui text-text transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+          className="relative touch-target shrink-0 rounded-image border border-line bg-bg px-2 py-1 font-sans text-ui text-text transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
         >
           {pending ? "Checking…" : "Unlock"}
         </button>

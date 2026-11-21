@@ -12,10 +12,12 @@ export const instrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
 });
 
-/** Case study headlines */
+/** Case study headlines. Not preloaded: fonts.ts is loaded by the root layout, so a preload
+ *  would fetch it on every page, and only case studies use it. */
 export const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
+  preload: false,
   variable: "--font-space-grotesk",
 });
 
@@ -26,10 +28,16 @@ export const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-/** The giant "Mary Fisher" wordmark; italic for the book title in the home "Currently reading" card */
+/**
+ * The giant "Mary Fisher" wordmark; italic for the book title in the home "Currently reading" card.
+ * Not preloaded: its two files (≈ 265KB) are the heaviest on the page and neither is needed for
+ * the first screen (the wordmark sits at the bottom, the card opens on hover). Preloading them
+ * held back the body text on mobile.
+ */
 export const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
+  preload: false,
   style: ["normal", "italic"],
   axes: ["SOFT", "WONK", "opsz"],
   variable: "--font-fraunces",

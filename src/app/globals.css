@@ -24,25 +24,26 @@
   --radius-image: 8px;
   --radius-card: 16px;
 
-  /* Fixed mono sizes */
-  --text-label: 13px;
+  /* Fixed mono sizes. Every text size is × --text-scale (1 unless the reader picks 112/125%
+     in Reading preferences; see the end of this file). */
+  --text-label: calc(13px * var(--text-scale, 1));
   --text-label--line-height: 1.4;
-  --text-meta: 12px;
+  --text-meta: calc(12px * var(--text-scale, 1));
   --text-meta--line-height: 1.4;
 
   /* Fixed UI sizes (site chrome: sidebar, header, footer) */
-  --text-ui: 16px;  /* Instrument Sans nav + footer links */
+  --text-ui: calc(16px * var(--text-scale, 1));  /* Instrument Sans nav + footer links */
   --text-ui--line-height: 1.4;
-  --text-nav: 14px; /* JetBrains Mono top-bar links */
+  --text-nav: calc(14px * var(--text-scale, 1)); /* JetBrains Mono top-bar links */
   --text-nav--line-height: 1.4;
 
   /* Case study table of contents (Instrument Sans): sections 15, explorations 14 */
-  --text-toc: 15px;
+  --text-toc: calc(15px * var(--text-scale, 1));
   --text-toc--line-height: 1.6;
-  --text-toc-sub: 14px;
+  --text-toc-sub: calc(14px * var(--text-scale, 1));
   --text-toc-sub--line-height: 1.6;
   /* Case study small text: stat and outcome captions, CTA (Instrument Sans 15) */
-  --text-small: 15px;
+  --text-small: calc(15px * var(--text-scale, 1));
   --text-small--line-height: 1.5;
 
   /* Layout breakpoints: 390 (base) · 834 · 1194 · 1440 · 1920.
@@ -52,6 +53,23 @@
   --breakpoint-desktop: 74.625rem; /* 1194px */
   --breakpoint-wide: 90rem;        /* 1440px */
   --breakpoint-xwide: 120rem;      /* 1920px */
+
+  /* Page load: each block of [data-enter] fades up 8px, 40ms apart (rules at the end of this file). */
+  --animate-enter: enter 300ms ease-out backwards;
+  @keyframes enter {
+    from {
+      opacity: 0;
+      translate: 0 8px;
+    }
+  }
+
+  /* Footer wordmark: rises once from the clip edge (0.9765em = line box 1.55 × visible 0.63). */
+  --animate-wordmark-rise: wordmark-rise 600ms ease-out backwards;
+  @keyframes wordmark-rise {
+    from {
+      translate: 0 0.9765em;
+    }
+  }
 
   /* 404 entrance: polaroids and sticky note drop in from 16px above (use with motion-safe:). */
   --animate-drop-in: drop-in 400ms ease-out both;
@@ -112,20 +130,22 @@
      held — the 834, 1194 and 1440 frames share one scale. Nothing jumps at a breakpoint.
      Pattern: clamp(min, calc(min + (max − min) × (100vw − 390px) / 444), max).
      --fs-h1 keeps growing after that: 32 from 834, then 2.78vw up to 40 at 1440. */
-  --fs-body: clamp(16px, calc(16px + 2 * (100vw - 390px) / 444), 18px);
-  --fs-intro: clamp(18px, calc(18px + 2 * (100vw - 390px) / 444), 20px);
-  --fs-h1: clamp(30px, max(min(calc(30px + 2 * (100vw - 390px) / 444), 32px), 2.78vw), 40px);
-  --fs-headline: clamp(24px, calc(24px + 4 * (100vw - 390px) / 444), 28px);
-  --fs-case-title: clamp(28px, calc(28px + 4 * (100vw - 390px) / 444), 32px);
-  --fs-case-intro: clamp(16px, calc(16px + 3 * (100vw - 390px) / 444), 19px);
-  --fs-case-lead: clamp(26px, calc(26px + 21 * (100vw - 390px) / 444), 47px);
-  --fs-case-headline: clamp(24px, calc(24px + 6 * (100vw - 390px) / 444), 30px);
-  --fs-case-body: clamp(16px, calc(16px + 1 * (100vw - 390px) / 444), 17px);
-  --fs-card-title: clamp(15px, calc(15px + 7 * (100vw - 390px) / 444), 22px);
-  --fs-next-title: clamp(21px, calc(21px + 5 * (100vw - 390px) / 444), 26px);
-  --fs-quote: clamp(21px, calc(21px + 10 * (100vw - 390px) / 444), 31px);
-  --fs-stat: clamp(22px, calc(22px + 7 * (100vw - 390px) / 444), 29px);
-  --fs-outcome: clamp(32px, calc(32px + 16 * (100vw - 390px) / 444), 48px);
+  /* Reading preferences: 1 · 1.12 · 1.25 (set on <html> by data-text-size, below). */
+  --text-scale: 1;
+  --fs-body: calc(clamp(16px, calc(16px + 2 * (100vw - 390px) / 444), 18px) * var(--text-scale));
+  --fs-intro: calc(clamp(18px, calc(18px + 2 * (100vw - 390px) / 444), 20px) * var(--text-scale));
+  --fs-h1: calc(clamp(30px, max(min(calc(30px + 2 * (100vw - 390px) / 444), 32px), 2.78vw), 40px) * var(--text-scale));
+  --fs-headline: calc(clamp(24px, calc(24px + 4 * (100vw - 390px) / 444), 28px) * var(--text-scale));
+  --fs-case-title: calc(clamp(28px, calc(28px + 4 * (100vw - 390px) / 444), 32px) * var(--text-scale));
+  --fs-case-intro: calc(clamp(16px, calc(16px + 3 * (100vw - 390px) / 444), 19px) * var(--text-scale));
+  --fs-case-lead: calc(clamp(26px, calc(26px + 21 * (100vw - 390px) / 444), 47px) * var(--text-scale));
+  --fs-case-headline: calc(clamp(24px, calc(24px + 6 * (100vw - 390px) / 444), 30px) * var(--text-scale));
+  --fs-case-body: calc(clamp(16px, calc(16px + 1 * (100vw - 390px) / 444), 17px) * var(--text-scale));
+  --fs-card-title: calc(clamp(15px, calc(15px + 7 * (100vw - 390px) / 444), 22px) * var(--text-scale));
+  --fs-next-title: calc(clamp(21px, calc(21px + 5 * (100vw - 390px) / 444), 26px) * var(--text-scale));
+  --fs-quote: calc(clamp(21px, calc(21px + 10 * (100vw - 390px) / 444), 31px) * var(--text-scale));
+  --fs-stat: calc(clamp(22px, calc(22px + 7 * (100vw - 390px) / 444), 29px) * var(--text-scale));
+  --fs-outcome: calc(clamp(32px, calc(32px + 16 * (100vw - 390px) / 444), 48px) * var(--text-scale));
 
   /* Layout: content column starts at x=145 on a 1440 frame (right of sidebar) */
   --content-left: 145px;
@@ -248,8 +268,92 @@
     color: var(--color-bg);
   }
 
+  /* Every link, tag, chip and button: 2px accent ring, 2px out. */
   :focus-visible {
     outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
+    outline-offset: 2px;
   }
+}
+
+/* ==========================================================================
+   Motion. Subtle and one-shot; all of it switches off with reduced motion.
+   ========================================================================== */
+
+/* Page load: direct children of [data-enter] fade up 8px, 40ms apart (capped at the 9th block,
+   which is below the fold anyway). `backwards` fill: once done, the blocks keep no transform, so
+   no stacking contexts are left behind to trap the tag and reading-card popovers. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-enter] > * {
+    animation: var(--animate-enter);
+    animation-delay: calc(var(--enter-i, 8) * 40ms);
+  }
+  [data-enter] > :nth-child(1) { --enter-i: 0; }
+  [data-enter] > :nth-child(2) { --enter-i: 1; }
+  [data-enter] > :nth-child(3) { --enter-i: 2; }
+  [data-enter] > :nth-child(4) { --enter-i: 3; }
+  [data-enter] > :nth-child(5) { --enter-i: 4; }
+  [data-enter] > :nth-child(6) { --enter-i: 5; }
+  [data-enter] > :nth-child(7) { --enter-i: 6; }
+  [data-enter] > :nth-child(8) { --enter-i: 7; }
+}
+
+/* Case study images fade in as they scroll into view (<FadeIn>). Only when scripts run, so the
+   images never stay hidden without JS. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-fade] {
+    transition: opacity 400ms ease-out;
+  }
+  [data-fade]:not([data-shown]) {
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: no movement anywhere and every state change is instant. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Touch targets: on coarse pointers, an invisible ::before grows the hit area to 44 × 44
+   (or --hit, where neighbours are closer than that) around the element's centre. Nothing
+   visible changes. The element must be positioned (add `relative` if it isn't).
+   ========================================================================== */
+@utility touch-target {
+  @media (pointer: coarse) {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: max(100%, var(--hit, 44px));
+      height: max(100%, var(--hit, 44px));
+      translate: -50% -50%;
+    }
+  }
+}
+
+/* ==========================================================================
+   Reading preferences (<ReadingPreferences> in the footer row). Set on <html> from
+   localStorage by the inline script in layout.tsx, before first paint.
+   ========================================================================== */
+html[data-text-size="112"] {
+  --text-scale: 1.12;
+}
+
+html[data-text-size="125"] {
+  --text-scale: 1.25;
+}
+
+/* High contrast: secondary text takes the primary text colour. */
+html[data-contrast="high"] {
+  --color-muted: var(--color-text);
 }
