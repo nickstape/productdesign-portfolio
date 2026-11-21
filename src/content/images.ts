@@ -24,4 +24,16 @@ export const images = {
   tagDesignSystems: { src: "/assets/home/tags/design-systems.jpg", alt: "NDD component and accessibility sheet", width: 560, height: 350 },
   tag0to1: { src: "/assets/home/tags/0-to-1.mp4", alt: "Sóróyà platform home page", width: 560, height: 350 },
   tagBranding: { src: "/assets/home/tags/branding.gif", alt: "H20pe wordmark and brand", width: 560, height: 350 },
+
+  /* ---- About: side quests gallery (captions and display heights in gallery.ts) ---- */
+  gallery01: { src: "/assets/about/gallery/01-richmond-hike.jpg", alt: "Mary leaning on a \"Thank you for visiting\" sign in Richmond Park", width: 536, height: 952 },
+  gallery02: { src: "/assets/about/gallery/02-studio-eko.jpg", alt: "Mary talking with visitors at the Studio Eko exhibition", width: 642, height: 600 },
+  gallery03: { src: "/assets/about/gallery/03-lcc-accelerate.jpg", alt: "LCC Accelerate 2026 founders slide on screen at the cohort launch", width: 764, height: 760 },
+  gallery04: { src: "/assets/about/gallery/04-international-womens-day.jpg", alt: "Mary and a friend with an International Women's Day frame", width: 476, height: 520 },
+  gallery05: { src: "/assets/about/gallery/05-ma-grad.jpg", alt: "A graduate in a black gown and mortarboard on a city street on graduation day", width: 3213, height: 5712 },
+  gallery06: { src: "/assets/about/gallery/06-studio-eko.JPG", alt: "A visitor in headphones watches the Studio Eko short film next to a screen on a stand", width: 6240, height: 4160 },
+  gallery07: { src: "/assets/about/gallery/07-h2ope.jpeg", alt: "A team presents a research framework slide to a seated audience in a studio", width: 4032, height: 3024 },
+  gallery08: { src: "/assets/about/gallery/08-postcards.JPG", alt: "Two postcards from Senegal: a horse and cart by the beach, and a painted yellow and blue bus on a street", width: 3072, height: 3840 },
+  gallery09: { src: "/assets/about/gallery/09-10k.jpg", alt: "A runner bites her finisher’s medal in front of the Access Bank Lagos City Marathon backdrop", width: 3024, height: 4032 },
+  gallery10: { src: "/assets/about/gallery/10-quest.jpg", alt: "A woman sits under a painting of two schoolgirls while someone photographs her", width: 3213, height: 5712 },
 } satisfies Record<string, Img>;
