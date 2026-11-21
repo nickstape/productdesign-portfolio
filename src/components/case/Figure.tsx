@@ -14,7 +14,9 @@ export function Figure({ img, w, h, caption, maxWidth }: Props) {
       <div style={maxWidth ? { maxWidth } : undefined} className="w-full">
         <CaseMedia img={img} w={w} h={h} sizes={maxWidth ? `${maxWidth}px` : SIZES_FULL} />
       </div>
-      {caption && <figcaption className="font-mono text-meta text-muted">{caption}</figcaption>}
+      {caption && (
+        <figcaption className="font-mono text-meta text-muted tablet:font-sans tablet:text-nav">{caption}</figcaption>
+      )}
     </figure>
   );
 }

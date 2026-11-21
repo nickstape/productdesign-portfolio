@@ -2,45 +2,67 @@ import type { ReactNode } from "react";
 import { explorationId } from "@/lib/case-studies";
 import { SectionLabel } from "../SectionLabel";
 
+/** [label, text]. A null label hides it (Figma hides some, e.g. the answer under "problem"). */
+type Row = [label: string | null, content: ReactNode];
+
 type Props = {
   n: number;
   title: string;
-  problem?: ReactNode;
-  solution?: ReactNode;
+  /** Text between the label and the title (Figma exploration 01). */
+  intro?: ReactNode;
+  /**
+   * Mini table under the title. The first row is muted; later rows are the answer
+   * (accent label, text colour), e.g. [["problem", …], [null, …]] or [["considered", …], ["chose", …]].
+   */
+  rows?: Row[];
+  /** Right-hand column at ≥ 1194 (Figma explorations 03 and 04), usually a <Figure>. */
+  aside?: ReactNode;
   children?: ReactNode;
 };
 
 /**
- * Figma "Decision block": ".exploration 0n", title, a two-row problem / solution table, then
- * children (images, stats). Nested under its <Section> in the table of contents.
+ * Figma "Decision block": ".exploration 0n", optional intro, Space Grotesk 28 title, the rows,
+ * then children (text, images, stats). Nested under its <Section> in the table of contents.
  */
-export function Exploration({ n, title, problem, solution, children }: Props) {
-  const rows = [
-    { label: "problem", value: problem, accent: false },
-    { label: "solution", value: solution, accent: true },
-  ].filter((r) => r.value);
+export function Exploration({ n, title, intro, rows = [], aside, children }: Props) {
+  const main = (
+    <div className="flex min-w-0 flex-col">
+      <SectionLabel>{`exploration ${String(n).padStart(2, "0")}`}</SectionLabel>
+      {intro && <div className="mt-[14px] font-sans text-case-body text-text/80">{intro}</div>}
+      <h3 className={`font-display text-headline font-normal text-text ${intro ? "mt-6" : "mt-2"}`}>{title}</h3>
+      {rows.length > 0 && (
+        <dl className="mt-2 flex flex-col gap-[10px]">
+          {rows.map(([label, content], i) => (
+            <div
+              key={i}
+              className="flex flex-col gap-0.5 tablet:flex-row tablet:items-baseline tablet:gap-[12px]"
+            >
+              {label ? (
+                <dt className={`w-[88px] shrink-0 font-mono text-meta ${i > 0 ? "text-accent" : "text-muted"}`}>
+                  {label}
+                </dt>
+              ) : (
+                <dt className="sr-only">{i > 0 ? "solution" : "problem"}</dt>
+              )}
+              <dd className={`font-sans text-ui ${i > 0 ? "text-text" : "text-text/75"}`}>{content}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+      {children && <div className="mt-2 flex flex-col gap-5">{children}</div>}
+    </div>
+  );
 
   return (
     <section
       id={explorationId(n)}
       tabIndex={-1}
-      className="mt-3 flex scroll-mt-[var(--case-scroll-offset)] flex-col focus:outline-none tablet:mt-6"
+      className={`mt-6 scroll-mt-[var(--case-scroll-offset)] focus:outline-none ${
+        aside ? "flex flex-col gap-3 desktop:grid desktop:grid-cols-2 desktop:items-start desktop:gap-5" : ""
+      }`}
     >
-      <SectionLabel>{`exploration ${String(n).padStart(2, "0")}`}</SectionLabel>
-      <h3 className="mt-[14px] font-display text-headline font-normal text-text">{title}</h3>
-      {rows.length > 0 && (
-        <dl className="mt-2 flex flex-col gap-[10px]">
-          {rows.map((r) => (
-            <div key={r.label} className="flex flex-col gap-0.5 tablet:flex-row tablet:items-baseline tablet:gap-[12px]">
-              <dt className={`w-[88px] shrink-0 font-mono text-meta ${r.accent ? "text-accent" : "text-muted"}`}>
-                {r.label}
-              </dt>
-              <dd className={`font-sans text-ui ${r.accent ? "text-text" : "text-muted"}`}>{r.value}</dd>
-            </div>
-          ))}
-        </dl>
-      )}
-      {children && <div className="mt-3 flex flex-col gap-3">{children}</div>}
+      {main}
+      {aside && <div className="min-w-0 desktop:pt-[48px]">{aside}</div>}
     </section>
   );
 }

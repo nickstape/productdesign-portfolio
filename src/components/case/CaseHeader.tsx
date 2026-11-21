@@ -13,7 +13,7 @@ type Props = {
 
 /**
  * Figma "Intro" + "Summary card" (3074:585, 3074:590); mobile "Title" (3303:663).
- * ≥ 834 the meta panel is 3 cells split by 1px lines; below it, 3 label/value rows.
+ * Desktop starts at y 162 (below the 90px header band). ≥ 834 the meta panel is 3 cells split by 1px lines; below it, 3 label/value rows.
  */
 export function CaseHeader({ kicker, title, intro, role, platform, outcome, outcomeAccent = true }: Props) {
   const meta = [
@@ -23,7 +23,7 @@ export function CaseHeader({ kicker, title, intro, role, platform, outcome, outc
   ];
 
   return (
-    <header className="flex flex-col pt-[22px] desktop:pt-9">
+    <header className="flex flex-col pt-[22px] desktop:pt-20">
       <Link
         href="/"
         className="mb-[14px] self-start font-mono text-meta text-muted transition-colors hover:text-text desktop:hidden"
@@ -34,7 +34,7 @@ export function CaseHeader({ kicker, title, intro, role, platform, outcome, outc
       <h1 className="mt-[14px] max-w-[900px] font-display text-case-title font-normal tracking-[-0.01em] text-text desktop:mt-3">
         {title}
       </h1>
-      <p className="mt-[14px] max-w-[920px] font-sans text-case-intro text-muted desktop:mt-3">{intro}</p>
+      <p className="mt-[14px] max-w-[1053px] font-sans text-case-intro text-text/75 desktop:mt-3">{intro}</p>
 
       <dl className="mt-[14px] flex flex-col gap-[12px] rounded-card bg-surface p-2 tablet:grid tablet:grid-cols-3 tablet:gap-px tablet:overflow-hidden tablet:border tablet:border-line tablet:bg-line tablet:p-0 desktop:mt-6">
         {meta.map((m) => (

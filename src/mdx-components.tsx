@@ -49,7 +49,7 @@ const components: MDXComponents = {
   StatRow,
   Step,
   Todo,
-  p: (props) => <p className="font-sans text-body text-text" {...props} />,
+  p: (props) => <p className="font-sans text-case-body text-text/80" {...props} />,
   strong: (props) => <strong className="font-semibold" {...props} />,
   a: (props) => <a className="text-accent underline underline-offset-4 hover:no-underline" {...props} />,
 };

@@ -12,13 +12,13 @@ export function NextCase({ href, title, cta }: Props) {
   return (
     <Link
       href={href}
-      className="group mt-8 flex flex-col gap-2 rounded-card bg-surface p-[18px] tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-4 tablet:p-4"
+      className="group mt-6 flex flex-col gap-2 rounded-card bg-surface p-[18px] tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-4 tablet:p-4"
     >
       <span className="flex flex-col gap-[6px]">
         <span className="font-mono text-meta text-muted">.next</span>
-        <span className="font-display text-headline text-text">{title}</span>
+        <span className="font-display text-next-title text-text">{title}</span>
       </span>
-      <span className="shrink-0 font-sans text-ui text-text transition-colors group-hover:text-accent">
+      <span className="shrink-0 font-sans text-small text-text transition-colors group-hover:text-accent">
         {cta} <span aria-hidden="true">→</span>
       </span>
     </Link>

@@ -27,7 +27,7 @@ export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] 
   ] as const;
 
   return (
-    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:gap-6">
+    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:gap-[51px]">
       {panes.map((p) => (
         <figure key={p.key} className="flex flex-col gap-[10px]">
           <div className="relative">
@@ -44,7 +44,7 @@ export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] 
                 </span>
               ))}
           </div>
-          <figcaption className="font-mono text-meta text-muted">{p.caption}</figcaption>
+          <figcaption className="font-mono text-meta text-muted tablet:font-sans tablet:text-nav">{p.caption}</figcaption>
         </figure>
       ))}
     </div>

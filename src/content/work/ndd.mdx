@@ -14,7 +14,7 @@ next: "tns"
 {/* NDD case study. Copy from Figma "Case study - NDD" (3074:583), word for word.
     Images: keys in src/content/images.ts ("Work: NDD case study"). nddFullIa isn't in the manifest yet. */}
 
-<Section id="tldr" label="tldr" nav="TLDR" title="NDD is where Nigeria’s recurring payments get permission.">
+<Section id="tldr" label="tldr" nav="TLDR" lead title="NDD is where Nigeria’s recurring payments get permission.">
 
 NIBSS Direct Debit is the electronic mandate library behind Nigeria’s direct debit scheme. When an insurer, lender or utility collects a recurring payment from a customer’s bank account, the mandate that allows it is created, approved and monitored here. It’s a back-office product: the people who use it do so all day, under audit, with real money on the line.
 
@@ -72,9 +72,15 @@ A payment authorisation passes through several hands before money moves, so I de
 
 I led the design process starting with drafting early wireframes and flows which I used to gather feedback from other designers as well as key stakeholders involved in the project
 
-<Exploration n={1} title="Single sign-on that fits how banks already work" problem={<Todo>problem</Todo>} solution={<Todo>solution</Todo>}>
-
-My first idea was to explain the onboarding process up front, with more content and clearer calls to action. It made no significant difference, so I dropped it.
+<Exploration
+  n={1}
+  title="Single sign-on that fits how banks already work"
+  intro="My first idea was to explain the onboarding process up front, with more content and clearer calls to action. It made no significant difference, so I dropped it."
+  rows={[
+    ["considered", <>[Option 1] · [Option 2] <Todo>options</Todo></>],
+    ["chose", <>[Option 2] <Todo>choice</Todo></>],
+  ]}
+>
 
 Added single sign-on (SSO) as a choice, not a requirement. Partners can sign in with their existing work account, or keep using email and password. I tested two ways of presenting that choice; the second cut login failures from 32% to 12%, and 70% of sign-ins now use SSO.
 
@@ -93,23 +99,39 @@ Added single sign-on (SSO) as a choice, not a requirement. Partners can sign in 
 
 </Exploration>
 
-<Exploration n={2} title="Restructuring NDD's information architecture" problem="Before I could present any individual feature, I had to address a structural problem: the navigation." solution="Each role needs different tools, but they should not feel like seven different products. I designed one shared layout with a collapsible sidebar that has a variant for each role's menu, so everyone gets the same structure with only the options they need.">
+<Exploration
+  n={2}
+  title="Restructuring NDD's information architecture"
+  rows={[
+    ["problem", "Before I could present any individual feature, I had to address a structural problem: the navigation."],
+    [null, "Each role needs different tools, but they should not feel like seven different products. I designed one shared layout with a collapsible sidebar that has a variant for each role's menu, so everyone gets the same structure with only the options they need."],
+  ]}
+>
 
 <Figure img="nddExp02Sidebar" w={471} h={564} maxWidth={471} caption="Side bar showing the collapsible component" />
 
 </Exploration>
 
-<Exploration n={3} title="Dynamic log filtering" problem="The existing mandate page showed a chronological list of log entries with no filtering specific for containers." solution="The admin workspace brings the whole scheme into one place. It reuses the same tables, filters and states as every other workspace, so admins can move from a list of institutions to a single user to a report without learning a new layout.">
+<Exploration
+  n={3}
+  title="Dynamic log filtering"
+  rows={[
+    ["problem", "The existing mandate page showed a chronological list of log entries with no filtering specific for containers."],
+    [null, "The admin workspace brings the whole scheme into one place. It reuses the same tables, filters and states as every other workspace, so admins can move from a list of institutions to a single user to a report without learning a new layout."],
+  ]}
+  aside={<Figure img="nddExp03Filtering" w={556} h={318} caption="Filtering system for easy search" />}
+/>
 
-<Figure img="nddExp03Filtering" w={556} h={318} maxWidth={556} caption="Filtering system for easy search" />
-
-</Exploration>
-
-<Exploration n={4} title="Accessibility built into the components" problem="NDD is used all day by operations staff across hundreds of institutions, on office monitors of every quality . Small, faint or colour-only signals cause mistakes, and mistakes here move money ." solution={<Todo>solution</Todo>}>
+<Exploration
+  n={4}
+  title="Accessibility built into the components"
+  rows={[
+    [null, "NDD is used all day by operations staff across hundreds of institutions, on office monitors of every quality . Small, faint or colour-only signals cause mistakes, and mistakes here move money ."],
+  ]}
+  aside={<Figure img="nddExp04A11y" w={556} h={417} caption={<>Labels are explicit and contrast meets WCAG AA, <Todo>caption ends with a comma in Figma; finish or confirm</Todo></>} />}
+>
 
 Then I audited my own screens against WCAG 2.2 AA. I measured contrast on the hi-fi exports <Todo>sentence ends here in Figma; finish or confirm</Todo>
-
-<Figure img="nddExp04A11y" w={556} h={417} maxWidth={556} caption={<>Labels are explicit and contrast meets WCAG AA, <Todo>caption ends with a comma in Figma; finish or confirm</Todo></>} />
 
 </Exploration>
 

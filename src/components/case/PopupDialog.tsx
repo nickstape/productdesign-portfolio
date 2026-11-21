@@ -11,7 +11,7 @@ export function PopupDialog({ label, title, children }: { label: string; title: 
       <button
         type="button"
         onClick={() => ref.current?.showModal()}
-        className="self-start font-sans text-body text-accent underline underline-offset-4 hover:no-underline"
+        className="self-start font-sans text-case-body text-accent underline-offset-4 hover:underline"
       >
         {label}
       </button>
