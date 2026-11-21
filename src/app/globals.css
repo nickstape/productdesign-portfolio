@@ -167,15 +167,12 @@
   }
 }
 
-/* Case study pages ([data-case] is the page root in src/app/work/[slug]/page.tsx).
-   ≥ 1194px the table of contents replaces the site sidebar and avatar mark. */
+/* Case study pages: sticky chrome above sections is gone ≥ 1194px (no top bar).
+   Hiding the site sidebar on case pages lives in <CasePageStyles>, not here: it must switch
+   off when Next keeps the case page mounted but hidden after navigating away. */
 @media (min-width: 74.625rem) {
   :root {
     --case-scroll-offset: 40px;
-  }
-
-  body:has([data-case]) nav[data-site-nav] {
-    display: none;
   }
 }
 
