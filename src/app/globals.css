@@ -81,6 +81,27 @@
   }
 }
 
+/* Home (≥ 1194px): exactly one viewport tall, min 820px, no scroll.
+   [data-home] is the page root in src/app/page.tsx. The shell gets the page height, main
+   becomes a flex column so the hero takes what's left, and the footer sits 32px under the
+   hero with its wordmark capped to the remaining height (only binds on short, wide screens). */
+@media (min-width: 74.625rem) {
+  div:has(> #main [data-home]) {
+    min-height: max(100svh, 820px);
+  }
+
+  #main:has([data-home]) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #main:has([data-home]) ~ footer {
+    margin-top: 32px;
+    /* page − hero minimum (32 top + 356 column) − footer chrome (32 + 24 + 23 + 32) */
+    --wordmark-max-height: calc(max(100svh, 820px) - 499px);
+  }
+}
+
 @layer base {
   html {
     background: var(--color-bg);

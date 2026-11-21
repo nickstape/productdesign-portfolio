@@ -26,10 +26,11 @@ export const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-/** Only for the giant "Mary Fisher" wordmark */
+/** The giant "Mary Fisher" wordmark; italic for the book title in the home "Currently reading" card */
 export const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
+  style: ["normal", "italic"],
   axes: ["SOFT", "WONK", "opsz"],
   variable: "--font-fraunces",
 });
