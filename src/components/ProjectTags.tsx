@@ -128,7 +128,8 @@ export function ProjectTags({ tags, previews }: Props) {
   }, [open]);
 
   return (
-    <ul ref={field} aria-label="Projects" className="pointer-events-none absolute inset-x-0 top-0">
+    // data-home-tags / data-tag: hooks for <HomeIntro> and its styles in globals.css.
+    <ul ref={field} aria-label="Projects" data-home-tags className="pointer-events-none absolute inset-x-0 top-0">
 
       {tags.map((tag, i) => (
         <Tag
@@ -192,6 +193,7 @@ function Tag({ tag, depth, preview, open, onOpen, onClose }: TagProps) {
 
   return (
     <li
+      data-tag={tag.label}
       onMouseEnter={onOpen}
       onMouseLeave={onClose}
       className={`pointer-events-auto absolute [translate:calc(var(--drift-x,0)*var(--depth))_calc(var(--drift-y,0)*var(--depth))] transition-[translate] duration-[600ms] ease-out left-(--l-tablet) top-(--t-tablet) desktop:left-(--l-desktop) desktop:top-(--t-desktop) wide:left-(--l-wide) wide:top-(--t-wide) xwide:left-(--l-xwide) xwide:top-(--t-xwide) ${

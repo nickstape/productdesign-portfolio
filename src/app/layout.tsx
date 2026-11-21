@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { INTRO_LOADER } from "@/components/home-intro";
 import { PageShell } from "@/components/PageShell";
 import { fontVariables } from "./fonts";
 import "./globals.css";
@@ -29,6 +30,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={fontVariables} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: PREFERENCES_LOADER }} />
+        {/* Home intro: hides Home before first paint when <HomeIntro> is going to play. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_LOADER }} />
       </head>
       <body className="min-h-dvh bg-bg text-body text-text">
         <PageShell>{children}</PageShell>

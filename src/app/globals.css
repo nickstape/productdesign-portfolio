@@ -323,6 +323,59 @@
 }
 
 /* ==========================================================================
+   Home intro (<HomeIntro>): first load of "/" per browser session, ≥ 834px, motion allowed.
+   The inline script in layout.tsx sets <html data-intro="pending"> before first paint;
+   <HomeIntro> switches it to "play" when it starts, then "done" at the end (kept while Home is
+   mounted, so the tags' page-load fade-up doesn't replay). Only the five tags and the counter
+   show until the last 550ms, when everything else fades in by --intro-fade (0 → 1, written
+   inline on <html>). Opacity only here; the tags move by transform.
+   ========================================================================== */
+html:is([data-intro="pending"], [data-intro="play"]) {
+  --intro-fade: 0;
+}
+
+html:is([data-intro="pending"], [data-intro="play"])
+  :is(header:has(~ #main), #main ~ footer, [data-home] [data-enter] > :not([data-home-tags])) {
+  opacity: var(--intro-fade);
+}
+
+/* The Chatbase bubble animates its own opacity, which would override the rule above. */
+html:is([data-intro="pending"], [data-intro="play"]) [id^="chatbase-"] {
+  opacity: var(--intro-fade) !important;
+}
+
+/* Until <HomeIntro> has put the tags at GATHER (no flash of them in their Home places). */
+html[data-intro="pending"] [data-home-tags] {
+  opacity: 0;
+}
+
+/* The intro replaces the tags' fade-up ([data-enter]). */
+html[data-intro] [data-home] [data-home-tags] {
+  animation: none;
+}
+
+/* Tags above everything; nothing reacts to the pointer. Window listeners still get the click
+   or tap that skips, and its click lands on <html>, not on a link that wasn't visible yet. */
+html:is([data-intro="pending"], [data-intro="play"]) [data-home-tags] > li {
+  z-index: 40;
+  pointer-events: none;
+}
+
+html:is([data-intro="pending"], [data-intro="play"]) body {
+  pointer-events: none;
+}
+
+/* Counter (".loading side quests  48%"): only during the intro, fading out as Home fades in. */
+[data-intro-counter] {
+  display: none;
+}
+
+html:is([data-intro="pending"], [data-intro="play"]) [data-intro-counter] {
+  display: block;
+  opacity: calc(1 - var(--intro-fade));
+}
+
+/* ==========================================================================
    Touch targets: on coarse pointers, an invisible ::before grows the hit area to 44 × 44
    (or --hit, where neighbours are closer than that) around the element's centre. Nothing
    visible changes. The element must be positioned (add `relative` if it isn't).

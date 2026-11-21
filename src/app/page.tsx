@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ContentImage } from "@/components/ContentImage";
 import { CurrentlyReading } from "@/components/CurrentlyReading";
+import { HomeIntro } from "@/components/HomeIntro";
 import { MobileHome } from "@/components/MobileHome";
 import { ProjectTags } from "@/components/ProjectTags";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -23,6 +24,8 @@ export default function Home() {
       {/* < 834px: a separate text layout (Figma "Mobile — Home"). */}
       <MobileHome />
 
+      {/* ≥ 834px, first visit per session: the tags fly in before the rest of Home appears. */}
+      <HomeIntro>
       <div className="hidden flex-1 flex-col justify-center pt-6 pb-8 tablet:-mr-(--page-right) tablet:-ml-(--page-left) tablet:flex desktop:justify-start desktop:pt-(--home-column-top) desktop:pb-0">
       {/* Full-width stage: the column centres on the viewport and the tag field spans it. */}
       <div className="relative">
@@ -62,6 +65,7 @@ export default function Home() {
         </div>
       </div>
       </div>
+      </HomeIntro>
     </div>
   );
 }
