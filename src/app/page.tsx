@@ -50,9 +50,10 @@ export default function Home() {
             ))}
           />
 
-          <div className="mt-5">
+          <div className="mt-6 w-full desktop:w-auto">
             <CurrentlyReading />
           </div>
+
         </div>
       </div>
     </div>
