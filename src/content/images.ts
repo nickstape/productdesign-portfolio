@@ -38,7 +38,7 @@ export const images = {
   gallery10: { src: "/assets/about/gallery/10-quest.jpg", alt: "A woman sits under a painting of two schoolgirls while someone photographs her", width: 3213, height: 5712 },
 
   /* ---- Work: NDD case study ---- */
-  nddHero: { src: "/assets/work/ndd/hero-all-mandates.png", alt: "NDD All Mandates screen: a filterable table of direct debit mandates with status tags", width: 2304, height: 1152 },
+  nddHero: { src: "/assets/work/ndd/hero-all-mandates.mp4", alt: "NDD All Mandates screen: a filterable table of direct debit mandates with status tags", width: 2304, height: 1152 },
   nddProblem: { src: "/assets/work/ndd/problem-old-login.png", alt: "The original NDD login screen before the redesign", width: 2304, height: 1152 },
   nddExp01Before: { src: "/assets/work/ndd/exp01-login-before.png", alt: "Old sign-in form, annotated: no visual hierarchy, flat structure, no clear instructions", width: 1090, height: 834 },
   nddExp01After: { src: "/assets/work/ndd/exp01-login-after.mp4", alt: "Redesigned login with a \"Continue with Microsoft\" single sign-on button", width: 1090, height: 834 },
