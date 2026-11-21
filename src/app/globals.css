@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Design tokens — the single source of truth. Dark only; no light mode.
+   Tailwind v4 CSS-first: every token below becomes a utility class
+   (bg-surface, text-muted, border-line, font-mono, text-h1, rounded-image…).
+   ========================================================================== */
+
+@theme {
+  /* Colours — Tailwind's stock palette is removed so only these exist. */
+  --color-*: initial;
+  --color-bg: #0a0a0a;      /* page */
+  --color-surface: #141414; /* cards, meta rows */
+  --color-text: #f5f5f5;
+  --color-muted: #a3a3a3;   /* secondary text, >= 4.5:1 on bg */
+  --color-line: #262626;    /* 1px dividers and card borders */
+  --color-accent: #42f57e;  /* signal, not a fill */
+
+  /* 8px spacing grid: p-1 = 8px, p-2 = 16px, p-3 = 24px … (p-0.5 = 4px) */
+  --spacing: 0.5rem;
+
+  /* Images: 8px radius */
+  --radius-image: 8px;
+
+  /* Fixed mono sizes */
+  --text-label: 13px;
+  --text-label--line-height: 1.4;
+  --text-meta: 12px;
+  --text-meta--line-height: 1.4;
+}
+
+/* Values that point at runtime variables (next/font, responsive sizes). */
+@theme inline {
+  --font-sans: var(--font-instrument-sans), system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-wordmark: var(--font-fraunces), Georgia, serif;
+
+  /* Responsive type scale: one class per role, size switches at 1024px. */
+  --text-body: var(--fs-body);
+  --text-body--line-height: 1.4;
+  --text-intro: var(--fs-intro);
+  --text-intro--line-height: 1.4;
+  --text-h1: var(--fs-h1);
+  --text-h1--line-height: 1.15;
+  --text-headline: var(--fs-headline);
+  --text-headline--line-height: 1.15;
+}
+
+:root {
+  /* Mobile type sizes */
+  --fs-body: 16px;
+  --fs-intro: 18px;
+  --fs-h1: 30px;
+  --fs-headline: 24px;
+
+  /* Layout: content column starts at x=145 on a 1440 frame (right of sidebar) */
+  --content-left: 145px;
+
+  color-scheme: dark;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    /* Desktop type sizes */
+    --fs-body: 18px;
+    --fs-intro: 20px;
+    --fs-h1: clamp(32px, 2.78vw, 40px); /* 32 → 40 at 1440 */
+    --fs-headline: 28px;
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-bg);
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    line-height: 1.4;
+    text-align: left;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+}
