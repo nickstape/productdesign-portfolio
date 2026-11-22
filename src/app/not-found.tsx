@@ -162,6 +162,7 @@ export default function NotFound() {
           clear of the Chatbase bubble (55px, 16px from the edge), as in the shell footer. */}
       <FooterRow
         compact
+        location="404"
         className="absolute right-9 bottom-[36px] left-[20px] flex items-baseline justify-between tablet:right-[88px] tablet:bottom-5 tablet:left-6 desktop:right-[144px] desktop:left-[var(--content-left)]"
       />
     </div>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { AnalyticsEvents } from "@/components/AnalyticsEvents";
 import { INTRO_LOADER } from "@/components/home-intro";
 import { PageShell } from "@/components/PageShell";
 import {
@@ -10,6 +12,7 @@ import {
   sharedOpenGraph,
   sharedTwitter,
 } from "@/lib/seo";
+import { CONSENT_DEFAULTS, GA_ID } from "@/lib/analytics";
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
@@ -38,6 +41,9 @@ const CHATBASE_LOADER = String.raw`(function(){if(!window.chatbase||window.chatb
  */
 const PREFERENCES_LOADER = `(function(){try{var d=document.documentElement,s=localStorage.getItem("mf-text-size"),c=localStorage.getItem("mf-contrast");if(s==="112"||s==="125")d.setAttribute("data-text-size",s);if(c==="high")d.setAttribute("data-contrast","high")}catch(e){}})()`;
 
+/** Google Analytics: production builds only, never dev or Vercel preview deployments. */
+const ANALYTICS = process.env.NODE_ENV === "production" && !IS_PREVIEW;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // suppressHydrationWarning: the preferences script may add data-* attributes before hydration.
@@ -46,6 +52,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: PREFERENCES_LOADER }} />
         {/* Home intro: hides Home before first paint when <HomeIntro> is going to play. */}
         <script dangerouslySetInnerHTML={{ __html: INTRO_LOADER }} />
+        {/* Consent Mode v2 defaults (all denied), before GA loads. See src/lib/analytics.ts. */}
+        {ANALYTICS && <script dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULTS }} />}
       </head>
       <body className="min-h-dvh bg-bg text-body text-text">
         <PageShell>{children}</PageShell>
@@ -55,7 +63,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: CHATBASE_LOADER }}
         />
+        <AnalyticsEvents />
       </body>
+      {ANALYTICS && <GoogleAnalytics gaId={GA_ID} />}
     </html>
   );
 }

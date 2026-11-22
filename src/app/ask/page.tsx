@@ -25,7 +25,7 @@ export default function Page() {
 
       <OpenChat />
 
-      <p className="font-mono text-meta text-muted">
+      <p data-analytics-location="ask" className="font-mono text-meta text-muted">
         AskMary is an AI agent and can make mistakes. For anything important,{" "}
         <a href={`mailto:${contact.email}`} className="text-accent underline underline-offset-2 hover:decoration-2">
           email

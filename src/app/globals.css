@@ -261,6 +261,8 @@
     text-align: left;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Room under the page for the consent bar while it's open (set by <ConsentBar>). */
+    padding-bottom: var(--consent-h, 0px);
   }
 
   ::selection {
@@ -335,7 +337,7 @@ html:is([data-intro="pending"], [data-intro="play"]) {
 }
 
 html:is([data-intro="pending"], [data-intro="play"])
-  :is(header:has(~ #main), #main ~ footer, [data-home] [data-enter] > :not([data-home-tags])) {
+  :is(header:has(~ #main), #main ~ footer, [data-consent], [data-home] [data-enter] > :not([data-home-tags])) {
   opacity: var(--intro-fade);
 }
 
