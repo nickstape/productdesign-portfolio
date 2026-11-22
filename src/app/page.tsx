@@ -1,11 +1,29 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { ContentImage } from "@/components/ContentImage";
 import { CurrentlyReading } from "@/components/CurrentlyReading";
+import { HomeIntro } from "@/components/HomeIntro";
 import { MobileHome } from "@/components/MobileHome";
 import { ProjectTags } from "@/components/ProjectTags";
 import { SectionLabel } from "@/components/SectionLabel";
 import { homeTags } from "@/content/home-tags";
 import { images } from "@/content/images";
+import { contact } from "@/content/site";
+import { DEFAULT_DESCRIPTION, SITE_NAME, SITE_URL, pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({ description: DEFAULT_DESCRIPTION, path: "/" });
+
+/** schema.org Person, rendered as JSON-LD on Home only. */
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_NAME,
+  jobTitle: "Product Designer",
+  address: { "@type": "PostalAddress", addressLocality: "London", addressCountry: "GB" },
+  url: `${SITE_URL}/`,
+  sameAs: [contact.linkedin],
+  image: `${SITE_URL}${images.portrait.src}`,
+};
 
 /**
  * Home — the poster: Figma "Home — 834" (3408:964), "Home — 1194" (3407:1654), "Home " (1440,
@@ -20,9 +38,15 @@ export default function Home() {
 
   return (
     <div data-home className="flex flex-1 flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }}
+      />
       {/* < 834px: a separate text layout (Figma "Mobile — Home"). */}
       <MobileHome />
 
+      {/* ≥ 834px, first visit per session: the tags fly in before the rest of Home appears. */}
+      <HomeIntro>
       <div className="hidden flex-1 flex-col justify-center pt-6 pb-8 tablet:-mr-(--page-right) tablet:-ml-(--page-left) tablet:flex desktop:justify-start desktop:pt-(--home-column-top) desktop:pb-0">
       {/* Full-width stage: the column centres on the viewport and the tag field spans it. */}
       <div className="relative">
@@ -62,6 +86,7 @@ export default function Home() {
         </div>
       </div>
       </div>
+      </HomeIntro>
     </div>
   );
 }

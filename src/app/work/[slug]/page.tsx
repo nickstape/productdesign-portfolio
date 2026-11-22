@@ -6,6 +6,7 @@ import { CasePageStyles } from "@/components/case/CasePageStyles";
 import { CaseToc } from "@/components/case/CaseToc";
 import { JumpTo } from "@/components/case/JumpTo";
 import { getCase, getToc, listSlugs } from "@/lib/case-studies";
+import { pageMetadata } from "@/lib/seo";
 
 /**
  * Case study template — Figma "Case study - NDD" (3074:583, 1440) and "Mobile — Case study (NDD)"
@@ -24,7 +25,8 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   const { slug } = await params;
   if (!listSlugs().includes(slug)) return {};
   const { frontmatter } = await getCase(slug);
-  return { title: frontmatter.title, description: frontmatter.intro };
+  // Title and description come from the MDX frontmatter.
+  return pageMetadata({ title: frontmatter.title, description: frontmatter.intro, path: `/work/${slug}` });
 }
 
 /**

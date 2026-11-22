@@ -1,4 +1,5 @@
 import { contact } from "@/content/site";
+import { CookieSettings } from "./CookieSettings";
 import { Label } from "./Label";
 import { ReadingPreferences } from "./ReadingPreferences";
 import { gutter } from "./gutter";
@@ -67,11 +68,20 @@ export function Footer() {
  * The footer's bottom row: ".say hello", the contact links and Reading preferences. The caller
  * sets the layout.
  * `compact`: below 834px only LinkedIn and Email (the 404 page).
+ * `location`: where its email_click events come from (see <AnalyticsEvents>).
  */
-export function FooterRow({ className = "", compact = false }: { className?: string; compact?: boolean }) {
+export function FooterRow({
+  className = "",
+  compact = false,
+  location = "footer",
+}: {
+  className?: string;
+  compact?: boolean;
+  location?: "footer" | "404";
+}) {
   return (
-    <div className={className}>
-      <Label>say hello</Label>
+    <div className={className} data-analytics-location={location}>
+      <Label className="shrink-0 whitespace-nowrap">say hello</Label>
       <ul className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-sans text-ui">
         <li>
           <a
@@ -90,6 +100,9 @@ export function FooterRow({ className = "", compact = false }: { className?: str
         </li>
         <li className={compact ? "hidden tablet:list-item" : ""}>
           <ReadingPreferences />
+        </li>
+        <li className={compact ? "hidden tablet:list-item" : ""}>
+          <CookieSettings />
         </li>
         <li className={`text-muted ${compact ? "hidden tablet:list-item" : ""}`}>
           All rights reserved<span className="tablet:hidden">,</span> ©2026

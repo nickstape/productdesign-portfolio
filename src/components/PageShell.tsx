@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ConsentBar } from "./ConsentBar";
 import { Footer } from "./Footer";
 import { MobileHeader } from "./MobileHeader";
 import { Sidebar } from "./Sidebar";
@@ -18,6 +19,8 @@ export function PageShell({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
+      {/* Fixed to the bottom of the screen; early in the DOM so keyboard users reach it first. */}
+      <ConsentBar />
       {/* Banner landmark ≥ 1194px. Both children are position: fixed, so this box is empty and
           takes no space. Below 1194 <MobileHeader> is the banner. */}
       <header className="hidden desktop:block">
