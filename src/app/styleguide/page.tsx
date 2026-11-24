@@ -20,6 +20,8 @@ const colours = [
   { name: "muted", hex: "#a3a3a3", use: "Secondary text (≥ 4.5:1 on bg)", swatch: "bg-muted" },
   { name: "line", hex: "#262626", use: "1px dividers, card borders", swatch: "bg-line" },
   { name: "accent", hex: "#42f57e", use: "Active nav, links, key numbers, small squares", swatch: "bg-accent" },
+  { name: "quiet", hex: "#9a9a96", use: "Footer only: .say hello and the copyright", swatch: "bg-quiet" },
+  { name: "white", hex: "#ffffff", use: "About only: bio and mobile headline", swatch: "bg-white" },
   { name: "annotate", hex: "#ff6b6b", use: "Case studies only: before/after annotation labels", swatch: "bg-annotate" },
 ] as const;
 

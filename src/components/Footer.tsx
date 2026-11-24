@@ -73,8 +73,9 @@ export function Footer() {
  * ©2026" right (Instrument Sans 15 from 834px). Reading preferences and Cookie settings are
  * quieter (mono 12) on a small second line under the copyright, out of the row's flow at ≥ 834px
  * so they never move the main links. The caller sets the row layout.
- * Below 834px: ".say hello" in the text colour, then LinkedIn, Email and ©2026 in one 14px row;
- * the two settings wrap onto the line under it.
+ * ".say hello" and the copyright are #9A9A96 (quiet) at every width.
+ * Below 834px: LinkedIn, Email and ©2026 in one 14px row; the two settings wrap onto the line
+ * under it.
  * `compact`: below 834px only LinkedIn and Email (the 404 page).
  * `location`: where its email_click events come from (see <AnalyticsEvents>).
  */
@@ -89,7 +90,7 @@ export function FooterRow({
 }) {
   return (
     <div className={className} data-analytics-location={location}>
-      <Label className="shrink-0 whitespace-nowrap max-tablet:text-text!">say hello</Label>
+      <Label className="shrink-0 whitespace-nowrap text-quiet!">say hello</Label>
       <ul className="relative flex flex-wrap items-baseline gap-x-2 gap-y-1 font-sans text-nav tablet:gap-x-3 tablet:text-small">
         <li>
           <a
@@ -106,7 +107,7 @@ export function FooterRow({
             Email
           </a>
         </li>
-        <li className={`text-muted ${compact ? "hidden tablet:list-item" : ""}`}>All rights reserved ©2026</li>
+        <li className={`text-quiet ${compact ? "hidden tablet:list-item" : ""}`}>All rights reserved ©2026</li>
         {/* Second line, right-aligned under the copyright. */}
         <li
           className={`gap-x-2 max-tablet:order-1 max-tablet:basis-full tablet:absolute tablet:top-full tablet:right-0 tablet:mt-0.5 ${
