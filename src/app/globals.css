@@ -15,6 +15,8 @@
   --color-muted: #a3a3a3;   /* secondary text, >= 4.5:1 on bg */
   --color-line: #262626;    /* 1px dividers and card borders */
   --color-accent: #42f57e;  /* signal, not a fill */
+  --color-quiet: #9a9a96;   /* footer only: ".say hello" and the copyright (Figma, 24 Nov) */
+  --color-white: #ffffff;   /* About only: bio and mobile headline (Figma, 24 Nov) */
   --color-annotate: #ff6b6b; /* case studies only: annotation labels on before/after images */
 
   /* 8px spacing grid: p-1 = 8px, p-2 = 16px, p-3 = 24px … (p-0.5 = 4px) */
@@ -184,104 +186,9 @@
   }
 }
 
-/* One screen (≥ 834px): Home and the 404 ([data-one-screen] on the page root) are exactly one
-   viewport tall with no scrolling. The shell is 100dvh and clips; main is a flex column whose
-   page root takes what's left between the top bar (834–1193) and the footer, and centres its
-   contents vertically. Below 834px the pages scroll as normal.
-
-   Footer, bottom up (Figma Home 1440 × 820: cut edge ≈ 725, footer text ≈ 773): 32px padding,
-   the 24px footer row, 40px up to the wordmark's cut edge (with the consent line open: 8px, the
-   44px line, 8px). The wordmark is always fit to the width. Its band's top 0.3955em is empty
-   leading, pulled up under main so main ends at the top of the letters.
-
-   Home's content block sits at least 114px from the top of the page (the 90px logo row + 24) and
-   40px above the letters. Spare height goes 2/3 above the block and 1/3 below it (Figma
-   1440 × 820 → 1440 × 1024). If it doesn't fit (Home, src/app/page.tsx), all its gaps
-   scale down together first (to 0.6×, --gs), then the portrait shrinks (124 → 93 tall, --pf),
-   then the intro line hides under 680px tall, and only then does the wordmark's cut edge rise:
-   its visible height drops from 63% of the line box (0.9765em) towards 48% (0.744em). Its width
-   never changes and the letters never move.
-   --os-a-max / --os-a1 / --os-a2: heights of the space left for the block (inside those
-   minimums) where the gaps start to scale, where they reach 0.6× and where the portrait
-   reaches its minimum: the block's height at each point.
-   --os-pt: the content area's top padding (114px from the top of the page).
-   --os-min: main's smallest height (--os-pt + --os-a2 + 40); below it the cut edge rises. */
-@media (min-width: 52.125rem) {
-  :root {
-    --os-header: 60px;
-    /* Block: kicker 18.2 + H1 30 + intro 23.8 + reading 54, gaps 10 + 24 + 24 + 46, portrait 124. */
-    --os-a-max: 354px;
-    --os-a1: 312.4px;
-    --os-a2: 281.4px;
-    /* The tablet top bar is 60px; the content area adds 54 to reach 114. */
-    --os-pt: 54px;
-    --os-min: calc(var(--os-pt) + var(--os-a2) + 40px);
-  }
-
-  div:has(> #main [data-one-screen]) {
-    height: 100dvh;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  #main:has([data-one-screen]) {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  #main:has([data-one-screen]) ~ footer {
-    --os-below: 96px;
-    --wordmark-mt: -0.3955em;
-    --wordmark-h: clamp(
-      0.744em,
-      calc(100dvh - var(--os-header) - var(--os-below) - var(--os-min) + 0.3955em),
-      0.9765em
-    );
-    margin-top: 0;
-    padding-bottom: 32px;
-  }
-
-  #main:has([data-one-screen]) ~ footer:has([data-consent]) {
-    --os-below: 116px;
-  }
-
-  #main:has([data-one-screen]) ~ footer [data-consent] {
-    margin-top: 8px;
-  }
-
-  #main:has([data-one-screen]) ~ footer [data-analytics-location] {
-    height: calc(24px * var(--text-scale));
-    margin-top: 40px;
-  }
-
-  #main:has([data-one-screen]) ~ footer [data-consent] + [data-analytics-location] {
-    margin-top: 8px;
-  }
-}
-
-/* Under 680px tall the intro line and its 24px gap are gone. */
-@media (min-width: 52.125rem) and (height < 680px) {
-  :root {
-    --os-a-max: 306.2px;
-    --os-a1: 274.2px;
-    --os-a2: 243.2px;
-  }
-}
-
-@media (min-width: 74.625rem) {
-  :root {
-    --os-header: 0px;
-    --os-pt: 114px;
-  }
-}
-
-/* Home (< 834px): Figma "Mobile — Home" puts the footer 56px under the reading row. */
-@media (width < 52.125rem) {
-  #main:has([data-home]) ~ footer {
-    margin-top: 56px;
-  }
-}
+/* One screen (Home and the 404 only, ≥ 834px): the rules live in <OneScreenLayout>
+   (src/components/OneScreenLayout.tsx), switched off whenever those pages are hidden. Every other
+   page uses normal document flow and scrolls; its footer comes after all the content. */
 
 /* Case study pages: sticky chrome above sections is gone ≥ 1194px (no top bar).
    Hiding the site sidebar on case pages lives in <CasePageStyles>, not here: it must switch
@@ -486,4 +393,5 @@ html[data-text-size="125"] {
 /* High contrast: secondary text takes the primary text colour. */
 html[data-contrast="high"] {
   --color-muted: var(--color-text);
+  --color-quiet: var(--color-text);
 }

@@ -6,7 +6,7 @@ import { goToSection, useActiveSection } from "./useActiveSection";
 
 /**
  * Desktop (≥ 1194px) table of contents, in place of the site sidebar: Figma "On this page"
- * (3074:737), fixed at x 24, first item at y 155. The site logo stays above it.
+ * (3074:737), sticky at x 24, first item at y 155, stopping at the end of the case content. The site logo stays above it.
  * Sections 15px, explorations 14px indented 16px.
  * The section in view is accent green. Items come from getToc(), so they always exist.
  */
@@ -38,10 +38,16 @@ export function CaseToc({ items }: { items: TocItem[] }) {
     );
   };
 
+  // Column: from y 155 to the end of the case content ([data-case] is `relative` and starts at
+  // the top of the page), at x 24 of the viewport (the case content starts at
+  // max(--case-left, (100vw − 1152) / 2)). The nav sticks at 155 inside it, so it scrolls away
+  // with the last of the content and never reaches the footer. z-10: under the fixed site logo
+  // (z-20) as it scrolls away past it.
   return (
+    <div className="absolute top-[155px] bottom-0 left-[calc(24px-max(var(--case-left),(100vw-1152px)/2))] z-10 hidden w-[176px] desktop:block">
     <nav
       aria-label="On this page"
-      className="fixed top-[155px] left-[24px] z-20 hidden max-h-[calc(100dvh-195px)] w-[176px] overflow-y-auto desktop:block"
+      className="sticky top-[155px] max-h-[calc(100dvh-195px)] overflow-y-auto"
     >
       <ul className="flex flex-col gap-1">
         {items.map((item) => (
@@ -58,5 +64,6 @@ export function CaseToc({ items }: { items: TocItem[] }) {
         ))}
       </ul>
     </nav>
+    </div>
   );
 }

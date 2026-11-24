@@ -5,6 +5,7 @@ import { ContentImage } from "@/components/ContentImage";
 import { CurrentlyReading } from "@/components/CurrentlyReading";
 import { HomeIntro } from "@/components/HomeIntro";
 import { MobileHome } from "@/components/MobileHome";
+import { OneScreenLayout } from "@/components/OneScreenLayout";
 import { ProjectTags } from "@/components/ProjectTags";
 import { SectionLabel } from "@/components/SectionLabel";
 import { TAG_DISSOLVE, homeTags } from "@/content/home-tags";
@@ -15,7 +16,7 @@ import { DEFAULT_DESCRIPTION, SITE_NAME, SITE_URL, pageMetadata } from "@/lib/se
 export const metadata: Metadata = pageMetadata({ description: DEFAULT_DESCRIPTION, path: "/" });
 
 /**
- * Short screens (thresholds in globals.css, "One screen"). 100cqh is the space left for the
+ * Short screens (thresholds in <OneScreenLayout>). 100cqh is the space left for the
  * block (the content area is a size container; its padding holds the 114px top and 40px bottom
  * minimums).
  * tan(atan2(a, b)) = a / b: CSS can't divide a length by a length directly.
@@ -41,10 +42,9 @@ const personJsonLd = {
 /**
  * Home — the poster: Figma "Home — 834" (3408:964), "Home — 1194" (3407:1654), "Home " (1440,
  * 3363:751) and "Home — 1920" (3407:824); below 834px, <MobileHome> (3294:633) instead.
- * ≥ 834px the page is exactly one viewport tall, no scroll ([data-one-screen] rules in
- * globals.css): the content area runs from the top of the page to the top of the wordmark's
- * letters. The content block (kicker to Currently reading, Figma gaps 10 / 24 / 24 / 46,
- * ≈ 355 tall) sits at least 114px from the top of the page and 40px above the letters; spare
+ * ≥ 834px the page is exactly one viewport tall, no scroll (<OneScreenLayout>): the content
+ * area runs from the top of the page to the top of the wordmark's letters. The content block
+ * (kicker to Currently reading, Figma gaps 10 / 24 / 24 / 46, ≈ 355 tall) sits at least 114px from the top of the page and 40px above the letters; spare
  * height goes 2/3 above it and 1/3 below (Figma 1440 × 820 and 1440 × 1024), so it reads as
  * centred. The tags are placed in % of the content area.
  * Short screens: all gaps scale down together (to 0.6×), then the portrait shrinks
@@ -56,7 +56,7 @@ export default function Home() {
 
   return (
     <ViewTransition exit={{ [TAG_DISSOLVE]: TAG_DISSOLVE, default: "none" }} default="none">
-    <div data-home data-one-screen className="flex flex-1 flex-col">
+    <OneScreenLayout home className="flex flex-1 flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }}
@@ -109,7 +109,7 @@ export default function Home() {
       </div>
       </div>
       </HomeIntro>
-    </div>
+    </OneScreenLayout>
     </ViewTransition>
   );
 }

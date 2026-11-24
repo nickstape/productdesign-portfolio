@@ -33,8 +33,8 @@ const DRAG_THRESHOLD = 4;
  * ≥ 834px — Figma "About — 1194" (3407:1788): a filmstrip from the content column to the right
  *   edge of the viewport. Mixed heights on one baseline, no snap. Trackpad, shift+wheel (native),
  *   mouse drag and arrow keys. Edge fades only where more content is hidden.
- * < 834px — Figma "Mobile — About" (3305:663): one 310 × 390 slide per view, mandatory snap,
- *   the next slide peeking in, "01 / 10" counter.
+ * < 834px — Figma "Mobile — About" (24 Nov): one 295 × 371 slide per view, mandatory snap,
+ *   the next slide peeking in, "01 / 10" counter. "Swipe →" sits in the page's heading row.
  */
 export function SideQuestsGallery({ captions, slides, heights, ratios }: Props) {
   const scroller = useRef<HTMLDivElement>(null);
@@ -186,14 +186,14 @@ export function SideQuestsGallery({ captions, slides, heights, ratios }: Props) 
                 i === active ? "" : "opacity-40"
               }`}
             >
-              <p className="font-sans text-nav whitespace-nowrap text-text">
+              <p className="font-sans text-nav whitespace-nowrap text-text tablet:text-label">
                 <span aria-hidden="true">• </span>
                 {captions[i]}
               </p>
               {/* Explicit size on the image (or its placeholder), cropped to fill:
-                  mobile 310 × 390 (narrower on very small screens, so the next one still peeks);
+                  mobile 295 × 371 (narrower on very small screens, so the next one still peeks);
                   ≥ 834 the display height × the manifest's width/height ratio. */}
-              <div className="[--sw:min(310px,calc(100vw-80px))] [&>*]:h-[calc(var(--sw)*390/310)] [&>*]:w-[var(--sw)] [&>*]:object-cover [&_img]:pointer-events-none tablet:[&>*]:h-[var(--h)] tablet:[&>*]:w-[calc(var(--h)*var(--ar))]">
+              <div className="[--sw:min(295px,calc(100vw-80px))] [&>*]:h-[calc(var(--sw)*371/295)] [&>*]:w-[var(--sw)] [&>*]:object-cover [&_img]:pointer-events-none tablet:[&>*]:h-[var(--h)] tablet:[&>*]:w-[calc(var(--h)*var(--ar))]">
                 {slide}
               </div>
             </li>
@@ -201,16 +201,11 @@ export function SideQuestsGallery({ captions, slides, heights, ratios }: Props) 
         </ul>
       </div>
 
-      <div className="mt-2 flex items-baseline justify-between font-mono text-label text-muted tablet:hidden">
-        <p>
-          <span className="sr-only">Image </span>
-          {String(active + 1).padStart(2, "0")} / {count}
-        </p>
-        <p aria-hidden="true" className="text-accent">
-          Swipe →
-        </p>
-      </div>
-      <p aria-hidden="true" className="mt-3 hidden font-mono text-label text-muted tablet:block">
+      <p className="mt-2 font-mono text-label text-muted tablet:hidden">
+        <span className="sr-only">Image </span>
+        {String(active + 1).padStart(2, "0")} / {count}
+      </p>
+      <p aria-hidden="true" className="mt-3 hidden font-mono text-[calc(11px*var(--text-scale))] text-muted tablet:block">
         Drag or scroll →
       </p>
     </div>
