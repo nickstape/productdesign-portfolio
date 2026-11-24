@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ConsentBar } from "@/components/ConsentBar";
 import { FooterRow } from "@/components/Footer";
 import { NotFoundStyles } from "@/components/not-found/NotFoundStyles";
+import { OneScreenLayout } from "@/components/OneScreenLayout";
 import { Polaroid } from "@/components/not-found/Polaroid";
 import { StickyNote } from "@/components/not-found/StickyNote";
 import { images, type Img } from "@/content/images";
@@ -18,8 +19,8 @@ export const metadata: Metadata = {
  * and "404 — 390 v2" (3464:1201). Root not-found: unmatched URLs get a real 404 status.
  *
  * Layout: a content area, then the consent line (while it's open), then the footer row, all in
- * the flow. ≥ 834px the page is exactly one viewport tall with no scroll ([data-one-screen] in
- * globals.css) and the content area takes what's left; below 834 the page scrolls as normal.
+ * the flow. ≥ 834px the page is exactly one viewport tall with no scroll (<OneScreenLayout>)
+ * and the content area takes what's left; below 834 the page scrolls as normal.
  *
  * Every element in the content area is absolutely placed from the frames. Each sets its position
  * per breakpoint through CSS variables: --m-* (< 834, px from the 390 frame, main-relative so
@@ -97,10 +98,7 @@ const STAGGER_MS = 60;
 
 export default function NotFound() {
   return (
-    <div
-      data-one-screen
-      className="-mr-(--page-right) -ml-(--page-left) flex min-h-[max(calc(100svh-60px),680px)] flex-col overflow-x-clip tablet:min-h-0 tablet:flex-1"
-    >
+    <OneScreenLayout className="-mr-(--page-right) -ml-(--page-left) flex min-h-[max(calc(100svh-60px),680px)] flex-col overflow-x-clip tablet:min-h-0 tablet:flex-1">
       <NotFoundStyles />
 
       {/* Content area. A size container ≥ 834px, so the layout can fit its height. */}
@@ -186,6 +184,6 @@ export default function NotFound() {
         location="404"
         className="flex items-baseline justify-between gap-x-3 pt-1 pr-9 pb-[36px] pl-[20px] tablet:pr-[88px] tablet:pb-5 tablet:pl-6 desktop:pr-[144px] desktop:pl-(--content-left)"
       />
-    </div>
+    </OneScreenLayout>
   );
 }

@@ -40,7 +40,7 @@ export default function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
     <div
       data-case
       data-enter
-      className="pb-4 desktop:mr-1 desktop:ml-[calc(max(var(--case-left),(100vw-1152px)/2)-var(--page-left))] desktop:max-w-[1152px]"
+      className="relative pb-4 desktop:mr-1 desktop:ml-[calc(max(var(--case-left),(100vw-1152px)/2)-var(--page-left))] desktop:max-w-[1152px]"
     >
       <CasePageStyles />
       <Suspense>
