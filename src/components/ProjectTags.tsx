@@ -33,7 +33,7 @@ function lerpPct(a: number, b: number, w0: number, w1: number): string {
 /**
  * --l-tablet / --t-tablet (834–1193, from one Figma frame to the next) and --l-desk / --t-desk
  * (≥ 1194), picked by the breakpoint classes on the <li>. Tops are % of the field, which covers
- * the Home content block (full width, the block's height).
+ * the Home content area.
  */
 function placement({ tablet: p, desktop }: HomeTag): CSSProperties {
   const [w0, w1] = TABLET_FRAMES;
@@ -113,8 +113,8 @@ type Props = {
  * positioned around the centre column with a hover/focus preview card, one open at a time.
  * Esc closes the open card however it was opened (WCAG 1.4.13). On desktop with a mouse the
  * tags drift 2–3px with the pointer.
- * The field is absolute over the content block (full width), so the tags move with it; open
- * cards may hang over the wordmark and stay on top of it.
+ * The field is absolute over the whole content area (above the wordmark); open cards may hang
+ * over the wordmark and stay on top of it.
  */
 export function ProjectTags({ tags, previews }: Props) {
   const [open, setOpen] = useState<number | null>(null);

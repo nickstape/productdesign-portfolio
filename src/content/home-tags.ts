@@ -3,14 +3,14 @@ import { images, type Img } from "./images";
 /**
  * Floating project tags around the home page column (≥ 834px).
  *
- * Tags are anchored to the content block (kicker to Currently reading): tops are % of the block's
- * height from its top (negative = above it), so they move with the block as spare height grows
- * and scale with it when its gaps shrink, as in Figma's 1440 × 820 and 1440 × 1024 frames.
+ * Tops are % of the Home content area (the space between the top of the page or the tablet top
+ * bar and the wordmark, where the column is centred), so a tag never lands on the wordmark or
+ * the footer row at any viewport height.
  * desktop (≥ 1194px): the tag's top-left corner. left is % of the viewport width (Figma Home
- *   canvas 3363:751, updated 24 Nov); top is (Figma y − kicker y 151) ÷ the 355px block.
+ *   canvas 3363:751, updated 24 Nov); top is % of the content area (Figma y ÷ 546, the top of
+ *   the wordmark letters on the 1440 × 820 frame).
  * tablet (834–1193px): [x, top] in the 834 (3408:964) and 1194 (3407:1654) frames: x in px from
- *   the left edge of the viewport, top in % of the block (the frames' px from the column top
- *   ÷ the 834 frame's 406px column); straight line in between.
+ *   the left edge of the viewport, top in % of the content area; straight line in between.
  */
 export const TABLET_FRAMES = [834, 1194] as const;
 
@@ -46,8 +46,8 @@ export const homeTags: HomeTag[] = [
     image: images.tagPayments,
     caption: "Transfer Notification Service",
     durationMs: 280,
-    desktop: { left: 16.8, top: -23.1 },
-    tablet: [[56, 29.1], [155, 33.3]],
+    desktop: { left: 16.8, top: 12.6 },
+    tablet: [[56, 39.9], [155, 41.7]],
   },
   {
     label: "B2B",
@@ -56,23 +56,23 @@ export const homeTags: HomeTag[] = [
     caption: "NDD · ",
     captionAccent: "23+ API integrations",
     durationMs: 280,
-    desktop: { left: 18.7, top: 65.9 },
-    tablet: [[150, 48.8], [368, 25.6]],
+    desktop: { left: 18.7, top: 70.6 },
+    tablet: [[150, 49], [368, 34.8]],
   },
   {
     label: "Branding",
     image: images.tagBranding,
     caption: "H2ope · branding & assets",
     durationMs: 280,
-    desktop: { left: 70.7, top: -20.8 },
-    tablet: [[640, -4.9], [950, 14]],
+    desktop: { left: 70.7, top: 14.1 },
+    tablet: [[640, 21], [950, 24.4]],
   },
   {
     label: "0 → 1 products",
     image: images.tag0to1,
     caption: "Sóróyà · built from zero",
     durationMs: 300,
-    desktop: { left: 79.4, top: 65.9 },
-    tablet: [[590, 50.2], [932, 67]],
+    desktop: { left: 79.4, top: 70.6 },
+    tablet: [[590, 49.7], [932, 72]],
   },
 ];

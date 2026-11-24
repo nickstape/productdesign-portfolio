@@ -46,7 +46,7 @@ const personJsonLd = {
  * letters. The content block (kicker to Currently reading, Figma gaps 10 / 24 / 24 / 46,
  * ≈ 355 tall) sits at least 114px from the top of the page and 40px above the letters; spare
  * height goes 2/3 above it and 1/3 below (Figma 1440 × 820 and 1440 × 1024), so it reads as
- * centred. The tags are anchored to the block (% of its height), as in Figma.
+ * centred. The tags are placed in % of the content area.
  * Short screens: all gaps scale down together (to 0.6×), then the portrait shrinks
  * (to 72 × 93), then under 680px tall the intro line hides.
  * Clicking a tag dissolves Home into the case study (the <ViewTransition> exit, TAG_DISSOLVE).
@@ -71,9 +71,7 @@ export default function Home() {
         className="relative hidden min-h-0 flex-1 flex-col pt-(--os-pt) pb-[40px] [container-type:size] before:flex-[2] before:content-[''] after:flex-1 after:content-[''] tablet:-mr-(--page-right) tablet:-ml-(--page-left) tablet:flex"
         style={{ "--gs": GAP_SCALE, "--pf": PORTRAIT_FIT } as CSSProperties}
       >
-      {/* The block: full width, its height the column's. The tag field is placed on it, so the
-          tags move and scale with the block. */}
-      <div className="relative">
+      <div>
         <div data-enter className="mx-auto flex max-w-[520px] flex-col items-center text-center">
           <SectionLabel>hello, i’m a designer based in London</SectionLabel>
 
