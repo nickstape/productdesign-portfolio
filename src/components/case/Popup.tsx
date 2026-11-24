@@ -1,4 +1,4 @@
-import { CaseMedia, SIZES_FULL, type MediaProps } from "./CaseMedia";
+import { Media, SIZES_FULL, type MediaProps } from "./Media";
 import { PopupDialog } from "./PopupDialog";
 
 type Props = MediaProps & {
@@ -12,7 +12,7 @@ type Props = MediaProps & {
 export function Popup({ label, title, img, w = 1152, h = 720 }: Props) {
   return (
     <PopupDialog label={label} title={title}>
-      <CaseMedia img={img} w={w} h={h} sizes={SIZES_FULL} />
+      <Media img={img} w={w} h={h} sizes={SIZES_FULL} />
     </PopupDialog>
   );
 }

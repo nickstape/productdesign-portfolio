@@ -10,7 +10,11 @@ import { goToSection, useActiveSection } from "./useActiveSection";
  * Sections 15px, explorations 14px indented 16px.
  * The section in view is accent green. Items come from getToc(), so they always exist.
  */
-export function CaseToc({ items }: { items: TocItem[] }) {
+export function CaseToc({ items: all }: { items: TocItem[] }) {
+  // ≥ 1194 only, so <Mobile>-only sections never show here.
+  const items = all
+    .filter((i) => i.only !== "mobile")
+    .map((i) => ({ ...i, children: i.children.filter((c) => c.only !== "mobile") }));
   const flat = items.flatMap((i) => [i, ...i.children]);
   const [active, setActive] = useActiveSection(flat.map((i) => i.id));
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Todo } from "./Todo";
 
 type Props = {
   href: string;
@@ -9,6 +10,8 @@ type Props = {
 
 /** Figma "Next case study" (3074:655): one surface panel, the whole panel is the link. */
 export function NextCase({ href, title, cta }: Props) {
+  // A title still marked "TODO: …" in the next case study's frontmatter shows as a visible TODO.
+  const todo = title.match(/^TODO:?\s*(.*)$/);
   return (
     <Link
       href={href}
@@ -16,7 +19,7 @@ export function NextCase({ href, title, cta }: Props) {
     >
       <span className="flex flex-col gap-[6px]">
         <span className="font-mono text-meta text-muted">.next</span>
-        <span className="font-display text-next-title text-text">{title}</span>
+        <span className="font-display text-next-title text-text">{todo ? <Todo>{todo[1]}</Todo> : title}</span>
       </span>
       <span className="shrink-0 font-sans text-small text-text transition-colors group-hover:text-accent">
         {cta} <span aria-hidden="true">→</span>

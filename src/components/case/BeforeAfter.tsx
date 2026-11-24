@@ -1,5 +1,5 @@
-import { CaseMedia, SIZES_HALF } from "./CaseMedia";
-import { FadeIn } from "./FadeIn";
+import type { ReactNode } from "react";
+import { Media, SIZES_HALF } from "./Media";
 
 type Annotation = {
   /** Position over the image, in % of its width / height. */
@@ -18,6 +18,9 @@ type Props = {
   w?: number;
   h?: number;
   annotations?: Annotation[];
+  /** Caption overrides (default "Before" / "After"). Use <Desktop as="span"> / <Mobile as="span"> for per-size text. */
+  beforeCaption?: ReactNode;
+  afterCaption?: ReactNode;
 };
 
 /**
@@ -25,33 +28,46 @@ type Props = {
  * Figma "Frame 3" (3184:2328): two 545 × 417 frames, 51px apart (row 1141 wide), images contained.
  * The Before image has no stroke outline; After keeps the 1px line border.
  */
-export function BeforeAfter({ before, after, w = 545, h = 417, annotations = [] }: Props) {
+export function BeforeAfter({
+  before,
+  after,
+  w = 545,
+  h = 417,
+  annotations = [],
+  beforeCaption = "Before",
+  afterCaption = "After",
+}: Props) {
   const panes = [
-    { key: "before", img: before, caption: "Before" },
-    { key: "after", img: after, caption: "After" },
+    { key: "before", img: before, caption: beforeCaption },
+    { key: "after", img: after, caption: afterCaption },
   ] as const;
 
   return (
     <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:max-w-[1141px] desktop:gap-[51px]">
       {panes.map((p) => (
-        <figure key={p.key} className="flex flex-col gap-[10px]">
-          {/* Image and its annotations fade in together. */}
-          <FadeIn className="relative">
-            <CaseMedia img={p.img} w={w} h={h} sizes={SIZES_HALF} outline={p.key !== "before"} fit="contain" fade={false} />
-            {annotations
-              .filter((a) => (a.on ?? "before") === p.key)
-              .map((a) => (
-                <span
-                  key={a.text}
-                  className="absolute max-w-[45%] -rotate-2 rounded-[4px] bg-bg/85 px-0.5 font-sans text-ui leading-[1.25] font-medium text-annotate"
-                  style={{ left: `${a.x}%`, top: `${a.y}%` }}
-                >
-                  {a.text}
-                </span>
-              ))}
-          </FadeIn>
-          <figcaption className="font-mono text-meta text-muted tablet:font-sans tablet:text-nav">{p.caption}</figcaption>
-        </figure>
+        <Media
+          key={p.key}
+          img={p.img}
+          w={w}
+          h={h}
+          caption={p.caption}
+          sizes={SIZES_HALF}
+          outline={p.key !== "before"}
+          fit="contain"
+        >
+          {/* Annotations sit on the image and fade in with it. */}
+          {annotations
+            .filter((a) => (a.on ?? "before") === p.key)
+            .map((a) => (
+              <span
+                key={a.text}
+                className="absolute max-w-[45%] -rotate-2 rounded-[4px] bg-bg/85 px-0.5 font-sans text-ui leading-[1.25] font-medium text-annotate"
+                style={{ left: `${a.x}%`, top: `${a.y}%` }}
+              >
+                {a.text}
+              </span>
+            ))}
+        </Media>
       ))}
     </div>
   );

@@ -24,7 +24,8 @@ export function useActiveSection(ids: string[]) {
       let current: string | null = list[0] ?? null;
       for (const id of list) {
         const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= line) current = id;
+        // Skip sections hidden at this size (<Desktop> / <Mobile>): they have no box.
+        if (el && el.getClientRects().length && el.getBoundingClientRect().top <= line) current = id;
       }
       // At the very bottom the last sections can't reach the line; count the last one as in view.
       const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;

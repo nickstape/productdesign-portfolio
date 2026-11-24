@@ -4,6 +4,9 @@ import { useEffect, useRef, type MouseEvent } from "react";
 import type { TocItem } from "@/lib/case-studies";
 import { goToSection, useActiveSection } from "./useActiveSection";
 
+/** Id of the strip's anchor, the target of <BackToSections>. */
+export const SECTIONS_ANCHOR = "sections";
+
 /**
  * Below 1194px: Figma "Jump to (scrolls horizontally)" (3303:680). A strip of chips for the
  * top-level sections, sticky under the 60px MobileHeader. The active chip is scrolled into view.
@@ -32,29 +35,37 @@ export function JumpTo({ items }: { items: TocItem[] }) {
   };
 
   return (
-    <nav aria-label="Jump to section" className="sticky top-[60px] z-20 -mr-(--page-right) -ml-(--page-left) mt-3 bg-bg desktop:hidden">
-      <ul
-        ref={listRef}
-        className="flex gap-1 overflow-x-auto py-[10px] pr-(--page-right) pl-(--page-left) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {items.map((item) => {
-          const current = active === item.id;
-          return (
-            <li key={item.id} data-id={item.id} className="shrink-0">
-              <a
-                href={`#${item.id}`}
-                onClick={(e) => onClick(e, item.id)}
-                aria-current={current ? "location" : undefined}
-                className={`relative block touch-target rounded-full bg-surface px-[12px] py-1 font-mono text-meta whitespace-nowrap transition-colors duration-150 ease-out ${
-                  current ? "text-accent" : "text-muted hover:text-text"
-                }`}
-              >
-                {item.label}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+    <>
+      {/* Where the strip sits in the flow (the strip itself is sticky), just under the 60px top bar. */}
+      <span id={SECTIONS_ANCHOR} className="block scroll-mt-[60px] desktop:hidden" />
+      <nav aria-label="Jump to section" className="sticky top-[60px] z-20 -mr-(--page-right) -ml-(--page-left) mt-3 bg-bg desktop:hidden">
+        <ul
+          ref={listRef}
+          className="flex gap-1 overflow-x-auto py-[10px] pr-(--page-right) pl-(--page-left) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {items.map((item) => {
+            const current = active === item.id;
+            return (
+              <li
+              key={item.id}
+              data-id={item.id}
+              className={`shrink-0 ${item.only === "desktop" ? "hidden tablet:block" : item.only === "mobile" ? "tablet:hidden" : ""}`}
+            >
+                <a
+                  href={`#${item.id}`}
+                  onClick={(e) => onClick(e, item.id)}
+                  aria-current={current ? "location" : undefined}
+                  className={`relative block touch-target rounded-full bg-surface px-[12px] py-1 font-mono text-meta whitespace-nowrap transition-colors duration-150 ease-out ${
+                    current ? "text-accent" : "text-muted hover:text-text"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </>
   );
 }

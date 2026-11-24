@@ -13,6 +13,8 @@ type Props = {
   priority?: boolean;
   /** Default true: full width, 8px radius, 1px line border. false: no frame, the caller sizes it. */
   frame?: boolean;
+  /** Videos only: autoplay (muted, looping). The caller pauses it off screen (<Media>). */
+  autoPlay?: boolean;
 };
 
 /**
@@ -20,7 +22,7 @@ type Props = {
  * manifest; CSS controls display size), or a <video> for .mp4/.webm/.mov entries. If the file isn't in /public yet,
  * renders <ImagePlaceholder> at the same aspect ratio instead.
  */
-export function ContentImage({ img, className = "", sizes, priority, frame = true }: Props) {
+export function ContentImage({ img, className = "", sizes, priority, frame = true, autoPlay = false }: Props) {
   const file = path.join(process.cwd(), "public", img.src);
   const frameClass = frame ? "h-auto w-full rounded-image border border-line" : "";
 
@@ -35,8 +37,8 @@ export function ContentImage({ img, className = "", sizes, priority, frame = tru
     );
   }
 
-  // Video entries (.mp4/.webm/.mov) render as a muted, looping, inline <video>. It doesn't autoplay:
-  // the parent starts it when it's shown (e.g. a preview card opening).
+  // Video entries (.mp4/.webm/.mov) render as a muted, looping, inline <video>. It doesn't autoplay
+  // unless asked: the parent starts it when it's shown (e.g. a preview card opening).
   if (VIDEO.test(img.src)) {
     return (
       <video
@@ -44,6 +46,7 @@ export function ContentImage({ img, className = "", sizes, priority, frame = tru
         width={img.width}
         height={img.height}
         poster={img.poster}
+        autoPlay={autoPlay}
         muted
         loop
         playsInline

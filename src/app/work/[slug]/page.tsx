@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { CaseHeader, Hero, NextCase } from "@/components/case";
+import { BackToSections, CaseHeader, Hero, NextCase } from "@/components/case";
 import { CasePageStyles } from "@/components/case/CasePageStyles";
 import { CaseToc } from "@/components/case/CaseToc";
 import { JumpTo } from "@/components/case/JumpTo";
@@ -65,13 +65,17 @@ async function CaseStudy({ params }: { params: Promise<{ slug: string }> }) {
         kicker={fm.kicker}
         title={fm.title}
         intro={fm.intro}
+        introLinks={fm.introLinks}
         role={fm.role}
+        timeline={fm.timeline}
         platform={fm.platform}
+        platformMobile={fm.platformMobile}
         outcome={fm.outcome}
       />
       <Hero img={fm.hero} />
       <JumpTo items={toc} />
       <Content />
+      <BackToSections />
       <NextCase
         href={`/work/${next.frontmatter.slug}`}
         title={next.frontmatter.title}
