@@ -13,7 +13,7 @@ export type Img = {
 };
 
 export const images = {
-  /** Round avatar mark. Decorative: it always sits inside a link labelled "Mary Fisher — home". */
+  /** Logo mark, shown at 24 × 34 (never cropped round). Decorative: it always sits inside a link labelled "Mary Fisher — home". */
   siteLogo: { src: "/assets/shared/Vector.png", alt: "", width: 584, height: 836 },
 
   /* ---- Home ---- */
@@ -37,12 +37,19 @@ export const images = {
   gallery09: { src: "/assets/about/gallery/09-10k.jpg", alt: "A runner bites her finisher’s medal in front of the Access Bank Lagos City Marathon backdrop", width: 3024, height: 4032 },
   gallery10: { src: "/assets/about/gallery/10-quest.jpg", alt: "A woman sits under a painting of two schoolgirls while someone photographs her", width: 3213, height: 5712 },
 
-  /* ---- Work: NDD case study ---- */
-  nddHero: { src: "/assets/work/ndd/hero-all-mandates.mp4", alt: "NDD All Mandates screen: a filterable table of direct debit mandates with status tags", width: 2304, height: 1152 },
-  nddProblem: { src: "/assets/work/ndd/problem-old-login.png", alt: "The original NDD login screen before the redesign", width: 2304, height: 1152 },
-  nddExp01Before: { src: "/assets/work/ndd/exp01-login-before.png", alt: "Old sign-in form, annotated: no visual hierarchy, flat structure, no clear instructions", width: 1090, height: 834 },
-  nddExp01After: { src: "/assets/work/ndd/exp01-login-after.mp4", alt: "Redesigned login with a \"Continue with Microsoft\" single sign-on button", width: 1090, height: 834 },
-  nddExp02Sidebar: { src: "/assets/work/ndd/exp02-sidebar-roles.png", alt: "Collapsible sidebar shown expanded and collapsed, with a role-specific menu", width: 942, height: 1128 },
-  nddExp03Filtering: { src: "/assets/work/ndd/exp03-log-filtering.mov", alt: "All Mandates table with dynamic filters applied", width: 1112, height: 636 },
-  nddExp04A11y: { src: "/assets/work/ndd/exp04-accessibility-sheet.png", alt: "Component sheet showing input and dropdown states with contrast checks", width: 1112, height: 834 },
+  /* ---- Work: NDD case study ----
+     Files: public/assets/work/ndd/. width × height are each file's real pixel size (the earlier
+     table sizes no longer matched the files). No posters yet: without one, reduced motion shows
+     the paused video. */
+  nddHeroVideo: { src: "/assets/work/ndd/hero-all-mandates.mp4", alt: "NDD All Mandates screen: a filterable table of direct debit mandates with status tags", width: 1728, height: 1118 },
+  nddProblem: { src: "/assets/work/ndd/problem-old-login.png", alt: "The original NDD login screen before the redesign", width: 3114, height: 1754 },
+  // TODO alt text: no table row for this file yet. Its visible caption is "Design System layout".
+  nddExp01DesignSystem: { src: "/assets/work/ndd/exp01-design-system.png", alt: "", width: 1064, height: 532 },
+  nddExp02Before: { src: "/assets/work/ndd/exp01-login-before.png", alt: "Old sign-in form, annotated: no visual hierarchy, flat structure, no clear instructions", width: 525, height: 490 },
+  nddExp02AfterVideo: { src: "/assets/work/ndd/exp02-sso-after.mp4", alt: "Redesigned login with a \"Continue with Microsoft\" single sign-on button", width: 918, height: 848 },
+  // TODO alt text: no table row for this file yet. Its visible caption is "Before".
+  nddExp03Before: { src: "/assets/work/ndd/exp03-ia-before.png", alt: "", width: 3353, height: 2878 },
+  nddExp03After: { src: "/assets/work/ndd/exp03-ia-after.png", alt: "Collapsible sidebar shown expanded and collapsed, with a role-specific menu", width: 933, height: 1117 },
+  nddExp04FilteringVideo: { src: "/assets/work/ndd/exp04-filtering.mp4", alt: "All Mandates table with dynamic filters applied", width: 2762, height: 1540 },
+  nddExp05A11y: { src: "/assets/work/ndd/exp04-accessibility-sheet.png", alt: "Component sheet showing input and dropdown states with contrast checks", width: 1708, height: 1815 },
 } satisfies Record<string, Img>;

@@ -2,11 +2,12 @@
 
 import type { MouseEvent } from "react";
 import type { TocItem } from "@/lib/case-studies";
+import { footerFadeClass, useFooterInView } from "../useFooterInView";
 import { goToSection, useActiveSection } from "./useActiveSection";
 
 /**
  * Desktop (≥ 1194px) table of contents, in place of the site sidebar: Figma "On this page"
- * (3074:737), sticky at x 24, first item at y 155, stopping at the end of the case content. The site logo stays above it.
+ * (3074:737), fixed at x 24, y 140, below the site logo. Fades out while the footer wordmark is in view.
  * Sections 15px, explorations 14px indented 16px.
  * The section in view is accent green. Items come from getToc(), so they always exist.
  */
@@ -17,6 +18,7 @@ export function CaseToc({ items: all }: { items: TocItem[] }) {
     .map((i) => ({ ...i, children: i.children.filter((c) => c.only !== "mobile") }));
   const flat = items.flatMap((i) => [i, ...i.children]);
   const [active, setActive] = useActiveSection(flat.map((i) => i.id));
+  const footerInView = useFooterInView();
 
   const onClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -42,16 +44,14 @@ export function CaseToc({ items: all }: { items: TocItem[] }) {
     );
   };
 
-  // Column: from y 155 to the end of the case content ([data-case] is `relative` and starts at
-  // the top of the page), at x 24 of the viewport (the case content starts at
-  // max(--case-left, (100vw − 1152) / 2)). The nav sticks at 155 inside it, so it scrolls away
-  // with the last of the content and never reaches the footer. z-10: under the fixed site logo
-  // (z-20) as it scrolls away past it.
+  // Fixed at x 24, y 140 for the whole page: it never scrolls, so it can't be pushed up under the
+  // logo (y 32–66). When the footer wordmark comes into view it fades out (200ms, and inert so
+  // its links can't be tabbed to while invisible) instead, and fades back in on the way up.
   return (
-    <div className="absolute top-[155px] bottom-0 left-[calc(24px-max(var(--case-left),(100vw-1152px)/2))] z-10 hidden w-[176px] desktop:block">
     <nav
       aria-label="On this page"
-      className="sticky top-[155px] max-h-[calc(100dvh-195px)] overflow-y-auto"
+      inert={footerInView}
+      className={`fixed top-[140px] left-3 z-10 hidden max-h-[calc(100dvh-180px)] w-[176px] overflow-y-auto desktop:block ${footerFadeClass(footerInView)}`}
     >
       <ul className="flex flex-col gap-1">
         {items.map((item) => (
@@ -68,6 +68,5 @@ export function CaseToc({ items: all }: { items: TocItem[] }) {
         ))}
       </ul>
     </nav>
-    </div>
   );
 }

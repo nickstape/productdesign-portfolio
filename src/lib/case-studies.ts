@@ -63,7 +63,7 @@ function checkFrontmatter(slug: string, fm: Record<string, unknown> | undefined)
   if (missing.length) {
     throw new Error(`src/content/work/${slug}.mdx: frontmatter is missing ${missing.join(", ")}`);
   }
-  // Frontmatter values may be written as `images.nddHero`; the manifest key is the last part.
+  // Frontmatter values may be written as `images.nddHeroVideo`; the manifest key is the last part.
   const hero = String(fm!.hero).replace(/^images\./, "");
   return { ...(fm as CaseFrontmatter), hero, slug };
 }

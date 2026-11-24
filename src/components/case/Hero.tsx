@@ -4,7 +4,7 @@ import { Media, SIZES_FULL, type MediaProps } from "./Media";
 export function Hero({ img, w = 1152, h = 576 }: MediaProps) {
   return (
     <div className="mt-3 desktop:my-6">
-      <Media img={img} w={w} h={h} sizes={SIZES_FULL} priority fit="cover" fade={false} />
+      <Media img={img} w={w} h={h} sizes={SIZES_FULL} priority fit="cover" fade={false} hero />
     </div>
   );
 }

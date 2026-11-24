@@ -18,7 +18,7 @@ Pages are built one Figma screen at a time. Match the design closely: spacing, t
 ## Conventions
 - Section labels: lowercase mono, starting with a dot (".hello", ".experience", ".tldr"). Use `<SectionLabel>`. Never uppercase them.
 - Left-aligned text only. Never justify.
-- Images: 8px radius (`rounded-image`), 1px `border-line` on dark.
+- Images and videos: no border, radius only (`rounded-media` 16px; case study hero 20px from 834; all case study media 12px below 834; About gallery 16px; Home hover-card media 6px). The one exception is the Home portrait: 1px #404040 border, 2px radius.
 
 ## Images
 - `src/content/images.ts` is the only place image paths live. Files go in `public/assets/{shared,home/tags,about/gallery,work/ndd,work/tns}`.

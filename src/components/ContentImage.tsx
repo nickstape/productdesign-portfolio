@@ -11,7 +11,7 @@ type Props = {
   className?: string;
   sizes?: string;
   priority?: boolean;
-  /** Default true: full width, 8px radius, 1px line border. false: no frame, the caller sizes it. */
+  /** Default true: full width, 16px radius, no border. false: no frame, the caller sizes it. */
   frame?: boolean;
   /** Videos only: autoplay (muted, looping). The caller pauses it off screen (<Media>). */
   autoPlay?: boolean;
@@ -24,7 +24,7 @@ type Props = {
  */
 export function ContentImage({ img, className = "", sizes, priority, frame = true, autoPlay = false }: Props) {
   const file = path.join(process.cwd(), "public", img.src);
-  const frameClass = frame ? "h-auto w-full rounded-image border border-line" : "";
+  const frameClass = frame ? "h-auto w-full rounded-media" : "";
 
   if (!existsSync(file)) {
     return (

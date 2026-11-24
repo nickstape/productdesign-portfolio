@@ -26,7 +26,6 @@ type Props = {
 /**
  * Two images side by side ≥ 834 with Before / After captions; stacked (Before first) below.
  * Figma "Frame 3" (3184:2328): two 545 × 417 frames, 51px apart (row 1141 wide), images contained.
- * The Before image has no stroke outline; After keeps the 1px line border.
  */
 export function BeforeAfter({
   before,
@@ -52,7 +51,6 @@ export function BeforeAfter({
           h={h}
           caption={p.caption}
           sizes={SIZES_HALF}
-          outline={p.key !== "before"}
           fit="contain"
         >
           {/* Annotations sit on the image and fade in with it. */}

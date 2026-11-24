@@ -54,10 +54,10 @@ export default function CaseStudyComponentsPage() {
         <MetaRow role="[Lead product designer]" timeline="[2023 – 2024]" platform="Desktop web" outcome="[23+ integrations]" />
       </Demo>
 
-      <Demo id="media" name="<Media>" note="Image (nddProblem) with caption, then video (nddHero: autoplays, pauses off screen).">
+      <Demo id="media" name="<Media>" note="Image (nddProblem) with caption, then video (nddHeroVideo: autoplays, pauses off screen).">
         <Media img="nddProblem" w={1152} h={576} fit="cover" sizes={SIZES_FULL} caption="Image: next/image in the frame" />
-        <Media img="nddHero" w={1152} h={576} fit="cover" sizes={SIZES_FULL} caption="Video: autoplay, muted, loop, poster under reduced motion" />
-        <Figure img="nddExp02Sidebar" w={471} h={564} maxWidth={471} caption="<Figure>: Media with a max width" />
+        <Media img="nddHeroVideo" w={1152} h={576} fit="cover" sizes={SIZES_FULL} caption="Video: autoplay, muted, loop, poster under reduced motion" />
+        <Figure img="nddExp03After" w={471} h={564} maxWidth={471} caption="<Figure>: Media with a max width" />
       </Demo>
 
       <Demo id="constraints" name="<Constraints>" note="2 columns ≥ 834, 1 below.">
@@ -103,13 +103,13 @@ export default function CaseStudyComponentsPage() {
             ["problem", "The existing mandate page showed a chronological list of log entries with no filtering specific for containers."],
             [null, "The admin workspace brings the whole scheme into one place."],
           ]}
-          aside={<Figure img="nddExp03Filtering" w={556} h={318} caption="Filtering system for easy search" />}
+          aside={<Figure img="nddExp04FilteringVideo" w={556} h={318} caption="Filtering system for easy search" />}
         />
         <Exploration n={1} title="Single sign-on that fits how banks already work">
           <p className="font-sans text-case-body text-white">[Body copy above the comparison.]</p>
           <BeforeAfter
-            before="nddExp01Before"
-            after="nddExp01After"
+            before="nddExp02Before"
+            after="nddExp02AfterVideo"
             annotations={[{ x: 6, y: 10, text: "No visual hierarchy" }]}
           />
         </Exploration>

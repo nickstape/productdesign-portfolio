@@ -19,8 +19,8 @@ type Props = MediaProps & {
   maxWidth?: number;
   sizes?: string;
   priority?: boolean;
-  /** Default true: 1px line border. false: 8px radius only (e.g. the Before image). */
-  outline?: boolean;
+  /** The case study hero: 20px corners from 834 (other media 16). Below 834 all media are 12. */
+  hero?: boolean;
   /**
    * Hold the w × h frame and fill it like Figma does: "cover" (hero, problem image) or
    * "contain" (figures, before/after). Without it the frame takes the file's own ratio.
@@ -36,7 +36,7 @@ const manifest: Record<string, Img> = images;
 const VIDEO = /\.(mp4|webm|mov)$/i;
 
 /**
- * One case study media frame: an image (next/image) or a video in the same 8px-radius frame,
+ * One case study media frame: an image (next/image) or a video in the same rounded, borderless frame,
  * with an optional caption under it. <Hero>, <Figure>, <BeforeAfter>, <QuoteBlock> and <Popup>
  * all render through it.
  *
@@ -52,14 +52,14 @@ export function Media({
   maxWidth,
   sizes,
   priority,
-  outline = true,
+  hero = false,
   fit,
   fade = true,
   children,
 }: Props) {
   const key = img.replace(/^images\./, "");
   const entry = manifest[key];
-  const border = outline ? "border border-line" : "";
+  const radius = mediaRadius(hero);
 
   let frame: ReactNode;
   if (!entry) {
@@ -71,7 +71,7 @@ export function Media({
     const poster = isVideo && entry.poster ? { ...entry, src: entry.poster } : null;
 
     const box = (
-      <div style={{ aspectRatio: ratio }} className={`relative w-full overflow-hidden rounded-image ${border}`}>
+      <div style={{ aspectRatio: ratio }} className={`relative w-full overflow-hidden ${radius}`}>
         {isVideo ? (
           <>
             <ContentImage
@@ -113,6 +113,11 @@ export function Media({
       <figcaption className="font-mono text-meta text-muted tablet:font-sans tablet:text-nav">{caption}</figcaption>
     </figure>
   );
+}
+
+/** Case study media corners (no border on any media): 12px below 834, then 16px (hero 20px). */
+export function mediaRadius(hero = false) {
+  return hero ? "rounded-media-sm tablet:rounded-media-hero" : "rounded-media-sm tablet:rounded-media";
 }
 
 /** Display widths of the case study column, for next/image `sizes`. */

@@ -86,7 +86,7 @@ export default function Home() {
             height={portrait.height}
             sizes="96px"
             loading="eager"
-            className="mt-[calc(24px*var(--gs))] aspect-[96/124] h-[calc(93px+31px*var(--pf))] w-auto border border-line object-cover object-[72%_50%] grayscale"
+            className="mt-[calc(24px*var(--gs))] aspect-[96/124] h-[calc(93px+31px*var(--pf))] w-auto rounded-[2px] border border-[#404040] object-cover object-[72%_50%] grayscale"
           />
 
           <p className="mt-[calc(24px*var(--gs))] font-sans text-[17px] leading-[1.4] whitespace-nowrap text-[#b8b8b5] [@media(height<680px)]:hidden">

@@ -38,6 +38,7 @@ export function Footer() {
       <div className="@container hidden tablet:block tablet:pr-[2.014vw] tablet:pl-[1.806vw]">
         <div
           aria-hidden="true"
+          data-footer-wordmark
           className="pointer-events-none overflow-hidden font-wordmark font-normal whitespace-nowrap text-text select-none"
           style={{
             fontSize: WORDMARK_FONT_SIZE,
