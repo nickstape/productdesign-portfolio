@@ -22,11 +22,15 @@ type Props = {
  * manifest; CSS controls display size), or a <video> for .mp4/.webm/.mov entries. If the file isn't in /public yet,
  * renders <ImagePlaceholder> at the same aspect ratio instead.
  */
+/** True when the manifest entry's file is in /public. */
+export function hasFile(img: Img) {
+  return existsSync(path.join(process.cwd(), "public", img.src));
+}
+
 export function ContentImage({ img, className = "", sizes, priority, frame = true, autoPlay = false }: Props) {
-  const file = path.join(process.cwd(), "public", img.src);
   const frameClass = frame ? "h-auto w-full rounded-media" : "";
 
-  if (!existsSync(file)) {
+  if (!hasFile(img)) {
     return (
       <ImagePlaceholder
         name={path.basename(img.src)}

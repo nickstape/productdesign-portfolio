@@ -8,7 +8,7 @@ import { FadeIn } from "./FadeIn";
 export type MediaProps = {
   /** Key in src/content/images.ts, e.g. "nddHero" (or "images.nddHero"). src, poster and alt come from there. */
   img: string;
-  /** Frame aspect ratio (Figma frame size). Also sizes the placeholder while the key isn't in images.ts. */
+  /** Placeholder size while the key isn't in images.ts. With `cover`, also the fixed frame ratio. */
   w?: number;
   h?: number;
 };
@@ -21,13 +21,15 @@ type Props = MediaProps & {
   priority?: boolean;
   /** The case study hero: 20px corners from 834 (other media 16). Below 834 all media are 12. */
   hero?: boolean;
-  /**
-   * Hold the w × h frame and fill it like Figma does: "cover" (hero, problem image) or
-   * "contain" (figures, before/after). Without it the frame takes the file's own ratio.
-   */
-  fit?: "cover" | "contain";
   /** Default true: fade in on first scroll into view. Off for the hero (above the fold, the LCP image). */
   fade?: boolean;
+  /**
+   * EXCEPTION, only for <BeforeAfter cover> (exploration 03): hold a fixed w × h frame and fill
+   * it with object-fit: cover, centred. Every other media frame takes the file's own ratio.
+   */
+  cover?: boolean;
+  /** Replaces the caption's type classes (default: mono 12 below 834, Instrument Sans 14 above). */
+  captionClassName?: string;
   /** Overlays positioned over the frame in % (e.g. <BeforeAfter> annotations). They fade in with it. */
   children?: ReactNode;
 };
@@ -53,8 +55,9 @@ export function Media({
   sizes,
   priority,
   hero = false,
-  fit,
   fade = true,
+  cover = false,
+  captionClassName = "font-mono text-meta tablet:font-sans tablet:text-nav",
   children,
 }: Props) {
   const key = img.replace(/^images\./, "");
@@ -65,8 +68,11 @@ export function Media({
   if (!entry) {
     frame = <ImagePlaceholder name={`${key} · not in images.ts`} width={w} height={h} />;
   } else {
-    const ratio = fit ? `${w} / ${h}` : `${entry.width} / ${entry.height}`;
-    const fill = `absolute inset-0 size-full ${fit === "contain" ? "object-contain" : "object-cover"}`;
+    // Never cropped: the frame is the file's own ratio (manifest width × height), full width of
+    // its column, so the whole image or video always shows. object-contain only guards against
+    // a manifest size a pixel off the file. `cover` is the one exception (see the prop).
+    const ratio = cover ? `${w} / ${h}` : `${entry.width} / ${entry.height}`;
+    const fill = `absolute inset-0 size-full ${cover ? "object-cover object-center" : "object-contain"}`;
     const isVideo = VIDEO.test(entry.src);
     const poster = isVideo && entry.poster ? { ...entry, src: entry.poster } : null;
 
@@ -110,7 +116,7 @@ export function Media({
   return (
     <figure className="flex flex-col gap-[10px]">
       {body}
-      <figcaption className="font-mono text-meta text-muted tablet:font-sans tablet:text-nav">{caption}</figcaption>
+      <figcaption className={`text-muted ${captionClassName}`}>{caption}</figcaption>
     </figure>
   );
 }

@@ -6,6 +6,7 @@ import { NotFoundStyles } from "@/components/not-found/NotFoundStyles";
 import { OneScreenLayout } from "@/components/OneScreenLayout";
 import { Polaroid } from "@/components/not-found/Polaroid";
 import { StickyNote } from "@/components/not-found/StickyNote";
+import { caseHref } from "@/content/case-status";
 import { images, type Img } from "@/content/images";
 
 /** No `robots` here: Next injects <meta name="robots" content="noindex"> on every 404 itself,
@@ -158,7 +159,7 @@ export default function NotFound() {
           links={[
             { label: "← Back home", href: "/" },
             { label: "Read NIBSS Direct Debit →", href: "/work/ndd" },
-            { label: "Read TNS →", href: "/work/tns", tabletUp: true },
+            { label: "Read TNS →", href: caseHref("tns"), tabletUp: true },
           ]}
           className={`${PLACED} [--note-tilt:-11.58deg] tablet:[--note-tilt:3deg] motion-safe:animate-drop-in`}
           style={{

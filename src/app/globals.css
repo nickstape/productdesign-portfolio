@@ -58,13 +58,11 @@
   --text-small: calc(15px * var(--text-scale, 1));
   --text-small--line-height: 1.5;
 
-  /* Layout breakpoints: 390 (base) · 834 · 1194 · 1440 · 1920.
+  /* Layout breakpoints: 390 (base) · 834 · 1194.
      < tablet: mobile top bar · tablet–desktop: tablet top bar · ≥ desktop: sidebar.
-     ≥ wide: the 1440 layout is centred (see --frame-offset). */
+     ≥ 1440 the layout is centred (--frame-offset, a plain media query below). */
   --breakpoint-tablet: 52.125rem;  /* 834px */
   --breakpoint-desktop: 74.625rem; /* 1194px */
-  --breakpoint-wide: 90rem;        /* 1440px */
-  --breakpoint-xwide: 120rem;      /* 1920px */
 
   /* Page load: each block of [data-enter] fades up 8px, 40ms apart (rules at the end of this file). */
   --animate-enter: enter 300ms ease-out backwards;

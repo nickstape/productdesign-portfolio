@@ -42,7 +42,11 @@ export function WorkRow({ work, n, peek }: Props) {
 
   let name: ReactNode;
   if (!link.href) {
-    name = <span className="text-accent underline">{link.label}</span>;
+    name = (
+      <span aria-disabled="true" className="cursor-default text-accent underline">
+        {link.label}
+      </span>
+    );
   } else if (link.external) {
     name = (
       <a href={link.href} target="_blank" rel="noopener noreferrer" className={linkClass}>

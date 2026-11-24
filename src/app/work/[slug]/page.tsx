@@ -5,6 +5,7 @@ import { BackToSections, CaseHeader, Hero, NextCase } from "@/components/case";
 import { CasePageStyles } from "@/components/case/CasePageStyles";
 import { CaseToc } from "@/components/case/CaseToc";
 import { JumpTo } from "@/components/case/JumpTo";
+import { caseHref } from "@/content/case-status";
 import { getCase, getToc, listSlugs } from "@/lib/case-studies";
 import { pageMetadata } from "@/lib/seo";
 
@@ -77,7 +78,7 @@ async function CaseStudy({ params }: { params: Promise<{ slug: string }> }) {
       <Content />
       <BackToSections />
       <NextCase
-        href={`/work/${next.frontmatter.slug}`}
+        href={caseHref(next.frontmatter.slug)}
         title={next.frontmatter.title}
         cta={`Read case study ${String(next.frontmatter.order).padStart(2, "0")}`}
       />

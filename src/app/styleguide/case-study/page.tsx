@@ -55,8 +55,8 @@ export default function CaseStudyComponentsPage() {
       </Demo>
 
       <Demo id="media" name="<Media>" note="Image (nddProblem) with caption, then video (nddHeroVideo: autoplays, pauses off screen).">
-        <Media img="nddProblem" w={1152} h={576} fit="cover" sizes={SIZES_FULL} caption="Image: next/image in the frame" />
-        <Media img="nddHeroVideo" w={1152} h={576} fit="cover" sizes={SIZES_FULL} caption="Video: autoplay, muted, loop, poster under reduced motion" />
+        <Media img="nddProblem" w={1152} h={576} sizes={SIZES_FULL} caption="Image: next/image in the frame" />
+        <Media img="nddHeroVideo" w={1152} h={576} sizes={SIZES_FULL} caption="Video: autoplay, muted, loop, poster under reduced motion" />
         <Figure img="nddExp03After" w={471} h={564} maxWidth={471} caption="<Figure>: Media with a max width" />
       </Demo>
 

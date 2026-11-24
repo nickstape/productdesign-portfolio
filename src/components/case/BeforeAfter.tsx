@@ -14,18 +14,25 @@ type Props = {
   /** Manifest keys. */
   before: string;
   after: string;
-  /** Placeholder aspect ratio while keys aren't in images.ts (Figma 545 × 417). */
+  /** Placeholder aspect ratio while keys aren't in images.ts (Figma 545 × 417); with `cover`, the frame ratio. */
   w?: number;
   h?: number;
   annotations?: Annotation[];
   /** Caption overrides (default "Before" / "After"). Use <Desktop as="span"> / <Mobile as="span"> for per-size text. */
   beforeCaption?: ReactNode;
   afterCaption?: ReactNode;
+  /**
+   * Figma exploration 03 layout, the one exception to "never crop": two EQUAL w × h frames
+   * (471 × 564 at 1440), images filling them (object-fit: cover, centred). ≥ 834 side by side,
+   * 125px apart at 1440: the row is 1067 of the 1152 column and both scale with it. Below 834
+   * stacked, full width, same ratio. Captions Instrument Sans 14 at every size.
+   */
+  cover?: boolean;
 };
 
 /**
  * Two images side by side ≥ 834 with Before / After captions; stacked (Before first) below.
- * Figma "Frame 3" (3184:2328): two 545 × 417 frames, 51px apart (row 1141 wide), images contained.
+ * Figma "Frame 3" (3184:2328): two columns 51px apart (row 1141 wide). Each image shows whole at its own ratio (never cropped), top-aligned.
  */
 export function BeforeAfter({
   before,
@@ -35,6 +42,7 @@ export function BeforeAfter({
   annotations = [],
   beforeCaption = "Before",
   afterCaption = "After",
+  cover = false,
 }: Props) {
   const panes = [
     { key: "before", img: before, caption: beforeCaption },
@@ -42,7 +50,14 @@ export function BeforeAfter({
   ] as const;
 
   return (
-    <div className="grid grid-cols-1 gap-3 tablet:grid-cols-2 desktop:max-w-[1141px] desktop:gap-[51px]">
+    <div
+      className={
+        cover
+          ? // 1067 / 1152 = 92.62% of the column; gap 125 / 1067 = 11.715% of the row.
+            "grid grid-cols-1 items-start gap-3 tablet:w-[92.62%] tablet:grid-cols-2 tablet:gap-x-[11.715%]"
+          : "grid grid-cols-1 items-start gap-3 tablet:grid-cols-2 desktop:max-w-[1141px] desktop:gap-[51px]"
+      }
+    >
       {panes.map((p) => (
         <Media
           key={p.key}
@@ -51,7 +66,8 @@ export function BeforeAfter({
           h={h}
           caption={p.caption}
           sizes={SIZES_HALF}
-          fit="contain"
+          cover={cover}
+          captionClassName={cover ? "font-sans text-nav" : undefined}
         >
           {/* Annotations sit on the image and fade in with it. */}
           {annotations

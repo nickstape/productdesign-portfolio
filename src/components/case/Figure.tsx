@@ -17,7 +17,6 @@ export function Figure({ img, w, h, caption, maxWidth }: Props) {
       caption={caption}
       maxWidth={maxWidth}
       sizes={maxWidth ? `${maxWidth}px` : SIZES_FULL}
-      fit={w && h ? "contain" : undefined}
     />
   );
 }
