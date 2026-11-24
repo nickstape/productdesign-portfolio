@@ -26,7 +26,7 @@ export type AnalyticsEvent =
   | { name: "home_tag_click"; params: { tag: string } }
   | { name: "case_study_open"; params: { case_study: "ndd" | "tns" } }
   | { name: "cv_download" }
-  | { name: "email_click"; params: { location: "footer" | "404" | "ask" } }
+  | { name: "email_click"; params: { location: "footer" | "404" } }
   | { name: "linkedin_click" }
   | { name: "askmary_open" };
 

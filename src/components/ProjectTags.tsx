@@ -13,32 +13,35 @@ import {
 } from "react";
 import { TABLET_FRAMES, TAG_DISSOLVE, type HomeTag } from "@/content/home-tags";
 
-/**
- * `a` at viewport width w0, `b` at w1, linear in between. `base` is the length that tracks the
- * viewport: 100% for left (the field spans the viewport), 100vw for top.
- */
-function lerp(a: number, b: number, w0: number, w1: number, base: string): string {
+/** px: `a` at viewport width w0, `b` at w1, linear in between (100% = the field = viewport width). */
+function lerpPx(a: number, b: number, w0: number, w1: number): string {
   if (a === b) return `${a}px`;
   const slope = ((b - a) / (w1 - w0)).toFixed(5);
-  return `calc(${a}px + ${slope} * (${base} - ${w0}px))`;
+  return `calc(${a}px + ${slope} * (100% - ${w0}px))`;
 }
 
-/** Height of the Figma desktop Home canvas the desktop tops are a share of. */
-const CANVAS_H = 820;
+/**
+ * %: `a` at viewport width w0, `b` at w1, linear in between. tan(atan2(x, y)) = x / y turns the
+ * length ratio into a plain number (CSS can't divide a length by a length directly).
+ */
+function lerpPct(a: number, b: number, w0: number, w1: number): string {
+  if (a === b) return `${a}%`;
+  const t = `clamp(0, tan(atan2(100vw - ${w0}px, ${w1 - w0}px)), 1)`;
+  return `calc(${a}% + ${(b - a).toFixed(2)}% * ${t})`;
+}
 
 /**
  * --l-tablet / --t-tablet (834–1193, from one Figma frame to the next) and --l-desk / --t-desk
- * (≥ 1194: % of the 1440 × 820 canvas), picked by the breakpoint classes on the <li>.
- * The field's top is the top of the centre column, so the canvas top is
- * --home-column-top-820 above it (globals.css); the shift on tall screens moves both alike.
+ * (≥ 1194), picked by the breakpoint classes on the <li>. Tops are % of the field, which covers
+ * the Home content block (full width, the block's height).
  */
 function placement({ tablet: p, desktop }: HomeTag): CSSProperties {
   const [w0, w1] = TABLET_FRAMES;
   return {
-    "--l-tablet": lerp(p[0][0], p[1][0], w0, w1, "100%"),
-    "--t-tablet": lerp(p[0][1], p[1][1], w0, w1, "100vw"),
+    "--l-tablet": lerpPx(p[0][0], p[1][0], w0, w1),
+    "--t-tablet": lerpPct(p[0][1], p[1][1], w0, w1),
     "--l-desk": `${desktop.left}%`,
-    "--t-desk": `calc(${((desktop.top / 100) * CANVAS_H).toFixed(2)}px - var(--home-column-top-820))`,
+    "--t-desk": `${desktop.top}%`,
   } as CSSProperties;
 }
 
@@ -110,7 +113,8 @@ type Props = {
  * positioned around the centre column with a hover/focus preview card, one open at a time.
  * Esc closes the open card however it was opened (WCAG 1.4.13). On desktop with a mouse the
  * tags drift 2–3px with the pointer.
- * The field is absolute over the full-width stage, its top at the top of the centre column.
+ * The field is absolute over the content block (full width), so the tags move with it; open
+ * cards may hang over the wordmark and stay on top of it.
  */
 export function ProjectTags({ tags, previews }: Props) {
   const [open, setOpen] = useState<number | null>(null);
@@ -129,7 +133,7 @@ export function ProjectTags({ tags, previews }: Props) {
 
   return (
     // data-home-tags / data-tag: hooks for <HomeIntro> and its styles in globals.css.
-    <ul ref={field} aria-label="Projects" data-home-tags className="pointer-events-none absolute inset-x-0 top-0">
+    <ul ref={field} aria-label="Projects" data-home-tags className="pointer-events-none absolute inset-0">
 
       {tags.map((tag, i) => (
         <Tag

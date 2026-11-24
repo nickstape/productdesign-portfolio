@@ -10,50 +10,38 @@ import {
   subscribeConsent,
   type Choice,
 } from "@/lib/analytics";
-import { gutter } from "./gutter";
 
-/** Same look for both: neither choice is the default or the "nice" one. */
+/** Same look for both: neither choice is the default or the "nice" one. 44px tap height. */
 const BUTTON =
-  "relative touch-target flex h-5 items-center justify-center rounded-image border border-line px-2 font-mono text-meta text-text transition-colors hover:border-accent hover:text-accent";
+  "flex h-[44px] items-center font-mono text-meta text-text underline underline-offset-2 transition-colors hover:text-accent";
 
 /**
- * Analytics consent bar, fixed to the bottom of the screen until the reader accepts or declines
- * (stored in localStorage, never shown again). "Cookie settings" in the footer reopens it.
+ * Analytics consent line, shown until the reader accepts or declines (stored in localStorage,
+ * never shown again). "Cookie settings" in the footer reopens it.
  *
- * While it's open, --consent-h on <html> reserves its height under the page (globals.css), so
- * nothing ends up trapped behind it. On the 404 below 834px it sits under the page instead, so
- * it never covers the sticky note (see <NotFoundStyles>). The right padding matches the footer row's, keeping the buttons clear of
- * the Chatbase bubble (55px, 16px from the edge); the chat window itself stacks above the bar.
+ * No fill, border or shadow: one line of text and two text buttons, in the normal layout flow
+ * directly above the footer row (the caller places it and sets its padding, left-aligned with
+ * ".say hello"). It stays on the left, clear of the Chatbase bubble at the bottom right. Once
+ * answered it unmounts and the space closes.
  *
- * Not a dialog: the page stays usable. It sits right after the skip link, so keyboard and screen
- * reader users meet it early. Reopened from the footer it takes focus, Esc closes it again and
- * focus goes back to "Cookie settings".
+ * Not a dialog: the page stays usable. Reopened from the footer it takes focus, Esc closes it
+ * again and focus goes back to "Cookie settings". The 404 renders its own copy (the shell
+ * footer is hidden there); only the visible one reacts.
  */
-export function ConsentBar() {
+export function ConsentBar({ className = "" }: { className?: string }) {
   const state = useSyncExternalStore(subscribeConsent, consentSnapshot, consentServerSnapshot);
   const ref = useRef<HTMLElement>(null);
   /** "Cookie settings", when the bar was reopened from it. */
   const opener = useRef<HTMLElement | null>(null);
   const open = state === "open";
 
-  // Reserve the bar's height under the page while it's open.
-  useEffect(() => {
-    const el = ref.current;
-    const root = document.documentElement;
-    if (!open || !el) return;
-    const ro = new ResizeObserver(() => root.style.setProperty("--consent-h", `${el.offsetHeight}px`));
-    ro.observe(el);
-    return () => {
-      ro.disconnect();
-      root.style.removeProperty("--consent-h");
-    };
-  }, [open]);
-
   // Reopened from "Cookie settings" (a choice exists): focus the bar; Esc closes it.
   useEffect(() => {
-    if (!open || storedChoice() === null) return;
+    const el = ref.current;
+    // Skip a copy inside a hidden subtree (display: none has no client rects).
+    if (!open || !el || el.getClientRects().length === 0 || storedChoice() === null) return;
     opener.current = document.activeElement as HTMLElement | null;
-    ref.current?.focus();
+    el.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
       closeConsent();
@@ -77,22 +65,16 @@ export function ConsentBar() {
       data-consent
       aria-label="Cookie consent"
       tabIndex={-1}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#333] bg-surface outline-none"
+      className={`flex flex-wrap items-center gap-x-3 outline-none ${className}`}
     >
-      <div className={`${gutter} py-2`}>
-        <div className="flex flex-col gap-2 pr-9 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-4 tablet:pr-5 desktop:pr-6">
-          <p className="font-mono text-meta text-text">
-            This site uses analytics cookies to see which work people read.
-          </p>
-          <div className="grid shrink-0 grid-cols-2 gap-1 tablet:w-[224px]">
-            <button type="button" onClick={() => choose("granted")} className={BUTTON}>
-              Accept
-            </button>
-            <button type="button" onClick={() => choose("denied")} className={BUTTON}>
-              Decline
-            </button>
-          </div>
-        </div>
+      <p className="font-mono text-meta text-muted">This site uses analytics cookies to see which work people read.</p>
+      <div className="flex gap-3">
+        <button type="button" onClick={() => choose("granted")} className={BUTTON}>
+          Accept
+        </button>
+        <button type="button" onClick={() => choose("denied")} className={BUTTON}>
+          Decline
+        </button>
       </div>
     </section>
   );

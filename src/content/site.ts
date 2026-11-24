@@ -10,14 +10,13 @@ export type NavItem = {
   className?: string;
 };
 
-/** Desktop sidebar and tablet top bar. */
+/** Desktop sidebar and tablet top bar. AskMary is reached through the Chatbase bubble only. */
 export const primaryNav: NavItem[] = [
   { label: "Work", href: "/", match: ["/work"] },
   { label: "About", href: "/about" },
-  { label: "AskMary", href: "/ask" },
 ];
 
-/** Replaces AskMary in the mobile top bar (< 834px). File goes in public/cv.pdf. */
+/** Mobile top bar only (< 834px). File goes in public/cv.pdf. */
 export const cvLink: NavItem = { label: "CV", href: "/cv.pdf", external: true };
 
 export const contact = {

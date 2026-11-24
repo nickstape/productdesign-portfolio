@@ -1,11 +1,8 @@
 import Link from "next/link";
 import { cvLink, primaryNav, type NavItem } from "@/content/site";
 
-/** AskMary shows from 834px; CV only below it. */
-const items: NavItem[] = [
-  ...primaryNav.map((i) => (i.href === "/ask" ? { ...i, className: "hidden tablet:block" } : i)),
-  { ...cvLink, className: "tablet:hidden" },
-];
+/** CV only below 834px. */
+const items: NavItem[] = [...primaryNav, { ...cvLink, className: "tablet:hidden" }];
 import { Avatar } from "./Avatar";
 import { NavLinks } from "./NavLinks";
 
@@ -13,7 +10,7 @@ import { NavLinks } from "./NavLinks";
  * Sticky 60px top bar below 1194px.
  * < 834: avatar only, Work / About / CV ↗ in mono 13, 1px line under it.
  * 834–1193: Figma "Home — 834" header (3408:965): the sidebar moved to the top. Avatar only,
- *   Work / About / AskMary in the sidebar's sans 16, 28px apart, 38px from each edge, no line.
+ *   Work / About in the sidebar's sans 16, 28px apart, 38px from each edge, no line.
  */
 export function MobileHeader() {
   return (

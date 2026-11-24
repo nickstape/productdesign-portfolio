@@ -25,7 +25,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages: { path: string; files: string[] }[] = [
     { path: "/", files: ["src/app/page.tsx", "src/components/MobileHome.tsx", "src/content"] },
     { path: "/about", files: ["src/app/about", "src/content/experience.ts", "src/content/gallery.ts"] },
-    { path: "/ask", files: ["src/app/ask"] },
     ...listSlugs().map((slug) => ({
       path: `/work/${slug}`,
       files: [`src/content/work/${slug}.mdx`, "src/app/work/[slug]/page.tsx"],
