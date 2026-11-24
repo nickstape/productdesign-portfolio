@@ -35,8 +35,8 @@ export function Footer() {
           The word scales with the viewport, not the content column, at every width (even ≥ 1440,
           where the content is centred): < 834 it spans the full viewport (390 in Figma
           "Mobile / Footer"); from 834 it sits 1.9vw in from each edge (Figma: 16 at 834,
-          23 at 1194, 26 at 1440, 37 at 1920). */}
-      <div className="@container tablet:px-[1.9vw]">
+          23 at 1194, 26 at 1440, 37 at 1920). Not shown < 834 (Figma "Mobile — Home", 24 Nov). */}
+      <div className="@container hidden tablet:block tablet:px-[1.9vw]">
         <div
           aria-hidden="true"
           className="pointer-events-none overflow-hidden font-wordmark font-normal whitespace-nowrap text-text select-none"
@@ -56,9 +56,10 @@ export function Footer() {
       </div>
 
       {/* Right padding keeps the text clear of the Chatbase bubble (55px, 16px from the
-          viewport edge): text ends ≥ 87px from the edge at every width. */}
+          viewport edge, so its left edge is 71px in): text ends ≥ 80px from the edge at every
+          width (< 834: 16 + 64, just wide enough for LinkedIn, Email and ©2026 in one row). */}
       <div className={gutter}>
-        <FooterRow className="mt-3 flex flex-col gap-2 pr-9 tablet:flex-row tablet:items-baseline tablet:justify-between tablet:pr-5 desktop:pr-6" />
+        <FooterRow className="flex flex-col gap-2 tablet:mt-3 pr-8 tablet:flex-row tablet:items-baseline tablet:justify-between tablet:pr-5 desktop:pr-6" />
       </div>
     </footer>
   );
@@ -67,6 +68,8 @@ export function Footer() {
 /**
  * The footer's bottom row: ".say hello", the contact links and Reading preferences. The caller
  * sets the layout.
+ * Below 834px: ".say hello" in the text colour, then LinkedIn, Email and "All rights reserved
+ * ©2026" in one 14px row; Reading preferences and Cookie settings wrap onto the line under it.
  * `compact`: below 834px only LinkedIn and Email (the 404 page).
  * `location`: where its email_click events come from (see <AnalyticsEvents>).
  */
@@ -81,8 +84,8 @@ export function FooterRow({
 }) {
   return (
     <div className={className} data-analytics-location={location}>
-      <Label className="shrink-0 whitespace-nowrap">say hello</Label>
-      <ul className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-sans text-ui">
+      <Label className="shrink-0 whitespace-nowrap max-tablet:text-text!">say hello</Label>
+      <ul className="flex flex-wrap items-baseline gap-x-2 gap-y-1 font-sans text-nav tablet:gap-x-3 tablet:text-ui">
         <li>
           <a
             href={contact.linkedin}
@@ -98,15 +101,13 @@ export function FooterRow({
             Email
           </a>
         </li>
-        <li className={compact ? "hidden tablet:list-item" : ""}>
+        <li className={`max-tablet:order-1 ${compact ? "hidden tablet:list-item" : ""}`}>
           <ReadingPreferences />
         </li>
-        <li className={compact ? "hidden tablet:list-item" : ""}>
+        <li className={`max-tablet:order-1 ${compact ? "hidden tablet:list-item" : ""}`}>
           <CookieSettings />
         </li>
-        <li className={`text-muted ${compact ? "hidden tablet:list-item" : ""}`}>
-          All rights reserved<span className="tablet:hidden">,</span> ©2026
-        </li>
+        <li className={`text-muted ${compact ? "hidden tablet:list-item" : ""}`}>All rights reserved ©2026</li>
       </ul>
     </div>
   );

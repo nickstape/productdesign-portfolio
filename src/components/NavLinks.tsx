@@ -8,6 +8,8 @@ import { isCurrent, type NavItem } from "@/content/site";
 type Props = {
   items: NavItem[];
   linkClassName: string;
+  /** Colour of the links that aren't the current page. */
+  idleClassName?: string;
 };
 
 /**
@@ -27,13 +29,18 @@ function ActiveList(props: Props) {
   return <List {...props} pathname={usePathname()} />;
 }
 
-function List({ items, linkClassName, pathname }: Props & { pathname: string | null }) {
+function List({
+  items,
+  linkClassName,
+  idleClassName = "text-muted hover:text-text",
+  pathname,
+}: Props & { pathname: string | null }) {
   return (
     <>
       {items.map((item) => {
         const current = isCurrent(item, pathname);
         const cls = `${linkClassName} relative touch-target transition-colors duration-150 ${
-          current ? "text-accent" : "text-muted hover:text-text"
+          current ? "text-accent" : idleClassName
         }`;
         return (
           <li key={item.label} className={item.className}>

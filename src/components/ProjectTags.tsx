@@ -11,7 +11,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { TAG_FRAMES, type HomeTag } from "@/content/home-tags";
+import { TABLET_FRAMES, TAG_DISSOLVE, type HomeTag } from "@/content/home-tags";
 
 /**
  * `a` at viewport width w0, `b` at w1, linear in between. `base` is the length that tracks the
@@ -23,23 +23,23 @@ function lerp(a: number, b: number, w0: number, w1: number, base: string): strin
   return `calc(${a}px + ${slope} * (${base} - ${w0}px))`;
 }
 
+/** Height of the Figma desktop Home canvas the desktop tops are a share of. */
+const CANVAS_H = 820;
+
 /**
- * --l-* / --t-* per range (tablet 834–1193, desktop 1194–1439, wide 1440–1919, xwide ≥ 1920),
- * picked by the breakpoint classes on the <li>. Each range runs from one Figma frame to the next,
- * so a tag never jumps at a breakpoint.
+ * --l-tablet / --t-tablet (834–1193, from one Figma frame to the next) and --l-desk / --t-desk
+ * (≥ 1194: % of the 1440 × 820 canvas), picked by the breakpoint classes on the <li>.
+ * The field's top is the top of the centre column, so the canvas top is
+ * --home-column-top-820 above it (globals.css); the shift on tall screens moves both alike.
  */
-function placement({ position: p }: HomeTag): CSSProperties {
-  const ranges = ["tablet", "desktop", "wide"] as const;
-  const vars: Record<string, string> = {};
-  ranges.forEach((r, i) => {
-    const [w0, w1] = [TAG_FRAMES[i], TAG_FRAMES[i + 1]];
-    vars[`--l-${r}`] = lerp(p[i][0], p[i + 1][0], w0, w1, "100%");
-    vars[`--t-${r}`] = lerp(p[i][1], p[i + 1][1], w0, w1, "100vw");
-  });
-  const [x, y] = p[3];
-  vars["--l-xwide"] = `${((x / TAG_FRAMES[3]) * 100).toFixed(3)}%`;
-  vars["--t-xwide"] = `${y}px`;
-  return vars as CSSProperties;
+function placement({ tablet: p, desktop }: HomeTag): CSSProperties {
+  const [w0, w1] = TABLET_FRAMES;
+  return {
+    "--l-tablet": lerp(p[0][0], p[1][0], w0, w1, "100%"),
+    "--t-tablet": lerp(p[0][1], p[1][1], w0, w1, "100vw"),
+    "--l-desk": `${desktop.left}%`,
+    "--t-desk": `calc(${((desktop.top / 100) * CANVAS_H).toFixed(2)}px - var(--home-column-top-820))`,
+  } as CSSProperties;
 }
 
 /** Parallax: tags drift up to this many px against the pointer; alternate tags sit "deeper". */
@@ -156,8 +156,36 @@ type TagProps = {
   onClose: () => void;
 };
 
+/** The card's left edge, from the tag's left edge (Figma). */
+const CARD_X = 6;
+const CARD_W = 280;
+/** Half the extra width the 3° turn adds to the 280 × 236 card. */
+const CARD_TURN = 6;
+
+/**
+ * Default: outlined chip with a green corner square. Open (hover or focus): green chip, dark
+ * label, light square; the preview card rises 14px into place under it.
+ */
 function Tag({ tag, depth, preview, open, onOpen, onClose }: TagProps) {
   const captionId = useId();
+  const item = useRef<HTMLLIElement>(null);
+  const duration = { transitionDuration: `${tag.durationMs}ms` };
+
+  // Where the card would run past the right edge of the field (narrower screens), pull it left
+  // just enough. Offsets ignore transforms, so the intro and the parallax don't disturb this.
+  useEffect(() => {
+    const li = item.current;
+    const field = li?.offsetParent as HTMLElement | null;
+    if (!li || !field) return;
+    const fit = () => {
+      const over = li.offsetLeft + CARD_X + CARD_W + CARD_TURN - field.clientWidth;
+      li.style.setProperty("--card-nudge", `${Math.min(0, -over)}px`);
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(field);
+    return () => ro.disconnect();
+  }, []);
 
   const controlProps = {
     onFocus: onOpen,
@@ -171,11 +199,16 @@ function Tag({ tag, depth, preview, open, onOpen, onClose }: TagProps) {
 
   const chip = (
     <span
-      className={`relative block border border-text px-1.5 py-1 font-sans text-[15px] leading-[1.4] whitespace-nowrap text-text transition-colors duration-[280ms] ease-out ${
-        open ? "bg-surface" : "bg-bg"
+      style={duration}
+      className={`relative block border px-[13px] py-[7px] font-sans text-nav whitespace-nowrap transition-colors ease-out ${
+        open ? "border-accent bg-accent text-bg" : "border-text bg-bg text-text"
       }`}
     >
-      <span aria-hidden="true" className="absolute -top-0.5 -left-0.5 size-1 bg-accent" />
+      <span
+        aria-hidden="true"
+        style={duration}
+        className={`absolute -top-[5px] -left-[5px] size-[9px] transition-colors ease-out ${open ? "bg-text" : "bg-accent"}`}
+      />
       {tag.label}
     </span>
   );
@@ -184,25 +217,27 @@ function Tag({ tag, depth, preview, open, onOpen, onClose }: TagProps) {
     <Preview
       preview={preview}
       caption={tag.caption}
+      captionAccent={tag.captionAccent}
       captionId={captionId}
       arrow={Boolean(tag.href)}
-      align={tag.previewAlign}
       open={open}
+      durationMs={tag.durationMs}
     />
   );
 
   return (
     <li
+      ref={item}
       data-tag={tag.label}
       onMouseEnter={onOpen}
       onMouseLeave={onClose}
-      className={`pointer-events-auto absolute [translate:calc(var(--drift-x,0)*var(--depth))_calc(var(--drift-y,0)*var(--depth))] transition-[translate] duration-[600ms] ease-out left-(--l-tablet) top-(--t-tablet) desktop:left-(--l-desktop) desktop:top-(--t-desktop) wide:left-(--l-wide) wide:top-(--t-wide) xwide:left-(--l-xwide) xwide:top-(--t-xwide) ${
+      className={`pointer-events-auto absolute [translate:calc(var(--drift-x,0)*var(--depth))_calc(var(--drift-y,0)*var(--depth))] transition-[translate] duration-[600ms] ease-out left-(--l-tablet) top-(--t-tablet) desktop:left-(--l-desk) desktop:top-(--t-desk) ${
         open ? "z-20" : "z-10"
       }`}
       style={{ ...placement(tag), "--depth": `${-depth}px` } as CSSProperties}
     >
       {tag.href ? (
-        <Link href={tag.href} {...controlProps}>
+        <Link href={tag.href} transitionTypes={[TAG_DISSOLVE]} {...controlProps}>
           {chip}
           {card}
         </Link>
@@ -227,18 +262,21 @@ function Tag({ tag, depth, preview, open, onOpen, onClose }: TagProps) {
 type PreviewProps = {
   preview: ReactNode;
   caption: string;
+  captionAccent?: string;
   captionId: string;
   arrow: boolean;
-  align: HomeTag["previewAlign"];
   open: boolean;
+  durationMs: number;
 };
 
 /**
- * 280px card under the tag. The 40px top padding is a hover bridge so the card stays open
- * while the pointer moves onto it. Hidden from assistive tech: the caption reaches screen
- * readers through the control's aria-describedby instead.
+ * 280 × 236 card under the tag, 6px in from its left edge, turned 3° clockwise. The 18px top
+ * padding is a hover bridge so the card stays open while the pointer moves onto it. Hidden from
+ * assistive tech: the caption reaches screen readers through the control's aria-describedby.
+ * Media sits in a fixed 264 × 180 mat, so an image or a muted looping video fits without
+ * layout changes (a video plays only while the card is open).
  */
-function Preview({ preview, caption, captionId, arrow, align, open }: PreviewProps) {
+function Preview({ preview, caption, captionAccent, captionId, arrow, open, durationMs }: PreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   // A video preview plays only while its card is open, and not at all with reduced motion.
@@ -256,21 +294,23 @@ function Preview({ preview, caption, captionId, arrow, align, open }: PreviewPro
     <div
       ref={ref}
       aria-hidden="true"
-      className={`absolute top-full z-30 w-[280px] pt-5 ${
-        align === "end" ? "right-0" : "left-0"
-      } ${open ? "pointer-events-auto" : "pointer-events-none"}`}
+      className={`absolute top-full left-[calc(6px+var(--card-nudge,0px))] z-30 w-[280px] pt-[18px] ${
+        open ? "pointer-events-auto" : "pointer-events-none"
+      }`}
     >
       <div
-        className={`rotate-3 rounded-[10px] border border-line bg-surface p-[7px] shadow-[0_20px_20px_rgb(0_0_0/0.6)] transition-[opacity,translate,visibility] duration-[280ms] ease-out motion-reduce:transition-none ${
-          open ? "visible translate-y-0 opacity-100" : "invisible translate-y-1 opacity-0"
+        style={{ transitionDuration: `${durationMs}ms` }}
+        className={`flex h-[236px] rotate-3 flex-col rounded-[10px] border border-text bg-surface p-1 shadow-[0_20px_40px_rgb(0_0_0/0.6)] transition-[opacity,translate,visibility] ease-out motion-reduce:transition-none ${
+          open ? "visible translate-y-0 opacity-100" : "invisible translate-y-[14px] opacity-0"
         }`}
       >
-        {preview}
-        {/* One line: a caption longer than the card truncates (the full text still reaches
-            screen readers via aria-describedby). */}
-        <div className="mt-1.5 mb-1 flex items-baseline justify-between gap-1 px-0.5 font-mono text-meta whitespace-nowrap text-muted">
-          <span id={captionId} className="min-w-0 truncate">
+        <div className="h-[180px] w-[264px] shrink-0 overflow-hidden rounded-[6px] bg-[#e8edeb]">{preview}</div>
+        {/* One line, 12px in from the card's edge: a caption longer than the card truncates (the
+            full text still reaches screen readers via aria-describedby). */}
+        <div className="flex flex-1 items-center justify-between gap-1 px-0.5 font-mono text-[11px] leading-[1.4] whitespace-nowrap">
+          <span id={captionId} className="min-w-0 truncate text-muted">
             {caption}
+            {captionAccent && <span className="text-accent">{captionAccent}</span>}
           </span>
           {arrow && <span className="shrink-0 text-text">→</span>}
         </div>

@@ -5,7 +5,7 @@ import { images, type Img } from "./images";
 export const highlights2026: string[] = [
   "Graduated MA, Design Management",
   "Founder member, LCC Accelerate 2026",
-  "Grew Sóróyà to 10,000 monthly visits, 68% women creatives",
+  "Grew Sóróyà to 10,000 monthly visits.",
 ];
 
 export type SelectedWork = {

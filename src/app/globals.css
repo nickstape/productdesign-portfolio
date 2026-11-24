@@ -203,15 +203,18 @@
 
 /* Home (≥ 1194px): exactly one viewport tall, min 820px, no scroll.
    [data-home] is the page root in src/app/page.tsx. The shell gets the page height, main
-   becomes a flex column so the hero takes what's left. The centre column's top follows the
-   page height as in Figma (y 151 at 820 and 834 tall, 211 at 1080: --home-column-top).
+   becomes a flex column so the hero takes what's left. Taller than 820, the whole composition
+   (column and tags) moves down by half the extra height, so it stays centred and the wordmark
+   stays at the bottom (Figma "Desktop - 1", 1440 × 1024): column top y 151 at 820, 253 at 1024.
+   The tags are placed from the 820 canvas top, --home-column-top-820 above the column.
    The footer sits 32px under the hero, its wordmark's empty top leading pulled up into that
    space (--wordmark-pull), and the wordmark is capped to the remaining height (only binds on
    short, wide screens). */
 @media (min-width: 74.625rem) {
   :root {
     --home-page-h: max(100svh, 820px);
-    --home-column-top: calc(151px + 0.23077 * (var(--home-page-h) - 820px));
+    --home-column-top-820: 151px;
+    --home-column-top: calc(var(--home-column-top-820) + (var(--home-page-h) - 820px) / 2);
   }
 
   div:has(> #main [data-home]) {
@@ -299,6 +302,38 @@
   [data-enter] > :nth-child(8) { --enter-i: 7; }
 }
 
+/* Tag → case study (Home <ViewTransition>, TAG_DISSOLVE in src/content/home-tags.ts): a 300ms
+   dissolve. Home's snapshot fades out while the page underneath crossfades to the case study. */
+::view-transition-old(.tag-dissolve) {
+  animation: 300ms ease-out both tag-dissolve-out;
+}
+
+:root:active-view-transition-type(tag-dissolve)::view-transition-old(root),
+:root:active-view-transition-type(tag-dissolve)::view-transition-new(root) {
+  animation-duration: 300ms;
+  animation-timing-function: ease-out;
+}
+
+@keyframes tag-dissolve-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Clicks during the dissolve reach the page instead of the overlay. */
+::view-transition {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
 /* Case study images fade in as they scroll into view (<FadeIn>). Only when scripts run, so the
    images never stay hidden without JS. */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
@@ -328,7 +363,7 @@
    Home intro (<HomeIntro>): first load of "/" per browser session, ≥ 834px, motion allowed.
    The inline script in layout.tsx sets <html data-intro="pending"> before first paint;
    <HomeIntro> switches it to "play" when it starts, then "done" at the end (kept while Home is
-   mounted, so the tags' page-load fade-up doesn't replay). Only the five tags and the counter
+   mounted, so the tags' page-load fade-up doesn't replay). Only the four tags and the counter
    show until the last 550ms, when everything else fades in by --intro-fade (0 → 1, written
    inline on <html>). Opacity only here; the tags move by transform.
    ========================================================================== */
