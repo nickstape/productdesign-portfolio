@@ -184,50 +184,95 @@
   }
 }
 
-/* Home (834–1193px): Figma "Home — 834" (3408:964) is one 834 × 1194 poster. The shell fills
-   the viewport, the hero takes what's left above the footer and centres the column in it. */
-@media (min-width: 52.125rem) and (width < 74.625rem) {
-  div:has(> #main [data-home]) {
-    min-height: max(100svh, 900px);
+/* One screen (≥ 834px): Home and the 404 ([data-one-screen] on the page root) are exactly one
+   viewport tall with no scrolling. The shell is 100dvh and clips; main is a flex column whose
+   page root takes what's left between the top bar (834–1193) and the footer, and centres its
+   contents vertically. Below 834px the pages scroll as normal.
+
+   Footer, bottom up (Figma Home 1440 × 820: cut edge ≈ 725, footer text ≈ 773): 32px padding,
+   the 24px footer row, 40px up to the wordmark's cut edge (with the consent line open: 8px, the
+   44px line, 8px). The wordmark is always fit to the width. Its band's top 0.3955em is empty
+   leading, pulled up under main so main ends at the top of the letters.
+
+   Home's content block sits at least 114px from the top of the page (the 90px logo row + 24) and
+   40px above the letters. Spare height goes 2/3 above the block and 1/3 below it (Figma
+   1440 × 820 → 1440 × 1024). If it doesn't fit (Home, src/app/page.tsx), all its gaps
+   scale down together first (to 0.6×, --gs), then the portrait shrinks (124 → 93 tall, --pf),
+   then the intro line hides under 680px tall, and only then does the wordmark's cut edge rise:
+   its visible height drops from 63% of the line box (0.9765em) towards 48% (0.744em). Its width
+   never changes and the letters never move.
+   --os-a-max / --os-a1 / --os-a2: heights of the space left for the block (inside those
+   minimums) where the gaps start to scale, where they reach 0.6× and where the portrait
+   reaches its minimum: the block's height at each point.
+   --os-pt: the content area's top padding (114px from the top of the page).
+   --os-min: main's smallest height (--os-pt + --os-a2 + 40); below it the cut edge rises. */
+@media (min-width: 52.125rem) {
+  :root {
+    --os-header: 60px;
+    /* Block: kicker 18.2 + H1 30 + intro 23.8 + reading 54, gaps 10 + 24 + 24 + 46, portrait 124. */
+    --os-a-max: 354px;
+    --os-a1: 312.4px;
+    --os-a2: 281.4px;
+    /* The tablet top bar is 60px; the content area adds 54 to reach 114. */
+    --os-pt: 54px;
+    --os-min: calc(var(--os-pt) + var(--os-a2) + 40px);
   }
 
-  #main:has([data-home]) {
+  div:has(> #main [data-one-screen]) {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  #main:has([data-one-screen]) {
     display: flex;
     flex-direction: column;
+    min-height: 0;
   }
 
-  #main:has([data-home]) ~ footer {
+  #main:has([data-one-screen]) ~ footer {
+    --os-below: 96px;
+    --wordmark-mt: -0.3955em;
+    --wordmark-h: clamp(
+      0.744em,
+      calc(100dvh - var(--os-header) - var(--os-below) - var(--os-min) + 0.3955em),
+      0.9765em
+    );
     margin-top: 0;
+    padding-bottom: 32px;
+  }
+
+  #main:has([data-one-screen]) ~ footer:has([data-consent]) {
+    --os-below: 116px;
+  }
+
+  #main:has([data-one-screen]) ~ footer [data-consent] {
+    margin-top: 8px;
+  }
+
+  #main:has([data-one-screen]) ~ footer [data-analytics-location] {
+    height: calc(24px * var(--text-scale));
+    margin-top: 40px;
+  }
+
+  #main:has([data-one-screen]) ~ footer [data-consent] + [data-analytics-location] {
+    margin-top: 8px;
   }
 }
 
-/* Home (≥ 1194px): exactly one viewport tall, min 820px, no scroll.
-   [data-home] is the page root in src/app/page.tsx. The shell gets the page height, main
-   becomes a flex column so the hero takes what's left. The centre column's top follows the
-   page height as in Figma (y 151 at 820 and 834 tall, 211 at 1080: --home-column-top).
-   The footer sits 32px under the hero, its wordmark's empty top leading pulled up into that
-   space (--wordmark-pull), and the wordmark is capped to the remaining height (only binds on
-   short, wide screens). */
+/* Under 680px tall the intro line and its 24px gap are gone. */
+@media (min-width: 52.125rem) and (height < 680px) {
+  :root {
+    --os-a-max: 306.2px;
+    --os-a1: 274.2px;
+    --os-a2: 243.2px;
+  }
+}
+
 @media (min-width: 74.625rem) {
   :root {
-    --home-page-h: max(100svh, 820px);
-    --home-column-top: calc(151px + 0.23077 * (var(--home-page-h) - 820px));
-  }
-
-  div:has(> #main [data-home]) {
-    min-height: var(--home-page-h);
-  }
-
-  #main:has([data-home]) {
-    display: flex;
-    flex-direction: column;
-  }
-
-  #main:has([data-home]) ~ footer {
-    margin-top: 32px;
-    --wordmark-pull: 0.38;
-    /* page − column top − column (354) − gap (32) − footer chrome under the band (24 + 23 + 32) */
-    --wordmark-max-height: calc(var(--home-page-h) - var(--home-column-top) - 465px);
+    --os-header: 0px;
+    --os-pt: 114px;
   }
 }
 
@@ -261,8 +306,6 @@
     text-align: left;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Room under the page for the consent bar while it's open (set by <ConsentBar>). */
-    padding-bottom: var(--consent-h, 0px);
   }
 
   ::selection {
@@ -299,6 +342,38 @@
   [data-enter] > :nth-child(8) { --enter-i: 7; }
 }
 
+/* Tag → case study (Home <ViewTransition>, TAG_DISSOLVE in src/content/home-tags.ts): a 300ms
+   dissolve. Home's snapshot fades out while the page underneath crossfades to the case study. */
+::view-transition-old(.tag-dissolve) {
+  animation: 300ms ease-out both tag-dissolve-out;
+}
+
+:root:active-view-transition-type(tag-dissolve)::view-transition-old(root),
+:root:active-view-transition-type(tag-dissolve)::view-transition-new(root) {
+  animation-duration: 300ms;
+  animation-timing-function: ease-out;
+}
+
+@keyframes tag-dissolve-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Clicks during the dissolve reach the page instead of the overlay. */
+::view-transition {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
 /* Case study images fade in as they scroll into view (<FadeIn>). Only when scripts run, so the
    images never stay hidden without JS. */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
@@ -328,7 +403,7 @@
    Home intro (<HomeIntro>): first load of "/" per browser session, ≥ 834px, motion allowed.
    The inline script in layout.tsx sets <html data-intro="pending"> before first paint;
    <HomeIntro> switches it to "play" when it starts, then "done" at the end (kept while Home is
-   mounted, so the tags' page-load fade-up doesn't replay). Only the five tags and the counter
+   mounted, so the tags' page-load fade-up doesn't replay). Only the four tags and the counter
    show until the last 550ms, when everything else fades in by --intro-fade (0 → 1, written
    inline on <html>). Opacity only here; the tags move by transform.
    ========================================================================== */

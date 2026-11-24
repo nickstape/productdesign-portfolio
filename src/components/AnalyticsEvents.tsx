@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { track } from "@/lib/analytics";
 
 const CASE_STUDY = /^\/work\/(ndd|tns)\/?$/;
-const EMAIL_LOCATIONS = ["footer", "404", "ask"] as const;
+const EMAIL_LOCATIONS = ["footer", "404"] as const;
 
 /**
  * Custom GA4 events from one click listener on the document, so links stay plain and new ones
@@ -16,7 +16,7 @@ const EMAIL_LOCATIONS = ["footer", "404", "ask"] as const;
  * - cv_download: /cv.pdf
  * - email_click: mailto: links, located by the nearest [data-analytics-location]
  * - linkedin_click: linkedin.com links
- * - askmary_open: the Chatbase bubble opening the chat (Open AskMary on /ask tracks itself)
+ * - askmary_open: the Chatbase bubble opening the chat
  */
 export function AnalyticsEvents() {
   useEffect(() => {

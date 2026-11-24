@@ -45,7 +45,7 @@ const typeScale = [
   { token: "text-outcome", spec: "48 / 32 · lh 1.2 · outcome numbers", cls: "font-display text-outcome text-accent", sample: "~26.55M" },
   { token: "text-intro", spec: "20 / 18 · lh 1.4", cls: "font-sans text-intro", sample: "Senior product designer for payments. I design the moments where money moves and people need to trust it." },
   { token: "text-body", spec: "18 / 16 · lh 1.4", cls: "font-sans text-body", sample: "Back-office tooling for users, mandates and failed collections, used daily by operations teams across 23+ integrated banks." },
-  { token: "text-ui", spec: "16 fixed · sidebar, header name, footer links", cls: "font-sans text-ui", sample: "Work  About  AskMary" },
+  { token: "text-ui", spec: "16 fixed · sidebar, header name, footer links", cls: "font-sans text-ui", sample: "Work  About" },
   { token: "text-nav", spec: "14 mono fixed · top bar links", cls: "font-mono text-nav text-muted", sample: "Work  About  CV ↗" },
   { token: "text-toc", spec: "15 fixed · case study contents", cls: "font-sans text-toc text-muted", sample: "Design Explorations" },
   { token: "text-toc-sub", spec: "14 fixed · contents sub-items", cls: "font-sans text-toc-sub text-muted", sample: "exploration 1" },

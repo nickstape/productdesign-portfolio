@@ -3,13 +3,22 @@ import { images, type Img } from "./images";
 /**
  * Floating project tags around the home page column (≥ 834px).
  *
- * position: the tag's top-left corner in each Figma Home frame, in px: x from the left edge of
- * the viewport, y from the top of the centre column (the ".hello" label). Frames: 834 (3408:964,
- * column at y 270), 1194 (3407:1654, y 151), 1440 (3363:751, y 151), 1920 (3407:824, y 211).
- * Between frames the tag moves in a straight line; above 1920, x keeps its share of the width
- * so the tags spread with the extra room, and y holds.
+ * Tops are % of the Home content area (the space between the top of the page or the tablet top
+ * bar and the wordmark, where the column is centred), so a tag never lands on the wordmark or
+ * the footer row at any viewport height.
+ * desktop (≥ 1194px): the tag's top-left corner. left is % of the viewport width (Figma Home
+ *   canvas 3363:751, updated 24 Nov); top is % of the content area (Figma y ÷ 546, the top of
+ *   the wordmark letters on the 1440 × 820 frame).
+ * tablet (834–1193px): [x, top] in the 834 (3408:964) and 1194 (3407:1654) frames: x in px from
+ *   the left edge of the viewport, top in % of the content area; straight line in between.
  */
-export const TAG_FRAMES = [834, 1194, 1440, 1920] as const;
+export const TABLET_FRAMES = [834, 1194] as const;
+
+/**
+ * View transition type for a tag → case study navigation: Home dissolves into the case study in
+ * 300ms (globals.css, "Tag → case study"). Here, not in ProjectTags, so the server page can read it.
+ */
+export const TAG_DISSOLVE = "tag-dissolve";
 
 type Point = [x: number, y: number];
 
@@ -18,15 +27,16 @@ export type HomeTag = {
   /** Case study route. Leave out for a project that isn't live yet: it renders as a disabled button. */
   href?: string;
   image: Img;
-  /** One line under the preview image */
+  /** One line under the preview image (muted). */
   caption: string;
-  /** One point per TAG_FRAMES entry, same order. */
-  position: [Point, Point, Point, Point];
-  /** Which edge of the tag the preview card lines up with. Right-hand tags use "end" so the card stays on screen. */
-  previewAlign: "start" | "end";
+  /** Optional rest of the caption, in accent green. */
+  captionAccent?: string;
+  /** Hover/focus transition of the tag and its card. */
+  durationMs: 280 | 300;
+  desktop: { left: number; top: number };
+  /** One [x px, top %] point per TABLET_FRAMES entry, same order. */
+  tablet: [Point, Point];
 };
-
-const COMING_SOON = "Sóróyà case study coming soon";
 
 /** DOM order = keyboard order: left column top to bottom, then right column top to bottom. */
 export const homeTags: HomeTag[] = [
@@ -35,37 +45,34 @@ export const homeTags: HomeTag[] = [
     href: "/work/tns",
     image: images.tagPayments,
     caption: "Transfer Notification Service",
-    position: [[56, 118], [155, 135], [200, 42], [302, 105]],
-    previewAlign: "start",
+    durationMs: 280,
+    desktop: { left: 16.8, top: 12.6 },
+    tablet: [[56, 39.9], [155, 41.7]],
   },
   {
     label: "B2B",
     href: "/work/ndd",
     image: images.tagB2B,
-    caption: "NIBSS Direct Debit · 50+ components",
-    position: [[150, 198], [368, 104], [316, 226], [579, 147]],
-    previewAlign: "start",
+    caption: "NDD · ",
+    captionAccent: "23+ API integrations",
+    durationMs: 280,
+    desktop: { left: 18.7, top: 70.6 },
+    tablet: [[150, 49], [368, 34.8]],
   },
   {
     label: "Branding",
     image: images.tagBranding,
-    caption: "H20pe case study coming soon",
-    position: [[640, -20], [950, 57], [1143, -14], [1521, 13]],
-    previewAlign: "end",
-  },
-  {
-    label: "Design Systems",
-    href: "/work/ndd",
-    image: images.tagDesignSystems,
-    caption: "NIBSS Direct Debit · WCAG AA audited",
-    position: [[540, 130], [757, 114], [930, 167], [1281, 163]],
-    previewAlign: "end",
+    caption: "H2ope · branding & assets",
+    durationMs: 280,
+    desktop: { left: 70.7, top: 14.1 },
+    tablet: [[640, 21], [950, 24.4]],
   },
   {
     label: "0 → 1 products",
     image: images.tag0to1,
-    caption: COMING_SOON,
-    position: [[590, 204], [932, 272], [1143, 234], [1456, 315]],
-    previewAlign: "end",
+    caption: "Sóróyà · built from zero",
+    durationMs: 300,
+    desktop: { left: 79.4, top: 70.6 },
+    tablet: [[590, 49.7], [932, 72]],
   },
 ];

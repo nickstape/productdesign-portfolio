@@ -55,7 +55,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Consent Mode v2 defaults (all denied), before GA loads. See src/lib/analytics.ts. */}
         {ANALYTICS && <script dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULTS }} />}
       </head>
-      <body className="min-h-dvh bg-bg text-body text-text">
+      {/* suppressHydrationWarning: browser extensions (e.g. Grammarly) add data-* attributes to <body>. */}
+      <body className="min-h-dvh bg-bg text-body text-text" suppressHydrationWarning>
         <PageShell>{children}</PageShell>
         {/* Chatbase chat bubble (AskMary), site-wide. The only Chatbase embed on the site. */}
         <Script

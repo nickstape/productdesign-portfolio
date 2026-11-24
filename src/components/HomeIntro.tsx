@@ -12,7 +12,6 @@ type Poses = Record<string, [gather: Pose, swirl: Pose, release: Pose]>;
 const DESKTOP_POSES: Poses = {
   Payments: [[50.3, 51.8, 34], [43.5, 61.4, 20], [40.3, 29.0, 42]],
   B2B: [[50.0, 51.5, 17], [38.2, 46.5, 12], [66.7, 36.3, 34]],
-  "Design Systems": [[48.6, 48.6, 0], [48.7, 35.3, 4], [68.2, 64.2, 26]],
   "0 → 1 products": [[48.8, 44.3, -17], [60.8, 41.9, -4], [43.2, 73.7, 18]],
   Branding: [[50.2, 40.3, -34], [58.0, 55.2, -12], [26.8, 50.0, 10]],
 };
@@ -21,7 +20,6 @@ const DESKTOP_POSES: Poses = {
 const TABLET_POSES: Poses = {
   Payments: [[50.5, 51.2, 34], [43.0, 57.3, 20], [39.0, 36.6, 42]],
   B2B: [[50.0, 51.7, 17], [37.9, 47.7, 12], [65.8, 41.2, 34]],
-  "Design Systems": [[47.7, 49.5, 0], [48.6, 40.5, 4], [67.6, 59.1, 26]],
   "0 → 1 products": [[48.0, 45.6, -17], [60.9, 44.6, -4], [42.7, 65.2, 18]],
   Branding: [[50.3, 42.7, -34], [58.1, 53.1, -12], [26.7, 49.9, 10]],
 };
@@ -58,7 +56,7 @@ let leaving: ReturnType<typeof setTimeout> | undefined;
  * One-time Home intro, ≥ 834px, first load of "/" in a browser session, motion allowed. The
  * inline script in layout.tsx decides before first paint and sets <html data-intro="pending">,
  * which (globals.css, "Home intro") hides everything but the counter. This component then
- * moves the five existing tags from GATHER through SWIRL and RELEASE to where they sit on Home
+ * moves the four existing tags from GATHER through SWIRL and RELEASE to where they sit on Home
  * (measured, so the intro always ends exactly on the real layout), fades the rest of Home in
  * and sets the sessionStorage flag. Only transform and opacity change: Home's content is in
  * the HTML and laid out from the start, so nothing shifts when it ends.

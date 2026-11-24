@@ -46,7 +46,7 @@ function apply(size: Size, contrast: Contrast) {
 }
 
 /**
- * "Reading preferences" in the footer row: a disclosure button that opens a small panel above
+ * "Reading preferences" under the footer row (JetBrains Mono 12 in #9A9A96 (Figma has no token for it): a quiet secondary control.): a disclosure button that opens a small panel above
  * it with text size (100 / 112 / 125%) and contrast (high: muted text takes the text colour).
  * Both are radio groups, so arrow keys move between options. Esc, a click outside or tabbing
  * away closes it. Choices persist in localStorage; the inline script in layout.tsx applies them
@@ -94,8 +94,8 @@ export function ReadingPreferences({ className = "" }: { className?: string }) {
         aria-expanded={open}
         aria-controls={`${id}-panel`}
         onClick={() => setOpen((o) => !o)}
-        className={`relative touch-target font-sans text-ui transition-colors hover:text-accent ${
-          open ? "text-accent" : "text-text"
+        className={`relative touch-target font-mono text-meta transition-colors hover:text-accent ${
+          open ? "text-accent" : "text-[#9a9a96]"
         }`}
       >
         Reading preferences

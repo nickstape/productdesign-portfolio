@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
+import { ConsentBar } from "@/components/ConsentBar";
 import { FooterRow } from "@/components/Footer";
 import { NotFoundStyles } from "@/components/not-found/NotFoundStyles";
 import { Polaroid } from "@/components/not-found/Polaroid";
@@ -16,10 +17,18 @@ export const metadata: Metadata = {
  * 404 — Figma "404" (3451:1109, 1440 × 820), "404 — 1194" (3434:1133), "404 — 834" (3434:1168)
  * and "404 — 390 v2" (3464:1201). Root not-found: unmatched URLs get a real 404 status.
  *
- * Every element is absolutely placed from the frames. Each sets its position per breakpoint
- * through CSS variables: --m-* (< 834, px from the 390 frame, main-relative so minus the
- * 60px header), --t-* (834–1193, % of the 834 frame across, px down) and --d-* (≥ 1194).
- * Desktop values interpolate linearly from the 1194 frame to the 1440 frame and hold above it.
+ * Layout: a content area, then the consent line (while it's open), then the footer row, all in
+ * the flow. ≥ 834px the page is exactly one viewport tall with no scroll ([data-one-screen] in
+ * globals.css) and the content area takes what's left; below 834 the page scrolls as normal.
+ *
+ * Every element in the content area is absolutely placed from the frames. Each sets its position
+ * per breakpoint through CSS variables: --m-* (< 834, px from the 390 frame, main-relative so
+ * minus the 60px header), --t-* (834–1193, % of the 834 frame across, px down × --ts) and --d-*
+ * (≥ 1194). Desktop values interpolate linearly from the 1194 frame to the 1440 frame and hold
+ * above it.
+ * Short screens: the content area is a size container, and the layout shrinks to fit its height
+ * (100cqh). Tablet: --ts scales the tops and the headline (the frame's content is 1080px tall with its margins).
+ * Desktop: the whole 820px frame scales by --ds, centred in the content area.
  * Polaroid positions are their Figma card centres, so the card sits centred in its 150 × 196 box.
  */
 
@@ -44,7 +53,7 @@ function vars({ m, t, d }: Place, extra: Record<string, string> = {}): CSSProper
   return {
     ...(m && { "--m-l": m[0], "--m-t": `${m[1]}px` }),
     "--t-l": t[0],
-    "--t-t": `${t[1]}px`,
+    "--t-t": `calc(${t[1]}px * var(--ts))`,
     "--d-l": d[0],
     "--d-t": d[1],
     ...extra,
@@ -89,18 +98,27 @@ const STAGGER_MS = 60;
 export default function NotFound() {
   return (
     <div
-      className="relative -mr-(--page-right) -ml-(--page-left) h-[max(calc(100svh-60px),680px)] overflow-x-clip tablet:h-[1134px] desktop:h-[max(100svh,820px)]"
-      style={
-        {
-          /* Headline size: also places the tablet sticky note under it. */
-          "--h1-t": "clamp(104px, 12.47vw, 120px)",
-        } as CSSProperties
-      }
+      data-one-screen
+      className="-mr-(--page-right) -ml-(--page-left) flex min-h-[max(calc(100svh-60px),680px)] flex-col overflow-x-clip tablet:min-h-0 tablet:flex-1"
     >
       <NotFoundStyles />
 
-      {/* Canvas: the full stage below 1194; ≥ 1194 a 1194–1440 wide frame, centred both ways. */}
-      <div className="absolute inset-0 desktop:right-auto desktop:bottom-auto desktop:top-[calc((max(100svh,820px)-820px)/2)] desktop:left-1/2 desktop:h-[820px] desktop:w-[clamp(1194px,100vw,1440px)] desktop:-translate-x-1/2">
+      {/* Content area. A size container ≥ 834px, so the layout can fit its height. */}
+      <div
+        className="relative min-h-[580px] flex-1 tablet:min-h-0 tablet:[container-type:size]"
+        style={
+          {
+            /* Tablet height scale, and the headline size (it also places the sticky note). */
+            "--ts": "min(1, tan(atan2(100cqh, 1080px)))",
+            "--h1-t": "calc(clamp(104px, 12.47vw, 120px) * var(--ts))",
+            /* Desktop: the 820px frame's scale. */
+            "--ds": "min(1, tan(atan2(100cqh, 820px)))",
+          } as CSSProperties
+        }
+      >
+      {/* Canvas: the full stage below 1194; ≥ 1194 a 1194–1440 wide, 820 tall frame, centred
+          both ways and scaled down to fit short screens. */}
+      <div className="absolute inset-0 desktop:right-auto desktop:bottom-auto desktop:top-1/2 desktop:left-1/2 desktop:h-[820px] desktop:w-[clamp(1194px,100vw,1440px)] desktop:[transform:translate(-50%,-50%)_scale(var(--ds))]">
         <p
           className={`${PLACED} font-mono text-meta text-muted tablet:-translate-x-1/2 tablet:text-label`}
           style={vars({ m: ["20px", 258], t: ["50%", 285], d: [lerp(597, 720), lerp(177, 188)] })}
@@ -152,18 +170,21 @@ export default function NotFound() {
               d: [lerp(484.9, 673.9), lerp(455.9, 464.9)],
             }),
             /* Tablet: 36px under the two-line headline, as in the 834 frame. */
-            "--t-t": "calc(326px + 1.9 * var(--h1-t) + 38px)",
+            "--t-t": "calc((326px + 38px) * var(--ts) + 1.9 * var(--h1-t))",
             animationDelay: `${shots.length * STAGGER_MS}ms`,
           } as CSSProperties}
         />
       </div>
+      </div>
 
-      {/* Footer row (the shell footer is hidden on this page). Right insets keep the links
-          clear of the Chatbase bubble (55px, 16px from the edge), as in the shell footer. */}
+      {/* Consent line and footer row (the shell footer is hidden on this page), in the flow
+          under the content area. Right insets keep the links clear of the Chatbase bubble
+          (55px, 16px from the edge), as in the shell footer. */}
+      <ConsentBar className="pr-9 pl-[20px] tablet:pr-[88px] tablet:pl-6 desktop:pr-[144px] desktop:pl-(--content-left)" />
       <FooterRow
         compact
         location="404"
-        className="absolute right-9 bottom-[36px] left-[20px] flex items-baseline justify-between tablet:right-[88px] tablet:bottom-5 tablet:left-6 desktop:right-[144px] desktop:left-[var(--content-left)]"
+        className="flex items-baseline justify-between gap-x-3 pt-1 pr-9 pb-[36px] pl-[20px] tablet:pr-[88px] tablet:pb-5 tablet:pl-6 desktop:pr-[144px] desktop:pl-(--content-left)"
       />
     </div>
   );
