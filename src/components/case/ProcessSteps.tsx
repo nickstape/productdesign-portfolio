@@ -31,14 +31,19 @@ export function Step({ n, title, pill, highlight = false, children }: StepProps)
     >
       {/* Faint accent on the highlight card: 60% is the least that clears 4.5:1 on its accent/5
           fill with margin (40% was 3.0:1). */}
-      <span className={`shrink-0 font-mono text-label ${highlight ? "text-accent tablet:text-accent/60" : "text-muted"}`}>
+      {/* Mobile: every number green. ≥ 834: muted, the highlight card faint accent. */}
+      <span className={`shrink-0 font-mono text-label text-accent ${highlight ? "tablet:text-accent/60" : "tablet:text-muted"}`}>
         {String(n).padStart(2, "0")}
       </span>
       <div className="flex flex-col gap-[2px] tablet:gap-[6px]">
         <p className="font-sans text-ui font-semibold text-text tablet:text-case-body tablet:leading-[1.3]">{title}</p>
-        <div className="font-sans text-nav leading-[1.45] text-muted">{children}</div>
+        <div className="font-sans text-nav leading-[1.45] text-muted">
+          {children}
+          {/* Mobile: the pill reads inline, "→ C-suite approval". */}
+          {pill && <span className="tablet:hidden"> → {pill}</span>}
+        </div>
         {pill && (
-          <span className="mt-0.5 self-start rounded-full bg-text px-1 py-[3px] font-sans text-meta font-semibold whitespace-nowrap text-bg">
+          <span className="mt-0.5 hidden self-start rounded-full bg-text px-1 py-[3px] font-sans text-meta font-semibold whitespace-nowrap text-bg tablet:inline-block">
             {pill}
           </span>
         )}

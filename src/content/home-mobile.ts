@@ -1,3 +1,4 @@
+import { caseHref } from "./case-status";
 import { images, type Img } from "./images";
 
 /** Copy for the mobile home page (< 834px), Figma "Mobile — Home" (3294:633). */
@@ -37,7 +38,8 @@ export const selectedWork: SelectedWork[] = [
   },
   {
     before: "Designed ",
-    link: { label: "TNS", href: "/work/tns" },
+    // Not tappable until TNS is live (src/content/case-status.ts).
+    link: { label: "TNS", href: caseHref("tns") ?? "" },
     after: ", real-time status for payments that are pending, delayed or failed.",
     meta: "Case study · Fintech · Mobile · 2024",
     peek: images.tagPayments,

@@ -1,5 +1,6 @@
 import { Suspense, type ReactNode } from "react";
 import { hasCaseAccess } from "@/lib/case-access";
+import { mediaRadius } from "./Media";
 import { UnlockForm } from "./UnlockForm";
 
 /**
@@ -22,7 +23,7 @@ async function Gate({ children }: { children: ReactNode }) {
 
 function Locked({ children, form }: { children: ReactNode; form: boolean }) {
   return (
-    <div className="relative overflow-hidden rounded-image">
+    <div className={`relative overflow-hidden ${mediaRadius()}`}>
       <div aria-hidden="true" className="pointer-events-none select-none">
         {children}
       </div>

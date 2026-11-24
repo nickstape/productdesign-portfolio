@@ -14,9 +14,16 @@ export type CaseFrontmatter = {
   slug: string;
   /** Mono kicker above the title, e.g. ".case study 01 · fintech · B2B platform" */
   kicker: string;
+  /** Plain text (also the meta description). Phrases named in `introLinks` become links. */
   intro: string;
+  /** { "phrase in the intro": "https://source" }: each phrase renders as an accent source link. */
+  introLinks?: Record<string, string>;
   role: string;
+  /** Shows a visible TODO in the meta row until it's set. */
+  timeline?: string;
   platform: string;
+  /** Platform text below 834, if it differs. */
+  platformMobile?: string;
   outcome: string;
   /** Key in src/content/images.ts, e.g. "nddHero". Shows a placeholder until the entry and file exist. */
   hero: string;
@@ -25,7 +32,13 @@ export type CaseFrontmatter = {
   next: string;
 };
 
-export type TocItem = { id: string; label: string; children: TocItem[] };
+export type TocItem = {
+  id: string;
+  label: string;
+  children: TocItem[];
+  /** Inside <Desktop> (≥ 834 only) or <Mobile> (< 834 only) in the MDX. */
+  only?: "desktop" | "mobile";
+};
 
 const REQUIRED: (keyof CaseFrontmatter)[] = [
   "title", "slug", "kicker", "intro", "role", "platform", "outcome", "hero", "order", "next",
@@ -50,7 +63,7 @@ function checkFrontmatter(slug: string, fm: Record<string, unknown> | undefined)
   if (missing.length) {
     throw new Error(`src/content/work/${slug}.mdx: frontmatter is missing ${missing.join(", ")}`);
   }
-  // Frontmatter values may be written as `images.nddHero`; the manifest key is the last part.
+  // Frontmatter values may be written as `images.nddHeroVideo`; the manifest key is the last part.
   const hero = String(fm!.hero).replace(/^images\./, "");
   return { ...(fm as CaseFrontmatter), hero, slug };
 }
@@ -79,7 +92,8 @@ function attr(node: JsxNode, name: string): string | undefined {
 /**
  * Table of contents, read from the MDX source: every <Section> (TOC text = `nav` prop, else
  * `label`) and every <Exploration> nested inside it. Built from the same nodes that render, so it
- * can't list a section that doesn't exist. Throws on a missing or duplicate id.
+ * can't list a section that doesn't exist. Throws on a missing or duplicate id. One inside a
+ * <Desktop> or <Mobile> wrapper is marked `only`, so the TOC and chip strip show it at that size only.
  */
 export function getToc(slug: string): TocItem[] {
   const source = readFileSync(path.join(DIR, `${slug}.mdx`), "utf8");
@@ -92,25 +106,27 @@ export function getToc(slug: string): TocItem[] {
     seen.add(item.id);
   };
 
-  const walk = (node: JsxNode, parent: TocItem | null) => {
+  const walk = (node: JsxNode, parent: TocItem | null, only?: TocItem["only"]) => {
     let current = parent;
-    if (node.type === "mdxJsxFlowElement" && node.name === "Section") {
+    if (node.type === "mdxJsxFlowElement" && (node.name === "Desktop" || node.name === "Mobile")) {
+      only = node.name === "Desktop" ? "desktop" : "mobile";
+    } else if (node.type === "mdxJsxFlowElement" && node.name === "Section") {
       const id = attr(node, "id");
       const label = attr(node, "nav") ?? attr(node, "label");
       if (!id || !label) throw new Error(`${slug}.mdx: <Section> needs an id and a label`);
-      current = { id, label, children: [] };
+      current = { id, label, children: [], ...(only ? { only } : {}) };
       add(current);
       items.push(current);
     } else if (node.type === "mdxJsxFlowElement" && node.name === "Exploration") {
       const n = Number(attr(node, "n"));
       if (!n) throw new Error(`${slug}.mdx: <Exploration> needs n={…}`);
-      const item = { id: explorationId(n), label: `exploration ${n}`, children: [] };
+      const item: TocItem = { id: explorationId(n), label: `exploration ${n}`, children: [], ...(only ? { only } : {}) };
       add(item);
       if (parent) parent.children.push(item);
       else items.push(item);
       return;
     }
-    node.children?.forEach((c) => walk(c, current));
+    node.children?.forEach((c) => walk(c, current, only));
   };
 
   walk(tree, null);

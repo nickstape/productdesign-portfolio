@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -20,8 +21,10 @@ const colours = [
   { name: "muted", hex: "#a3a3a3", use: "Secondary text (≥ 4.5:1 on bg)", swatch: "bg-muted" },
   { name: "line", hex: "#262626", use: "1px dividers, card borders", swatch: "bg-line" },
   { name: "accent", hex: "#42f57e", use: "Active nav, links, key numbers, small squares", swatch: "bg-accent" },
-  { name: "quiet", hex: "#9a9a96", use: "Footer only: .say hello and the copyright", swatch: "bg-quiet" },
-  { name: "white", hex: "#ffffff", use: "About only: bio and mobile headline", swatch: "bg-white" },
+  { name: "quiet", hex: "#9a9a96", use: "Footer (.say hello, copyright); case study labels and secondary text", swatch: "bg-quiet" },
+  { name: "white", hex: "#ffffff", use: "About bio and mobile headline; case study body copy", swatch: "bg-white" },
+  { name: "ink", hex: "#f5f5f2", use: "Case studies only: testimonial quotes", swatch: "bg-ink" },
+  { name: "subtle", hex: "#b8b8b4", use: "Case studies only: mobile “← Home” link", swatch: "bg-subtle" },
   { name: "annotate", hex: "#ff6b6b", use: "Case studies only: before/after annotation labels", swatch: "bg-annotate" },
 ] as const;
 
@@ -43,6 +46,7 @@ const typeScale = [
   { token: "text-card-title", spec: "22 / 15 · lh 1.3 · audience cards", cls: "font-sans text-card-title font-semibold", sample: "Raise the mandates" },
   { token: "text-next-title", spec: "26 / 21 · lh 1.25 · next case study", cls: "font-display text-next-title", sample: "Giving operators control of Direct Debit" },
   { token: "text-quote", spec: "31 / 21 · lh 1.25 · quotes", cls: "font-display text-quote", sample: "“Every time I see this login screen, I wonder if we should be using something else.”" },
+  { token: "text-testimonial", spec: "31 / 20 · lh 1.25 · testimonials", cls: "font-display text-testimonial text-ink", sample: "“Every time I see this login screen, I wonder if we should be using something else.”" },
   { token: "text-stat", spec: "29 / 22 · lh 1.15 · stat cards", cls: "font-sans font-semibold text-stat text-accent", sample: "32% → 12%" },
   { token: "text-outcome", spec: "48 / 32 · lh 1.2 · outcome numbers", cls: "font-display text-outcome text-accent", sample: "~26.55M" },
   { token: "text-intro", spec: "20 / 18 · lh 1.4", cls: "font-sans text-intro", sample: "Senior product designer for payments. I design the moments where money moves and people need to trust it." },
@@ -67,6 +71,11 @@ export default function StyleguidePage() {
         <p className="max-w-[640px] text-intro text-muted">
           Every colour, font and type size in the system. Sizes marked “rendered” are read from
           the browser, so resize the window to watch the fluid sizes grow from 390px to 834px.
+          Case study components:{" "}
+          <Link href="/styleguide/case-study" className="text-accent underline underline-offset-4 hover:no-underline">
+            /styleguide/case-study
+          </Link>
+          .
         </p>
       </header>
 

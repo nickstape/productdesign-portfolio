@@ -110,7 +110,7 @@ export default function Page() {
                 img={g.img}
                 frame={false}
                 sizes={`(min-width: 834px) ${Math.round((g.height * g.img.width) / g.img.height)}px, 295px`}
-                className="rounded-image border border-line"
+                className="rounded-media"
               />
             ))}
           />

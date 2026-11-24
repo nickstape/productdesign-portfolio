@@ -5,7 +5,7 @@ export function HMW({ children, why }: { children: ReactNode; why: ReactNode }) 
   return (
     <div className="flex flex-col gap-2">
       <div className="font-display text-case-headline text-text">{children}</div>
-      <p className="font-sans text-case-body text-text">
+      <p className="font-sans text-case-body text-white">
         <strong className="font-semibold">Why it mattered to the business:</strong> {why}
       </p>
     </div>

@@ -1,3 +1,4 @@
+import { caseHref } from "./case-status";
 import { images, type Img } from "./images";
 
 /**
@@ -42,7 +43,8 @@ export type HomeTag = {
 export const homeTags: HomeTag[] = [
   {
     label: "Payments",
-    href: "/work/tns",
+    // A disabled tag until TNS is live (src/content/case-status.ts).
+    href: caseHref("tns"),
     image: images.tagPayments,
     caption: "Transfer Notification Service",
     durationMs: 280,

@@ -7,6 +7,8 @@ type Row = [label: string | null, content: ReactNode];
 
 type Props = {
   n: number;
+  /** Number shown below 834 when mobile has fewer explorations (e.g. 05 is ".exploration 04" there). */
+  mobileN?: number;
   title: string;
   /** Text between the label and the title (Figma exploration 01). */
   intro?: ReactNode;
@@ -15,6 +17,8 @@ type Props = {
    * (accent label, text colour), e.g. [["problem", …], [null, …]] or [["considered", …], ["chose", …]].
    */
   rows?: Row[];
+  /** Show the rows at ≥ 834 only (mobile gets its own copy in the children, in <Mobile>). */
+  desktopRows?: boolean;
   /** Right-hand column at ≥ 834 (Figma explorations 03 and 04, 834 and up), usually a <Figure>. */
   aside?: ReactNode;
   children?: ReactNode;
@@ -24,14 +28,22 @@ type Props = {
  * Figma "Decision block": ".exploration 0n", optional intro, Space Grotesk 28 title, the rows,
  * then children (text, images, stats). Nested under its <Section> in the table of contents.
  */
-export function Exploration({ n, title, intro, rows = [], aside, children }: Props) {
+export function Exploration({ n, mobileN, title, intro, rows = [], desktopRows = false, aside, children }: Props) {
+  const label = (k: number) => `exploration ${String(k).padStart(2, "0")}`;
   const main = (
     <div className="flex min-w-0 flex-col">
-      <SectionLabel>{`exploration ${String(n).padStart(2, "0")}`}</SectionLabel>
-      {intro && <div className="mt-[14px] font-sans text-case-body text-text/80">{intro}</div>}
+      {mobileN ? (
+        <>
+          <SectionLabel className="hidden tablet:block">{label(n)}</SectionLabel>
+          <SectionLabel className="tablet:hidden">{label(mobileN)}</SectionLabel>
+        </>
+      ) : (
+        <SectionLabel>{label(n)}</SectionLabel>
+      )}
+      {intro && <div className="mt-[14px] font-sans text-case-body text-white">{intro}</div>}
       <h3 className={`font-display text-headline font-normal text-text ${intro ? "mt-6" : "mt-2"}`}>{title}</h3>
       {rows.length > 0 && (
-        <dl className="mt-2 flex flex-col gap-[10px]">
+        <dl className={`mt-2 flex-col gap-[10px] ${desktopRows ? "hidden tablet:flex" : "flex"}`}>
           {rows.map(([label, content], i) => (
             <div
               key={i}

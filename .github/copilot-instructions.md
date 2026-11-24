@@ -38,7 +38,7 @@ Tailwind's stock palette is removed. Use only these, e.g. `bg-surface`, `text-mu
 - Left-aligned text only. Never justify.
 - 8px spacing grid: `--spacing` is 8px, so `p-1` = 8px, `p-2` = 16px and so on.
 - Content column starts at x=145 on a 1440 frame, right of the sidebar: `var(--content-left)`.
-- Images get an 8px radius (`rounded-image`) and a 1px `border-line` on dark.
+- Images and videos have no border, only a radius (`rounded-media` 16px; case study hero 20px from 834; all case study media 12px below 834; About gallery 16px; Home hover-card media 6px). The one exception is the Home portrait: 1px #404040 border, 2px radius.
 
 ## Images
 - `src/content/images.ts` is the only place image paths live (`type Img = { src, alt, width, height }`).

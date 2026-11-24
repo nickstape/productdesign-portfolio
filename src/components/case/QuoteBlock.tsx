@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CaseMedia, SIZES_FULL, type MediaProps } from "./CaseMedia";
+import { Media, SIZES_FULL, type MediaProps } from "./Media";
 import { ProtectedMedia } from "./ProtectedMedia";
 
 type Props = MediaProps & {
@@ -15,7 +15,7 @@ type Props = MediaProps & {
  * <ProtectedMedia> instead of the Figma 50% opacity.
  */
 export function QuoteBlock({ img, w = 1152, h = 576, quote, label, protect = false }: Props) {
-  const media = <CaseMedia img={img} w={w} h={h} sizes={SIZES_FULL} fit="cover" />;
+  const media = <Media img={img} w={w} h={h} sizes={SIZES_FULL} />;
   return (
     <figure className="flex flex-col">
       <div className={`mt-2 tablet:my-6 ${protect ? "" : "opacity-50"}`}>

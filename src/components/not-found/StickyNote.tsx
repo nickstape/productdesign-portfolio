@@ -6,7 +6,8 @@ const INK = "text-[#0f0f0f]";
 
 type NoteLink = {
   label: string;
-  href: string;
+  /** Leave out for a page that isn't live: the line keeps its look but isn't a link (aria-disabled). */
+  href?: string;
   /** Hidden below 834px (the mobile note has two rows). */
   tabletUp?: boolean;
 };
@@ -32,19 +33,28 @@ export function StickyNote({ links, className = "", style }: Props) {
         <ul className="tablet:mt-[10px] tablet:flex tablet:flex-col tablet:gap-[10px]">
           {links.map((link, i) => (
             <li
-              key={link.href}
+              key={link.label}
               className={`${link.tabletUp ? "hidden tablet:block" : ""} ${
                 i > 0 ? "border-t border-[#0f0f0f]/20 tablet:border-t-0" : ""
               }`}
             >
-              <Link
-                href={link.href}
-                className="relative touch-target flex h-6 items-center font-sans tablet:[--hit:34px] text-[14px] whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f0f0f] tablet:inline-flex tablet:h-auto tablet:text-[17px] tablet:leading-[24px]"
-              >
-                <span className="underline decoration-1 [text-underline-position:from-font] hover:decoration-2">
-                  {link.label}
+              {link.href ? (
+                <Link
+                  href={link.href}
+                  className="relative touch-target flex h-6 items-center font-sans tablet:[--hit:34px] text-[14px] whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f0f0f] tablet:inline-flex tablet:h-auto tablet:text-[17px] tablet:leading-[24px]"
+                >
+                  <span className="underline decoration-1 [text-underline-position:from-font] hover:decoration-2">
+                    {link.label}
+                  </span>
+                </Link>
+              ) : (
+                <span
+                  aria-disabled="true"
+                  className="flex h-6 cursor-default items-center font-sans text-[14px] whitespace-nowrap tablet:inline-flex tablet:h-auto tablet:text-[17px] tablet:leading-[24px]"
+                >
+                  <span className="underline decoration-1 [text-underline-position:from-font]">{link.label}</span>
                 </span>
-              </Link>
+              )}
             </li>
           ))}
         </ul>
